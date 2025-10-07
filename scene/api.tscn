@@ -8,4 +8,4 @@ _request_path = NodePath("HTTPRequest")
 
 [node name="HTTPRequest" type="HTTPRequest" parent="."]
 
-[connection signal="request_completed" from="HTTPRequest" to="HTTPRequest" method="_on_request_completed"]
+[connection signal="request_completed" from="HTTPRequest" to="." method="_on_http_request_request_completed"]
