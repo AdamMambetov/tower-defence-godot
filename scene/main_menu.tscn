@@ -1,0 +1,191 @@
+[gd_scene load_steps=10 format=3 uid="uid://clbg1eyvs7ak8"]
+
+[ext_resource type="Script" uid="uid://c155d6c6f3lr3" path="res://src/main_menu.gd" id="1_3er1b"]
+[ext_resource type="PackedScene" uid="uid://cuht5ocbqlwdl" path="res://scene/api.tscn" id="2_hxu56"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3er1b"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hxu56"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2fwvj"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0iwki"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_sepwh"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_14wem"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2atga"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_3er1b")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_top = -1.0
+offset_right = 163.0
+grow_vertical = 2
+alignment = 1
+
+[node name="start_btn" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Начать"
+
+[node name="settings_btn" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Настройки"
+
+[node name="account_btn" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Аккаунт"
+
+[node name="exit_btn" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Выход"
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.071
+anchor_top = 0.31300002
+anchor_right = 0.071
+anchor_bottom = 0.31300002
+offset_left = -82.792
+offset_top = -11.82402
+offset_right = 85.208
+offset_bottom = 11.17598
+grow_vertical = 2
+text = "Tower Defence Godot"
+
+[node name="AccountsPopup" type="Popup" parent="."]
+oversampling_override = 1.0
+title = "Accounts"
+position = Vector2i(600, 0)
+size = Vector2i(600, 600)
+visible = true
+
+[node name="Background" type="ColorRect" parent="AccountsPopup"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SignUp" type="VBoxContainer" parent="AccountsPopup/Background"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="username_te" type="TextEdit" parent="AccountsPopup/Background/SignUp"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+placeholder_text = "Имя пользователя"
+
+[node name="email_te" type="TextEdit" parent="AccountsPopup/Background/SignUp"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+placeholder_text = "Почта"
+
+[node name="password_te" type="TextEdit" parent="AccountsPopup/Background/SignUp"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+placeholder_text = "Пароль"
+
+[node name="sign_up_btn" type="Button" parent="AccountsPopup/Background/SignUp"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+text = "Зарегистрироваться"
+
+[node name="go_sign_in_btn" type="Button" parent="AccountsPopup/Background/SignUp"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_disabled_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_colors/icon_normal_color = Color(0, 0, 0, 1)
+theme_override_colors/icon_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/icon_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/icon_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/icon_hover_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/icon_disabled_color = Color(0, 0, 0, 1)
+theme_override_styles/normal = SubResource("StyleBoxEmpty_3er1b")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_hxu56")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_2fwvj")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_0iwki")
+text = "Уже есть учётная запись? Вход
+"
+
+[node name="SignIn" type="VBoxContainer" parent="AccountsPopup/Background"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="username_te" type="TextEdit" parent="AccountsPopup/Background/SignIn"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+placeholder_text = "Имя пользователя или почта"
+
+[node name="password_te" type="TextEdit" parent="AccountsPopup/Background/SignIn"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+placeholder_text = "Пароль"
+
+[node name="sign_in_btn" type="Button" parent="AccountsPopup/Background/SignIn"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+text = "Войти"
+
+[node name="go_sign_up_btn" type="Button" parent="AccountsPopup/Background/SignIn"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_disabled_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_colors/icon_normal_color = Color(0, 0, 0, 1)
+theme_override_colors/icon_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/icon_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/icon_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/icon_hover_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/icon_disabled_color = Color(0, 0, 0, 1)
+theme_override_styles/normal = SubResource("StyleBoxEmpty_3er1b")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_sepwh")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_14wem")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_2atga")
+text = "У вас нет аккаунта? Зарегистрироваться"
+
+[node name="Api" parent="." instance=ExtResource("2_hxu56")]
+
+[connection signal="pressed" from="VBoxContainer/start_btn" to="." method="_on_start_btn_pressed"]
+[connection signal="pressed" from="VBoxContainer/settings_btn" to="." method="_on_settings_btn_pressed"]
+[connection signal="pressed" from="VBoxContainer/account_btn" to="." method="_on_account_btn_pressed"]
+[connection signal="pressed" from="VBoxContainer/exit_btn" to="." method="_on_exit_btn_pressed"]
+[connection signal="text_set" from="AccountsPopup/Background/SignUp/username_te" to="." method="_on_username_te_text_set"]
+[connection signal="pressed" from="AccountsPopup/Background/SignUp/sign_up_btn" to="." method="_on_sign_up_btn_pressed"]
+[connection signal="pressed" from="AccountsPopup/Background/SignUp/go_sign_in_btn" to="." method="_on_go_sign_in_btn_pressed"]
+[connection signal="pressed" from="AccountsPopup/Background/SignIn/sign_in_btn" to="." method="_on_sign_in_btn_pressed"]
+[connection signal="pressed" from="AccountsPopup/Background/SignIn/go_sign_up_btn" to="." method="_on_go_sign_up_btn_pressed"]

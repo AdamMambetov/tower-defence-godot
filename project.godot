@@ -11,5 +11,10 @@ config_version=5
 [application]
 
 config/name="TowerDefenceGodot"
+run/main_scene="uid://clbg1eyvs7ak8"
 config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+Global="*res://src/global.gd"
