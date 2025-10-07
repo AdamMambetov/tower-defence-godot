@@ -26,6 +26,7 @@ func sign_in(username: String, password: String) -> void:
 		form,
 	)
 
+# register
 func sign_up(username: String, email: String, password: String) -> void:
 	var data = JSON.stringify({
 		username = username,
