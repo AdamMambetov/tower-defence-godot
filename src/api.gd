@@ -109,7 +109,6 @@ func join() -> void:
 	
 	var res = await request_completed
 	if res[0] == HTTPRequest.RESULT_SUCCESS and res[1] == 200:
-		join_result.emit(true)
 		var body_json = JSON.parse_string(res[3].get_string_from_utf8())
 		prints("POST", res[1], "queue/join/", body_json)
 		if body_json.has('waiting_room_id'):
@@ -134,26 +133,27 @@ func _add_field(body: PackedByteArray, key: String, value: String) -> void:
 func _end_body(body: PackedByteArray):
 	body.append_array("\r\n--boundary--\r\n".to_utf8_buffer())
 
-func _connect() -> void:
+func _connect() -> bool:
 	socket = WebSocketPeer.new()
 	socket.handshake_headers = PackedStringArray([
 		"access: " + Global.access,
 	])
-	var err = socket.connect_to_url(join_url)
-	if err != OK:
-		printerr("Connect error: ", err)
-		await get_tree().create_timer(5).timeout
-		_connect()
-	else:
-		print("Connecting...")
-
+	return socket.connect_to_url(join_url) == OK
+	
 func _waiting_game_process(json: Dictionary) -> void:
 	# Обработка сообщений
 	if waiting_opponent and json.has("room_id"):
 		waiting_opponent = false
 		room_id = json.room_id
 		join_url = "%splay_room/%s/" % [WS_BASE_URL, room_id]
-		_connect()
+		for i in 3:
+			if _connect():
+				join_result.emit(true)
+				await get_tree().create_timer(1.0).timeout
+				return
+		socket = null
+		Global.game_state = Global.GameState.Menu
+		join_result.emit(false)
 	else:
 		prints("Received other message: ", json)
 

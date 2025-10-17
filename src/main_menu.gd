@@ -1,17 +1,30 @@
 extends Control
 
+
+enum MenuState {
+	None,
+	Game,
+	Accounts,
+}
+
+
 var username: String
 var email: String
 var password: String
+var menu_state: MenuState:
+	set(value):
+		$GameMenu.visible = value == MenuState.Game
+		$AccountsMenu.visible = value == MenuState.Accounts
+
 
 func _on_start_btn_pressed() -> void:
-	$GameMenuPopup.show()
+	menu_state = MenuState.Game
 
 func _on_settings_btn_pressed() -> void:
 	pass # Replace with function body.
 
 func _on_account_btn_pressed() -> void:
-	$AccountsPopup.show()
+	menu_state = MenuState.Accounts
 
 func _on_exit_btn_pressed() -> void:
 	get_tree().quit()
@@ -32,13 +45,13 @@ func _on_sign_up_btn_pressed() -> void:
 	Api.sign_up(username, email, password)
 	var res = await Api.sign_result
 	if res:
-		$AccountsPopup.hide()
+		menu_state = MenuState.None
 
 func _on_sign_in_btn_pressed() -> void:
 	Api.sign_in(username, password)
 	var res = await Api.sign_result
 	if res:
-		$AccountsPopup.hide()
+		menu_state = MenuState.None
 
 func _on_password_le_text_changed(new_text: String) -> void:
 	password = new_text
@@ -51,6 +64,13 @@ func _on_username_le_text_changed(new_text: String) -> void:
 
 func _on_play_random_btn_pressed() -> void:
 	Api.join()
+	$LoadingScreen.visible = true
+	var success = await Api.join_result
+	$LoadingScreen.visible = false
+	if success:
+		get_tree().change_scene_to_file("res://scene/main_map.tscn")
+	else:
+		print("NOOOOOOOOOOOOOOO111!!!!!!")
 
 func _on_play_friend_btn_pressed() -> void:
 	pass # Replace with function body.

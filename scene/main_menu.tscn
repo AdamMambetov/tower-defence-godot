@@ -1,6 +1,7 @@
-[gd_scene load_steps=9 format=3 uid="uid://clbg1eyvs7ak8"]
+[gd_scene load_steps=10 format=3 uid="uid://clbg1eyvs7ak8"]
 
 [ext_resource type="Script" uid="uid://c155d6c6f3lr3" path="res://src/main_menu.gd" id="1_3er1b"]
+[ext_resource type="PackedScene" uid="uid://binsf0lskx6jt" path="res://scene/LoadingScreen.tscn" id="2_hxu56"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3er1b"]
 
@@ -25,13 +26,25 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_3er1b")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="Label" type="Label" parent="."]
 layout_mode = 1
-anchors_preset = 9
-anchor_bottom = 1.0
-offset_top = -1.0
-offset_right = 163.0
+anchors_preset = -1
+anchor_left = 0.071
+anchor_top = 0.31300002
+anchor_right = 0.071
+anchor_bottom = 0.31300002
+offset_left = -82.792
+offset_top = -11.82402
+offset_right = 85.208
+offset_bottom = 11.17598
 grow_vertical = 2
+text = "Tower Defence Godot"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 203.0
+offset_bottom = 648.0
+size_flags_horizontal = 3
 alignment = 1
 
 [node name="start_btn" type="Button" parent="VBoxContainer"]
@@ -50,35 +63,59 @@ text = "Аккаунт"
 layout_mode = 2
 text = "Выход"
 
-[node name="Label" type="Label" parent="."]
+[node name="GameMenu" type="ColorRect" parent="."]
+visible = false
+custom_minimum_size = Vector2(600, 600)
 layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.071
-anchor_top = 0.31300002
-anchor_right = 0.071
-anchor_bottom = 0.31300002
-offset_left = -82.792
-offset_top = -11.82402
-offset_right = 85.208
-offset_bottom = 11.17598
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
 grow_vertical = 2
-text = "Tower Defence Godot"
+size_flags_horizontal = 3
 
-[node name="AccountsPopup" type="Popup" parent="."]
-oversampling_override = 1.0
-title = "Accounts"
-initial_position = 4
-size = Vector2i(600, 600)
-visible = true
-
-[node name="Background" type="ColorRect" parent="AccountsPopup"]
+[node name="VBoxContainer" type="VBoxContainer" parent="GameMenu"]
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+alignment = 1
 
-[node name="SignUp" type="VBoxContainer" parent="AccountsPopup/Background"]
+[node name="Label" type="Label" parent="GameMenu/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Выберите режим игры"
+horizontal_alignment = 1
+
+[node name="play_random_btn" type="Button" parent="GameMenu/VBoxContainer"]
+layout_mode = 2
+text = "Рандом"
+
+[node name="play_friend_btn" type="Button" parent="GameMenu/VBoxContainer"]
+layout_mode = 2
+text = "С другом"
+
+[node name="AccountsMenu" type="ColorRect" parent="."]
+visible = false
+custom_minimum_size = Vector2(600, 600)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -300.0
+offset_right = 300.0
+offset_bottom = 300.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SignUp" type="VBoxContainer" parent="AccountsMenu"]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -88,31 +125,31 @@ grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="Label" type="Label" parent="AccountsPopup/Background/SignUp"]
+[node name="Label" type="Label" parent="AccountsMenu/SignUp"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "Аккаунт"
 horizontal_alignment = 1
 
-[node name="username_le" type="LineEdit" parent="AccountsPopup/Background/SignUp"]
+[node name="username_le" type="LineEdit" parent="AccountsMenu/SignUp"]
 layout_mode = 2
 placeholder_text = "Имя пользователя"
 
-[node name="email_le" type="LineEdit" parent="AccountsPopup/Background/SignUp"]
+[node name="email_le" type="LineEdit" parent="AccountsMenu/SignUp"]
 layout_mode = 2
 placeholder_text = "Почта"
 
-[node name="password_le" type="LineEdit" parent="AccountsPopup/Background/SignUp"]
+[node name="password_le" type="LineEdit" parent="AccountsMenu/SignUp"]
 layout_mode = 2
 placeholder_text = "Пароль"
 secret = true
 
-[node name="sign_up_btn" type="Button" parent="AccountsPopup/Background/SignUp"]
+[node name="sign_up_btn" type="Button" parent="AccountsMenu/SignUp"]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 text = "Зарегистрироваться"
 
-[node name="go_sign_in_btn" type="Button" parent="AccountsPopup/Background/SignUp"]
+[node name="go_sign_in_btn" type="Button" parent="AccountsMenu/SignUp"]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
@@ -135,7 +172,7 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_0iwki")
 text = "Уже есть учётная запись? Вход
 "
 
-[node name="SignIn" type="VBoxContainer" parent="AccountsPopup/Background"]
+[node name="SignIn" type="VBoxContainer" parent="AccountsMenu"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -144,27 +181,27 @@ grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="Label" type="Label" parent="AccountsPopup/Background/SignIn"]
+[node name="Label" type="Label" parent="AccountsMenu/SignIn"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "Аккаунт"
 horizontal_alignment = 1
 
-[node name="username_le" type="LineEdit" parent="AccountsPopup/Background/SignIn"]
+[node name="username_le" type="LineEdit" parent="AccountsMenu/SignIn"]
 layout_mode = 2
 placeholder_text = "Имя пользователя или почта"
 
-[node name="password_le" type="LineEdit" parent="AccountsPopup/Background/SignIn"]
+[node name="password_le" type="LineEdit" parent="AccountsMenu/SignIn"]
 layout_mode = 2
 placeholder_text = "Пароль"
 secret = true
 
-[node name="sign_in_btn" type="Button" parent="AccountsPopup/Background/SignIn"]
+[node name="sign_in_btn" type="Button" parent="AccountsMenu/SignIn"]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 text = "Войти"
 
-[node name="go_sign_up_btn" type="Button" parent="AccountsPopup/Background/SignIn"]
+[node name="go_sign_up_btn" type="Button" parent="AccountsMenu/SignIn"]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
@@ -186,53 +223,22 @@ theme_override_styles/hover = SubResource("StyleBoxEmpty_14wem")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_2atga")
 text = "У вас нет аккаунта? Зарегистрироваться"
 
-[node name="GameMenuPopup" type="Popup" parent="."]
-oversampling_override = 1.0
-initial_position = 4
-size = Vector2i(600, 600)
-
-[node name="Background" type="ColorRect" parent="GameMenuPopup"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="GameMenuPopup/Background"]
+[node name="LoadingScreen" parent="." instance=ExtResource("2_hxu56")]
+visible = false
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-alignment = 1
-
-[node name="Label" type="Label" parent="GameMenuPopup/Background/VBoxContainer"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Выберите режим игры"
-horizontal_alignment = 1
-
-[node name="play_random_btn" type="Button" parent="GameMenuPopup/Background/VBoxContainer"]
-layout_mode = 2
-text = "Рандом"
-
-[node name="play_friend_btn" type="Button" parent="GameMenuPopup/Background/VBoxContainer"]
-layout_mode = 2
-text = "С другом"
 
 [connection signal="pressed" from="VBoxContainer/start_btn" to="." method="_on_start_btn_pressed"]
 [connection signal="pressed" from="VBoxContainer/settings_btn" to="." method="_on_settings_btn_pressed"]
 [connection signal="pressed" from="VBoxContainer/account_btn" to="." method="_on_account_btn_pressed"]
 [connection signal="pressed" from="VBoxContainer/exit_btn" to="." method="_on_exit_btn_pressed"]
-[connection signal="text_changed" from="AccountsPopup/Background/SignUp/username_le" to="." method="_on_username_le_text_changed"]
-[connection signal="text_changed" from="AccountsPopup/Background/SignUp/email_le" to="." method="_on_email_le_text_changed"]
-[connection signal="text_changed" from="AccountsPopup/Background/SignUp/password_le" to="." method="_on_password_le_text_changed"]
-[connection signal="pressed" from="AccountsPopup/Background/SignUp/sign_up_btn" to="." method="_on_sign_up_btn_pressed"]
-[connection signal="pressed" from="AccountsPopup/Background/SignUp/go_sign_in_btn" to="." method="_on_go_sign_in_btn_pressed"]
-[connection signal="text_changed" from="AccountsPopup/Background/SignIn/username_le" to="." method="_on_username_le_text_changed"]
-[connection signal="text_changed" from="AccountsPopup/Background/SignIn/password_le" to="." method="_on_password_le_text_changed"]
-[connection signal="pressed" from="AccountsPopup/Background/SignIn/sign_in_btn" to="." method="_on_sign_in_btn_pressed"]
-[connection signal="pressed" from="AccountsPopup/Background/SignIn/go_sign_up_btn" to="." method="_on_go_sign_up_btn_pressed"]
-[connection signal="pressed" from="GameMenuPopup/Background/VBoxContainer/play_random_btn" to="." method="_on_play_random_btn_pressed"]
-[connection signal="pressed" from="GameMenuPopup/Background/VBoxContainer/play_friend_btn" to="." method="_on_play_friend_btn_pressed"]
+[connection signal="pressed" from="GameMenu/VBoxContainer/play_random_btn" to="." method="_on_play_random_btn_pressed"]
+[connection signal="pressed" from="GameMenu/VBoxContainer/play_friend_btn" to="." method="_on_play_friend_btn_pressed"]
+[connection signal="text_changed" from="AccountsMenu/SignUp/username_le" to="." method="_on_username_le_text_changed"]
+[connection signal="text_changed" from="AccountsMenu/SignUp/email_le" to="." method="_on_email_le_text_changed"]
+[connection signal="text_changed" from="AccountsMenu/SignUp/password_le" to="." method="_on_password_le_text_changed"]
+[connection signal="pressed" from="AccountsMenu/SignUp/sign_up_btn" to="." method="_on_sign_up_btn_pressed"]
+[connection signal="pressed" from="AccountsMenu/SignUp/go_sign_in_btn" to="." method="_on_go_sign_in_btn_pressed"]
+[connection signal="text_changed" from="AccountsMenu/SignIn/username_le" to="." method="_on_username_le_text_changed"]
+[connection signal="text_changed" from="AccountsMenu/SignIn/password_le" to="." method="_on_password_le_text_changed"]
+[connection signal="pressed" from="AccountsMenu/SignIn/sign_in_btn" to="." method="_on_sign_in_btn_pressed"]
+[connection signal="pressed" from="AccountsMenu/SignIn/go_sign_up_btn" to="." method="_on_go_sign_up_btn_pressed"]
