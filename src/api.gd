@@ -7,33 +7,63 @@ signal join_result(result: bool)
 
 var socket: WebSocketPeer
 var join_url: String
+var room_id: String
+var waiting_opponent: bool
 
 @export var _request_path: NodePath
 @onready var request_node: HTTPRequest = get_node(_request_path)
 
-const BASE_URL = "http://10.144.97.136:8000/"
-const header = {
-	sign_in = ["Content-Type: multipart/form-data; boundary=\"boundary\""],
-	sign_up = ["Content-Type: application/json"],
-	queue = ["Content-Type: application/json", "Authorization: Bearer %s"],
+const API_BASE_URL = "http://127.0.0.1:8000/"
+const WS_BASE_URL = "ws://127.0.0.1:8100/ws/"
+
+const headers = {
+	form_data = "Content-Type: multipart/form-data; boundary=\"boundary\"",
+	json = "Content-Type: application/json",
+	jwt_token = "Authorization: Bearer ",
 }
+var prev_state = -1
 
 func _process(_delta: float) -> void:
-	if !is_instance_valid(socket):
+	if socket == null or !is_instance_valid(socket):
 		return
 	socket.poll()
 	var state = socket.get_ready_state()
+	if state != prev_state:
+		prev_state = state
+		prints("State changed to: ", state)
 	match state:
 		WebSocketPeer.STATE_OPEN:
-			print("STATE_OPEN")
+			while socket.get_available_packet_count() > 0:
+				var packet = socket.get_packet()
+				if not socket.was_string_packet():
+					printerr("Received non-text packet! Size: ", packet.size())
+					continue  
+
+				var data = packet.get_string_from_utf8()
+				prints(data)
+				
+				var json = JSON.parse_string(data)
+				if json == null:
+					prints("Message no a JSON format: ", data)
+					continue
+
+				# Обработка сообщений
+				if waiting_opponent and json.has("room_id"):
+					waiting_opponent = false
+					room_id = json.room_id
+					join_url = "%splay_room/%s/" % [WS_BASE_URL, room_id]
+					socket.close()
+					await get_tree().create_timer(0.3).timeout
+					_connect()
+				else:
+					prints("Received other message: ", json)
 		WebSocketPeer.STATE_CLOSING:
 			print("STATE_CLOSING")
 		WebSocketPeer.STATE_CLOSED:
-			print("STATE_CLOSED")
 			var code = socket.get_close_code()
 			var reason = socket.get_close_reason()
-			socket.free()
 			socket = null
+			prints("Connection closed","CODE:",code,"Reason:",reason)
 
 # login
 func sign_in(username: String, password: String) -> void:
@@ -43,8 +73,8 @@ func sign_in(username: String, password: String) -> void:
 	_end_body(body)
 	
 	request_node.request_raw(
-		BASE_URL + "users/login/",
-		header.sign_in,
+		API_BASE_URL + "users/login/",
+		[headers.form_data],
 		HTTPClient.METHOD_POST,
 		body,
 	)
@@ -53,7 +83,7 @@ func sign_in(username: String, password: String) -> void:
 		var body_json = JSON.parse_string(res[3].get_string_from_utf8())
 		Global.access = body_json.access
 		sign_result.emit(true)
-		print("request success! :)")
+		prints("POST", res[1], "users/login/", body_json)
 	else:
 		sign_result.emit(false)
 		printerr("request error: ", res)
@@ -66,8 +96,8 @@ func sign_up(username: String, email: String, password: String) -> void:
 		password = password,
 	})
 	request_node.request(
-		BASE_URL + "users/register/",
-		header.sign_up,
+		API_BASE_URL + "users/register/",
+		[headers.json],
 		HTTPClient.METHOD_POST,
 		data,
 	)
@@ -75,31 +105,34 @@ func sign_up(username: String, email: String, password: String) -> void:
 	var res = await request_node.request_completed
 	if res[0] == HTTPRequest.RESULT_SUCCESS and res[1] == 200:
 		emit_signal("sign_result", true)
-		print("request success! :)")
+		prints("POST", res[1], "users/register/", res[3])
 	else:
 		emit_signal("sign_result", false)
 		printerr("request error: ", res)
 
 func join() -> void:
-	var headers = header.queue.duplicate(true)
-	headers[-1] %= Global.access
 	request_node.request(
-		BASE_URL + "queue/join/",
-		headers,
+		API_BASE_URL + "queue/join/",
+		[headers.json, headers.jwt_token + Global.access],
 		HTTPClient.METHOD_POST,
 	)
 	
 	var res = await request_node.request_completed
 	if res[0] == HTTPRequest.RESULT_SUCCESS and res[1] == 200:
 		join_result.emit(true)
-		print("request success! :)")
 		var body_json = JSON.parse_string(res[3].get_string_from_utf8())
-		var room_id = body_json.waiting_room_id
-		join_url = BASE_URL + room_id
+		prints("POST", res[1], "queue/join/", body_json)
+		if body_json.has('waiting_room_id'):
+			waiting_opponent = true
+			room_id = body_json.waiting_room_id
+			join_url = "%swaiting_room/%s/" % [WS_BASE_URL, room_id]
+		else:
+			room_id = body_json.room_id
+			join_url = "%splay_room/%s/" % [WS_BASE_URL, room_id]
 		_connect()
 	else:
 		join_result.emit(false)
-		printerr("request error: ", res)
+		printerr("Request Error: ", res)
 
 
 func _add_field(body: PackedByteArray, key: String, value: String) -> void:
@@ -111,10 +144,13 @@ func _end_body(body: PackedByteArray):
 
 func _connect() -> void:
 	socket = WebSocketPeer.new()
+	socket.handshake_headers = PackedStringArray([
+		"access: " + Global.access,
+	])
 	var err = socket.connect_to_url(join_url)
 	if err != OK:
-		printerr("connect error: ", err)
+		printerr("Connect error: ", err)
 		await get_tree().create_timer(5).timeout
 		_connect()
 	else:
-		printerr("connect...")
+		print("Connecting...")
