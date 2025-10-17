@@ -1,7 +1,6 @@
-[gd_scene load_steps=10 format=3 uid="uid://clbg1eyvs7ak8"]
+[gd_scene load_steps=9 format=3 uid="uid://clbg1eyvs7ak8"]
 
 [ext_resource type="Script" uid="uid://c155d6c6f3lr3" path="res://src/main_menu.gd" id="1_3er1b"]
-[ext_resource type="PackedScene" uid="uid://cuht5ocbqlwdl" path="res://scene/api.tscn" id="2_hxu56"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3er1b"]
 
@@ -221,8 +220,6 @@ text = "Рандом"
 [node name="play_friend_btn" type="Button" parent="GameMenuPopup/Background/VBoxContainer"]
 layout_mode = 2
 text = "С другом"
-
-[node name="Api" parent="." instance=ExtResource("2_hxu56")]
 
 [connection signal="pressed" from="VBoxContainer/start_btn" to="." method="_on_start_btn_pressed"]
 [connection signal="pressed" from="VBoxContainer/settings_btn" to="." method="_on_settings_btn_pressed"]

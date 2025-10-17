@@ -1,4 +1,4 @@
-extends Node
+extends HTTPRequest
 
 
 signal sign_result(result: bool)
@@ -9,9 +9,6 @@ var socket: WebSocketPeer
 var join_url: String
 var room_id: String
 var waiting_opponent: bool
-
-@export var _request_path: NodePath
-@onready var request_node: HTTPRequest = get_node(_request_path)
 
 const API_BASE_URL = "http://127.0.0.1:8000/"
 const WS_BASE_URL = "ws://127.0.0.1:8100/ws/"
@@ -24,7 +21,7 @@ const headers = {
 var prev_state = -1
 
 func _process(_delta: float) -> void:
-	if socket == null or !is_instance_valid(socket):
+	if !is_instance_valid(socket):
 		return
 	socket.poll()
 	var state = socket.get_ready_state()
@@ -37,26 +34,19 @@ func _process(_delta: float) -> void:
 				var packet = socket.get_packet()
 				if not socket.was_string_packet():
 					printerr("Received non-text packet! Size: ", packet.size())
-					continue  
+					continue
 
 				var data = packet.get_string_from_utf8()
-				prints(data)
-				
 				var json = JSON.parse_string(data)
 				if json == null:
 					prints("Message no a JSON format: ", data)
 					continue
 
-				# Обработка сообщений
-				if waiting_opponent and json.has("room_id"):
-					waiting_opponent = false
-					room_id = json.room_id
-					join_url = "%splay_room/%s/" % [WS_BASE_URL, room_id]
-					socket.close()
-					await get_tree().create_timer(0.3).timeout
-					_connect()
-				else:
-					prints("Received other message: ", json)
+				match Global.game_state:
+					Global.GameState.WaitingGame:
+						_waiting_game_process(json)
+					Global.GameState.PlayingGame:
+						_playing_game_process()
 		WebSocketPeer.STATE_CLOSING:
 			print("STATE_CLOSING")
 		WebSocketPeer.STATE_CLOSED:
@@ -72,13 +62,13 @@ func sign_in(username: String, password: String) -> void:
 	_add_field(body, "password", password)
 	_end_body(body)
 	
-	request_node.request_raw(
+	request_raw(
 		API_BASE_URL + "users/login/",
 		[headers.form_data],
 		HTTPClient.METHOD_POST,
 		body,
 	)
-	var res = await request_node.request_completed
+	var res = await request_completed
 	if res[0] == HTTPRequest.RESULT_SUCCESS and res[1] == 200:
 		var body_json = JSON.parse_string(res[3].get_string_from_utf8())
 		Global.access = body_json.access
@@ -95,14 +85,14 @@ func sign_up(username: String, email: String, password: String) -> void:
 		email = email,
 		password = password,
 	})
-	request_node.request(
+	request(
 		API_BASE_URL + "users/register/",
 		[headers.json],
 		HTTPClient.METHOD_POST,
 		data,
 	)
 	
-	var res = await request_node.request_completed
+	var res = await request_completed
 	if res[0] == HTTPRequest.RESULT_SUCCESS and res[1] == 200:
 		emit_signal("sign_result", true)
 		prints("POST", res[1], "users/register/", res[3])
@@ -111,22 +101,24 @@ func sign_up(username: String, email: String, password: String) -> void:
 		printerr("request error: ", res)
 
 func join() -> void:
-	request_node.request(
+	request(
 		API_BASE_URL + "queue/join/",
 		[headers.json, headers.jwt_token + Global.access],
 		HTTPClient.METHOD_POST,
 	)
 	
-	var res = await request_node.request_completed
+	var res = await request_completed
 	if res[0] == HTTPRequest.RESULT_SUCCESS and res[1] == 200:
 		join_result.emit(true)
 		var body_json = JSON.parse_string(res[3].get_string_from_utf8())
 		prints("POST", res[1], "queue/join/", body_json)
 		if body_json.has('waiting_room_id'):
+			Global.game_state = Global.GameState.WaitingGame
 			waiting_opponent = true
 			room_id = body_json.waiting_room_id
 			join_url = "%swaiting_room/%s/" % [WS_BASE_URL, room_id]
 		else:
+			Global.game_state = Global.GameState.PlayingGame
 			room_id = body_json.room_id
 			join_url = "%splay_room/%s/" % [WS_BASE_URL, room_id]
 		_connect()
@@ -154,3 +146,16 @@ func _connect() -> void:
 		_connect()
 	else:
 		print("Connecting...")
+
+func _waiting_game_process(json: Dictionary) -> void:
+	# Обработка сообщений
+	if waiting_opponent and json.has("room_id"):
+		waiting_opponent = false
+		room_id = json.room_id
+		join_url = "%splay_room/%s/" % [WS_BASE_URL, room_id]
+		_connect()
+	else:
+		prints("Received other message: ", json)
+
+func _playing_game_process() -> void:
+	pass
