@@ -20,5 +20,5 @@ static func set_user_info(info: Dictionary) -> void:
 
 static func append_user_info(info: Dictionary) -> void:
 	var user_info = get_user_info()
-	user_info.assign(info)
+	user_info.merge(info, true)
 	set_user_info(user_info)

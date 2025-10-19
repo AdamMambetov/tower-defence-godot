@@ -79,12 +79,12 @@ func _on_username_le_text_changed(new_text: String) -> void:
 func _on_play_random_btn_pressed() -> void:
 	Api.join()
 	$LoadingScreen.visible = true
-	var result: String = await Api.join_result
+	var result = await Api.join_result
 	$LoadingScreen.visible = false
-	if !result.is_empty():
+	if result[0]:
 		get_tree().change_scene_to_file("res://scene/main_map.tscn")
 	else:
-		$AcceptDialog.dialog_text = result
+		$AcceptDialog.dialog_text = result[1]
 		$AcceptDialog.reset_size()
 		$AcceptDialog.show()
 

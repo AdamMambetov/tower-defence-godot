@@ -2,7 +2,7 @@ extends HTTPRequest
 
 
 signal sign_result(success: bool, result: String)
-signal join_result(result: String)
+signal join_result(success: bool, result: String)
 
 
 var socket: WebSocketPeer
@@ -82,6 +82,7 @@ func sign_in(username: String, password: String) -> void:
 		UserInfo.append_user_info({ access = body_json.access })
 		sign_result.emit(true, res[3].get_string_from_utf8())
 		access_token_timer.start()
+		authorized = true
 		prints("POST", res[1], "users/login/", body_json)
 	else:
 		sign_result.emit(false, res[3].get_string_from_utf8())
@@ -89,20 +90,22 @@ func sign_in(username: String, password: String) -> void:
 
 # register
 func sign_up(username: String, email: String, password: String) -> void:
-	var data = JSON.stringify({
+	var data = {
 		username = username,
 		email = email,
 		password = password,
-	})
+	}
+	var json = JSON.stringify(data)
 	request(
 		API_BASE_URL + "users/register/",
 		[headers.json],
 		HTTPClient.METHOD_POST,
-		data,
+		json,
 	)
 	
 	var res = await request_completed
 	if res[0] == HTTPRequest.RESULT_SUCCESS and res[1] == 200:
+		UserInfo.append_user_info(data)
 		sign_result.emit(true, "Вы успешно зарегистрированы!")
 		prints("POST", res[1], "users/register/", res[3])
 	else:
@@ -112,12 +115,12 @@ func sign_up(username: String, email: String, password: String) -> void:
 func join() -> void:
 	if !authorized:
 		await get_tree().process_frame
-		join_result.emit("Вы не авторизованы!")
+		join_result.emit(false, "Вы не авторизованы!")
 		return
 	
 	request(
 		API_BASE_URL + "queue/join/",
-		[headers.json, headers.jwt_token + Global.access],
+		[headers.json, headers.jwt_token + UserInfo.get_user_info().access],
 		HTTPClient.METHOD_POST,
 	)
 	
@@ -135,19 +138,10 @@ func join() -> void:
 			room_id = body_json.room_id
 			join_url = "%splay_room/%s/" % [WS_BASE_URL, room_id]
 		_connect()
-	elif res[1] == 401:
-		var user_info = UserInfo.get_user_info()
-		if user_info.is_empty():
-			join_result.emit("Вы не авторизированы!")
-			printerr("Request Error: Not authorized!")
-			return
-		sign_in(user_info.username, user_info.password)
-		var result = await sign_result
 	else:
 		var error = res[3].get_string_from_utf8()
 		printerr("Request Error: ", error)
-		join_result.emit(error)
-
+		join_result.emit(false, error)
 
 func _add_field(body: PackedByteArray, key: String, value: String) -> void:
 	var content = "\r\n--boundary\r\n" + "Content-Disposition: form-data; name=\"%s\"\r\n" % key + "Content-Type: text/plain; charset=UTF-8\r\n\r\n" + value
@@ -164,19 +158,18 @@ func _connect() -> bool:
 	return socket.connect_to_url(join_url) == OK
 
 func _waiting_game_process(json: Dictionary) -> void:
-	# Обработка сообщений
 	if waiting_opponent and json.has("room_id"):
 		waiting_opponent = false
 		room_id = json.room_id
 		join_url = "%splay_room/%s/" % [WS_BASE_URL, room_id]
 		for i in 3:
 			if _connect():
-				join_result.emit(true)
+				join_result.emit(true, "")
 				await get_tree().create_timer(1.0).timeout
 				return
 		socket = null
 		Global.game_state = Global.GameState.Menu
-		join_result.emit(false)
+		join_result.emit(false, "Не удалось найти противника.")
 	else:
 		prints("Received other message: ", json)
 
@@ -201,4 +194,5 @@ func _create_access_token_timer() -> void:
 	add_child(access_token_timer)
 
 func  _on_access_token_timeout() -> void:
-	print('jdkfjkdjfkj')
+	var result = UserInfo.get_user_info()
+	sign_in(result.username, result.password)
