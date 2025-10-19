@@ -227,6 +227,10 @@ text = "У вас нет аккаунта? Зарегистрироваться"
 visible = false
 layout_mode = 1
 
+[node name="AcceptDialog" type="AcceptDialog" parent="."]
+oversampling_override = 1.0
+initial_position = 2
+
 [connection signal="pressed" from="VBoxContainer/start_btn" to="." method="_on_start_btn_pressed"]
 [connection signal="pressed" from="VBoxContainer/settings_btn" to="." method="_on_settings_btn_pressed"]
 [connection signal="pressed" from="VBoxContainer/account_btn" to="." method="_on_account_btn_pressed"]

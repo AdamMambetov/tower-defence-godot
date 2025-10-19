@@ -1,15 +1,19 @@
 extends HTTPRequest
 
 
-signal sign_result(result: bool)
-signal join_result(result: bool)
+signal sign_result(success: bool, result: String)
+signal join_result(result: String)
 
 
 var socket: WebSocketPeer
 var join_url: String
 var room_id: String
 var waiting_opponent: bool
+var authorized: bool
+var prev_state = -1
+var access_token_timer: Timer
 
+const ACCESS_TOKEN_LIFE_TIME = 60*60
 const API_BASE_URL = "http://127.0.0.1:8000/"
 const WS_BASE_URL = "ws://127.0.0.1:8100/ws/"
 
@@ -18,7 +22,11 @@ const headers = {
 	json = "Content-Type: application/json",
 	jwt_token = "Authorization: Bearer ",
 }
-var prev_state = -1
+
+
+func _ready() -> void:
+	_create_access_token_timer()
+	_try_auth()
 
 func _process(_delta: float) -> void:
 	if !is_instance_valid(socket):
@@ -71,12 +79,13 @@ func sign_in(username: String, password: String) -> void:
 	var res = await request_completed
 	if res[0] == HTTPRequest.RESULT_SUCCESS and res[1] == 200:
 		var body_json = JSON.parse_string(res[3].get_string_from_utf8())
-		Global.access = body_json.access
-		sign_result.emit(true)
+		UserInfo.append_user_info({ access = body_json.access })
+		sign_result.emit(true, res[3].get_string_from_utf8())
+		access_token_timer.start()
 		prints("POST", res[1], "users/login/", body_json)
 	else:
-		sign_result.emit(false)
-		printerr("request error: ", res)
+		sign_result.emit(false, res[3].get_string_from_utf8())
+		printerr("request error: ", res[3].get_string_from_utf8())
 
 # register
 func sign_up(username: String, email: String, password: String) -> void:
@@ -94,13 +103,18 @@ func sign_up(username: String, email: String, password: String) -> void:
 	
 	var res = await request_completed
 	if res[0] == HTTPRequest.RESULT_SUCCESS and res[1] == 200:
-		emit_signal("sign_result", true)
+		sign_result.emit(true, "Вы успешно зарегистрированы!")
 		prints("POST", res[1], "users/register/", res[3])
 	else:
-		emit_signal("sign_result", false)
-		printerr("request error: ", res)
+		sign_result.emit(false, res[3].get_string_from_utf8())
+		printerr("request error: ", res, res[3].get_string_from_utf8())
 
 func join() -> void:
+	if !authorized:
+		await get_tree().process_frame
+		join_result.emit("Вы не авторизованы!")
+		return
+	
 	request(
 		API_BASE_URL + "queue/join/",
 		[headers.json, headers.jwt_token + Global.access],
@@ -121,9 +135,18 @@ func join() -> void:
 			room_id = body_json.room_id
 			join_url = "%splay_room/%s/" % [WS_BASE_URL, room_id]
 		_connect()
+	elif res[1] == 401:
+		var user_info = UserInfo.get_user_info()
+		if user_info.is_empty():
+			join_result.emit("Вы не авторизированы!")
+			printerr("Request Error: Not authorized!")
+			return
+		sign_in(user_info.username, user_info.password)
+		var result = await sign_result
 	else:
-		join_result.emit(false)
-		printerr("Request Error: ", res)
+		var error = res[3].get_string_from_utf8()
+		printerr("Request Error: ", error)
+		join_result.emit(error)
 
 
 func _add_field(body: PackedByteArray, key: String, value: String) -> void:
@@ -136,10 +159,10 @@ func _end_body(body: PackedByteArray):
 func _connect() -> bool:
 	socket = WebSocketPeer.new()
 	socket.handshake_headers = PackedStringArray([
-		"access: " + Global.access,
+		"access: " + UserInfo.get_user_info().access,
 	])
 	return socket.connect_to_url(join_url) == OK
-	
+
 func _waiting_game_process(json: Dictionary) -> void:
 	# Обработка сообщений
 	if waiting_opponent and json.has("room_id"):
@@ -159,3 +182,23 @@ func _waiting_game_process(json: Dictionary) -> void:
 
 func _playing_game_process() -> void:
 	pass
+
+func _try_auth() -> void:
+	var user_info = UserInfo.get_user_info()
+	if user_info.is_empty():
+		authorized = false
+	elif user_info.has("access"):
+		sign_in(user_info.username, user_info.password)
+		var result = await sign_result
+		authorized = result[0]
+
+func _create_access_token_timer() -> void:
+	access_token_timer = Timer.new()
+	access_token_timer.autostart = false
+	access_token_timer.one_shot = true
+	access_token_timer.wait_time = ACCESS_TOKEN_LIFE_TIME
+	access_token_timer.timeout.connect(_on_access_token_timeout)
+	add_child(access_token_timer)
+
+func  _on_access_token_timeout() -> void:
+	print('jdkfjkdjfkj')

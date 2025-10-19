@@ -7,5 +7,5 @@ enum GameState {
 	PlayingGame,
 }
 
-var access: String
+
 var game_state: GameState

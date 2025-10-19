@@ -17,6 +17,12 @@ var menu_state: MenuState:
 		$AccountsMenu.visible = value == MenuState.Accounts
 
 
+func _show_accept_dialog(dialog_text: String) -> void:
+	$AcceptDialog.dialog_text = dialog_text
+	$AcceptDialog.reset_size()
+	$AcceptDialog.show()
+
+
 func _on_start_btn_pressed() -> void:
 	menu_state = MenuState.Game
 
@@ -30,28 +36,36 @@ func _on_exit_btn_pressed() -> void:
 	get_tree().quit()
 
 func _on_go_sign_up_btn_pressed() -> void:
-	$AccountsPopup/Background/SignIn.visible = false
-	$AccountsPopup/Background/SignUp.visible = true
-	username = $AccountsPopup/Background/SignUp/username_le.text
-	password = $AccountsPopup/Background/SignUp/password_le.text
+	$AccountsMenu/SignIn.visible = false
+	$AccountsMenu/SignUp.visible = true
+	username = $AccountsMenu/SignUp/username_le.text
+	password = $AccountsMenu/SignUp/password_le.text
 
 func _on_go_sign_in_btn_pressed() -> void:
-	$AccountsPopup/Background/SignIn.visible = true
-	$AccountsPopup/Background/SignUp.visible = false
-	username = $AccountsPopup/Background/SignIn/username_le.text
-	password = $AccountsPopup/Background/SignIn/password_le.text
+	$AccountsMenu/SignIn.visible = true
+	$AccountsMenu/SignUp.visible = false
+	username = $AccountsMenu/SignIn/username_le.text
+	password = $AccountsMenu/SignIn/password_le.text
 
 func _on_sign_up_btn_pressed() -> void:
 	Api.sign_up(username, email, password)
+	$LoadingScreen.visible = true
 	var res = await Api.sign_result
-	if res:
-		menu_state = MenuState.None
+	var dialog_text = res[1]
+	if res[0]:
+		Api.sign_in(username, password)
+		res = await Api.sign_result
+		if !res[0]:
+			dialog_text = res[1]
+	$LoadingScreen.visible = false
+	_show_accept_dialog(dialog_text)
 
 func _on_sign_in_btn_pressed() -> void:
 	Api.sign_in(username, password)
+	$LoadingScreen.visible = true
 	var res = await Api.sign_result
-	if res:
-		menu_state = MenuState.None
+	$LoadingScreen.visible = false
+	_show_accept_dialog(res[1])
 
 func _on_password_le_text_changed(new_text: String) -> void:
 	password = new_text
@@ -65,12 +79,14 @@ func _on_username_le_text_changed(new_text: String) -> void:
 func _on_play_random_btn_pressed() -> void:
 	Api.join()
 	$LoadingScreen.visible = true
-	var success = await Api.join_result
+	var result: String = await Api.join_result
 	$LoadingScreen.visible = false
-	if success:
+	if !result.is_empty():
 		get_tree().change_scene_to_file("res://scene/main_map.tscn")
 	else:
-		print("NOOOOOOOOOOOOOOO111!!!!!!")
+		$AcceptDialog.dialog_text = result
+		$AcceptDialog.reset_size()
+		$AcceptDialog.show()
 
 func _on_play_friend_btn_pressed() -> void:
 	pass # Replace with function body.
