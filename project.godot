@@ -19,3 +19,10 @@ config/icon="res://icon.svg"
 
 Global="*res://src/global.gd"
 Api="*res://src/api.gd"
+
+[layer_names]
+
+2d_physics/layer_1="None"
+2d_physics/layer_2="Player"
+2d_physics/layer_3="Enemy"
+2d_physics/layer_4="Tower"

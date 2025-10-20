@@ -21,3 +21,14 @@ func _update_camera() -> void:
 			$Camera2D.limit_left,
 			$Camera2D.limit_right,
 		)
+		print($Camera2D.position.x)
+
+
+func _on_enemy_tower_input_event(
+		_viewport: Node,
+		event: InputEvent,
+		_shape_idx: int
+) -> void:
+	if event is InputEventMouseButton:
+		if !event.pressed:
+			print("jfkdjfkdjf")

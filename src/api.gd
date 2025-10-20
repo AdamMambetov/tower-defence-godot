@@ -79,7 +79,11 @@ func sign_in(username: String, password: String) -> void:
 	var res = await request_completed
 	if res[0] == HTTPRequest.RESULT_SUCCESS and res[1] == 200:
 		var body_json = JSON.parse_string(res[3].get_string_from_utf8())
-		UserInfo.append_user_info({ access = body_json.access })
+		UserInfo.append_user_info({
+			access = body_json.access,
+			username = username,
+			password = password,
+		 })
 		sign_result.emit(true, res[3].get_string_from_utf8())
 		access_token_timer.start()
 		authorized = true
@@ -90,22 +94,21 @@ func sign_in(username: String, password: String) -> void:
 
 # register
 func sign_up(username: String, email: String, password: String) -> void:
-	var data = {
+	var data = JSON.stringify({
 		username = username,
 		email = email,
 		password = password,
-	}
-	var json = JSON.stringify(data)
+	})
 	request(
 		API_BASE_URL + "users/register/",
 		[headers.json],
 		HTTPClient.METHOD_POST,
-		json,
+		data,
 	)
 	
 	var res = await request_completed
 	if res[0] == HTTPRequest.RESULT_SUCCESS and res[1] == 200:
-		UserInfo.append_user_info(data)
+		UserInfo.append_user_info({ username = username, password = password })
 		sign_result.emit(true, "Вы успешно зарегистрированы!")
 		prints("POST", res[1], "users/register/", res[3])
 	else:
@@ -142,6 +145,7 @@ func join() -> void:
 		var error = res[3].get_string_from_utf8()
 		printerr("Request Error: ", error)
 		join_result.emit(false, error)
+
 
 func _add_field(body: PackedByteArray, key: String, value: String) -> void:
 	var content = "\r\n--boundary\r\n" + "Content-Disposition: form-data; name=\"%s\"\r\n" % key + "Content-Type: text/plain; charset=UTF-8\r\n\r\n" + value
@@ -192,6 +196,7 @@ func _create_access_token_timer() -> void:
 	access_token_timer.wait_time = ACCESS_TOKEN_LIFE_TIME
 	access_token_timer.timeout.connect(_on_access_token_timeout)
 	add_child(access_token_timer)
+
 
 func  _on_access_token_timeout() -> void:
 	var result = UserInfo.get_user_info()
