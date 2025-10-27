@@ -26,3 +26,7 @@ Api="*res://src/api.gd"
 2d_physics/layer_2="Player"
 2d_physics/layer_3="Enemy"
 2d_physics/layer_4="Tower"
+
+[network]
+
+tls/enable_tls_v1.3=false

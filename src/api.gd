@@ -1,10 +1,11 @@
-extends HTTPRequest
+extends Node
 
 
 signal sign_result(success: bool, result: String)
 signal join_result(success: bool, result: String)
+signal new_data_recived(success: bool, result: Dictionary)
 
-
+@onready var http := HTTPRequest.new()
 var socket: WebSocketPeer
 var join_url: String
 var room_id: String
@@ -25,6 +26,7 @@ const headers = {
 
 
 func _ready() -> void:
+	add_child(http)
 	_create_access_token_timer()
 	_try_auth()
 
@@ -38,8 +40,9 @@ func _process(_delta: float) -> void:
 		prints("State changed to: ", state)
 	match state:
 		WebSocketPeer.STATE_OPEN:
-			while socket.get_available_packet_count() > 0:
+			while socket.get_available_packet_count():
 				var packet = socket.get_packet()
+				prints("Packet recieved!")
 				if not socket.was_string_packet():
 					printerr("Received non-text packet! Size: ", packet.size())
 					continue
@@ -54,9 +57,7 @@ func _process(_delta: float) -> void:
 					Global.GameState.WaitingGame:
 						_waiting_game_process(json)
 					Global.GameState.PlayingGame:
-						_playing_game_process()
-		WebSocketPeer.STATE_CLOSING:
-			print("STATE_CLOSING")
+						_playing_game_process(json)
 		WebSocketPeer.STATE_CLOSED:
 			var code = socket.get_close_code()
 			var reason = socket.get_close_reason()
@@ -70,13 +71,13 @@ func sign_in(username: String, password: String) -> void:
 	_add_field(body, "password", password)
 	_end_body(body)
 	
-	request_raw(
+	http.request_raw(
 		API_BASE_URL + "users/login/",
 		[headers.form_data],
 		HTTPClient.METHOD_POST,
 		body,
 	)
-	var res = await request_completed
+	var res = await http.request_completed
 	if res[0] == HTTPRequest.RESULT_SUCCESS and res[1] == 200:
 		var body_json = JSON.parse_string(res[3].get_string_from_utf8())
 		UserInfo.append_user_info({
@@ -99,14 +100,14 @@ func sign_up(username: String, email: String, password: String) -> void:
 		email = email,
 		password = password,
 	})
-	request(
+	http.request(
 		API_BASE_URL + "users/register/",
 		[headers.json],
 		HTTPClient.METHOD_POST,
 		data,
 	)
 	
-	var res = await request_completed
+	var res = await http.request_completed
 	if res[0] == HTTPRequest.RESULT_SUCCESS and res[1] == 200:
 		UserInfo.append_user_info({ username = username, password = password })
 		sign_result.emit(true, "Вы успешно зарегистрированы!")
@@ -121,13 +122,13 @@ func join() -> void:
 		join_result.emit(false, "Вы не авторизованы!")
 		return
 	
-	request(
+	http.request(
 		API_BASE_URL + "queue/join/",
 		[headers.json, headers.jwt_token + UserInfo.get_user_info().access],
 		HTTPClient.METHOD_POST,
 	)
 	
-	var res = await request_completed
+	var res = await http.request_completed
 	if res[0] == HTTPRequest.RESULT_SUCCESS and res[1] == 200:
 		var body_json = JSON.parse_string(res[3].get_string_from_utf8())
 		prints("POST", res[1], "queue/join/", body_json)
@@ -140,12 +141,12 @@ func join() -> void:
 			Global.game_state = Global.GameState.PlayingGame
 			room_id = body_json.room_id
 			join_url = "%splay_room/%s/" % [WS_BASE_URL, room_id]
-		_connect()
+			join_result.emit(true, "")
+		await _connect()
 	else:
 		var error = res[3].get_string_from_utf8()
 		printerr("Request Error: ", error)
 		join_result.emit(false, error)
-
 
 func _add_field(body: PackedByteArray, key: String, value: String) -> void:
 	var content = "\r\n--boundary\r\n" + "Content-Disposition: form-data; name=\"%s\"\r\n" % key + "Content-Type: text/plain; charset=UTF-8\r\n\r\n" + value
@@ -159,7 +160,21 @@ func _connect() -> bool:
 	socket.handshake_headers = PackedStringArray([
 		"access: " + UserInfo.get_user_info().access,
 	])
-	return socket.connect_to_url(join_url) == OK
+	var err = socket.connect_to_url(join_url)
+	if err != OK:
+		printerr("Failed to initiate websocket:", err)
+		return false
+
+	var start_time = Time.get_ticks_msec()
+	while socket.get_ready_state() == WebSocketPeer.STATE_CONNECTING:
+		socket.poll()
+		await get_tree().process_frame
+		if Time.get_ticks_msec() - start_time > 5000:
+			printerr("WebSocket timeout")
+			return false
+	prints("WebSocket connected:", join_url)
+	return socket.get_ready_state() == WebSocketPeer.STATE_OPEN
+
 
 func _waiting_game_process(json: Dictionary) -> void:
 	if waiting_opponent and json.has("room_id"):
@@ -167,7 +182,8 @@ func _waiting_game_process(json: Dictionary) -> void:
 		room_id = json.room_id
 		join_url = "%splay_room/%s/" % [WS_BASE_URL, room_id]
 		for i in 3:
-			if _connect():
+			if await _connect():
+				Global.game_state = Global.GameState.PlayingGame
 				join_result.emit(true, "")
 				await get_tree().create_timer(1.0).timeout
 				return
@@ -177,8 +193,8 @@ func _waiting_game_process(json: Dictionary) -> void:
 	else:
 		prints("Received other message: ", json)
 
-func _playing_game_process() -> void:
-	pass
+func _playing_game_process(json: Dictionary) -> void:
+	new_data_recived.emit(true, json)
 
 func _try_auth() -> void:
 	var user_info = UserInfo.get_user_info()

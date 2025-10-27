@@ -6,6 +6,9 @@ var camera_speed = 50
 
 func _process(_delta: float) -> void:
 	_update_camera()
+	var result = await Api.new_data_recived
+	if result[0]:
+		_new_data_handler(result[1])
  
 
 func _update_camera() -> void:
@@ -21,14 +24,43 @@ func _update_camera() -> void:
 			$Camera2D.limit_left,
 			$Camera2D.limit_right,
 		)
-		print($Camera2D.position.x)
+
+func _new_data_handler(data: Dictionary) -> void:
+	match data.get("event"):
+		"start_game": prints("Опонент подключился, игра началсь!");
+		"change_data":
+			$CanvasLayer/UI/HBoxContainer/HealthBar.value = data.get("health")
+			$CanvasLayer/UI/MoneyValue.text = str(data.get("money"))
+		"end_game": prints("Игра закончена ")
+
+
+func _on_player_tower_input_event(
+	_viewport: Node, 
+	event: InputEvent, 
+	_shape_idx: int
+) -> void:
+	if event is InputEventMouseButton:
+		if event.pressed:
+			var data := {
+				"who": "cursor",
+				"where": "player",
+				"type": "click"
+			}
+			var json := JSON.stringify(data)
+			Api.socket.send_text(json)
 
 
 func _on_enemy_tower_input_event(
-		_viewport: Node,
-		event: InputEvent,
-		_shape_idx: int
+	_viewport: Node,
+	event: InputEvent,
+	_shape_idx: int
 ) -> void:
 	if event is InputEventMouseButton:
-		if !event.pressed:
-			print("jfkdjfkdjf")
+		if event.pressed:
+			var data := {
+				"who": "cursor",
+				"where": "enemy",
+				"type": "click"
+			}
+			var json := JSON.stringify(data)
+			Api.socket.send_text(json)

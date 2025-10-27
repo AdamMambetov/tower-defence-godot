@@ -739,7 +739,8 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/UI"]
-layout_mode = 0
+layout_mode = 1
+anchors_preset = -1
 offset_right = 40.0
 offset_bottom = 40.0
 
@@ -748,6 +749,23 @@ custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_4jeie")
 theme_override_styles/fill = SubResource("StyleBoxFlat_hquly")
-value = 50.0
+value = 100.0
 
+[node name="MoneyText" type="Label" parent="CanvasLayer/UI"]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 40.0
+offset_right = 42.0
+offset_bottom = 63.0
+text = "Money:"
+
+[node name="MoneyValue" type="Label" parent="CanvasLayer/UI"]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 40.0
+offset_right = 104.0
+offset_bottom = 63.0
+text = "0"
+
+[connection signal="input_event" from="CanvasLayer2/PlayerTower" to="." method="_on_player_tower_input_event"]
 [connection signal="input_event" from="CanvasLayer2/EnemyTower" to="." method="_on_enemy_tower_input_event"]
