@@ -1,7 +1,14 @@
-[gd_scene load_steps=8 format=4 uid="uid://d1vrkfxgttq3c"]
+[gd_scene load_steps=9 format=4 uid="uid://d1vrkfxgttq3c"]
 
 [ext_resource type="Script" uid="uid://cfltnwoeynwn2" path="res://src/main_map.gd" id="1_xf4q7"]
 [ext_resource type="Texture2D" uid="uid://dnhk6e8h8p3f0" path="res://file/castle/tile_castle.png" id="2_cv3lj"]
+[ext_resource type="Texture2D" uid="uid://rucn240baf47" path="res://icon.svg" id="3_4jeie"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4jeie"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hquly"]
+bg_color = Color(1, 0, 0, 1)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_13gc7"]
 texture = ExtResource("2_cv3lj")
@@ -682,12 +689,6 @@ sources/0 = SubResource("TileSetAtlasSource_13gc7")
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cv3lj"]
 size = Vector2(196, 87)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4jeie"]
-bg_color = Color(0, 0, 0, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hquly"]
-bg_color = Color(1, 0, 0, 1)
-
 [node name="MainMap" type="Node2D"]
 script = ExtResource("1_xf4q7")
 
@@ -698,60 +699,81 @@ limit_top = 0
 limit_right = 1000
 limit_bottom = 644
 
-[node name="CanvasLayer2" type="CanvasLayer" parent="."]
+[node name="Game Layer" type="CanvasLayer" parent="."]
 follow_viewport_enabled = true
 
-[node name="PlayerTower" type="Area2D" parent="CanvasLayer2"]
+[node name="PlayerTower" type="Area2D" parent="Game Layer"]
 collision_layer = 10
 collision_mask = 4
 
-[node name="TileMapLayer" type="TileMapLayer" parent="CanvasLayer2/PlayerTower"]
+[node name="PlayerHealthBar" type="ProgressBar" parent="Game Layer/PlayerTower"]
+custom_minimum_size = Vector2(200, 0)
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = 510.0
+offset_right = 200.0
+offset_bottom = 533.0
+grow_vertical = 0
+theme_override_styles/background = SubResource("StyleBoxFlat_4jeie")
+theme_override_styles/fill = SubResource("StyleBoxFlat_hquly")
+value = 100.0
+
+[node name="TileMapLayer" type="TileMapLayer" parent="Game Layer/PlayerTower"]
 scale = Vector2(1.53, 1.53)
 tile_map_data = PackedByteArray("AAAFABYAAAAFAA4AAAAGABYAAAAGAA4AAAAAABcAAAAAAA8AAAAAABgAAAAAABAAAAAAABkAAAAAABEAAAABABYAAAABAA4AAAABABcAAAABAA8AAAABABgAAAABABAAAAABABkAAAABABEAAAACABYAAAACAA4AAAACABcAAAACAA8AAAACABgAAAACABAAAAACABkAAAACABEAAAADABYAAAADAA4AAAADABcAAAADAA8AAAADABgAAAADABAAAAADABkAAAADABEAAAAEABYAAAAEAA4AAAAEABcAAAAEAA8AAAAEABgAAAAEABAAAAAEABkAAAAEABEAAAAFABcAAAAFAA8AAAAFABgAAAAFABAAAAAFABkAAAAFABEAAAAGABcAAAAGAA8AAAAGABgAAAAGABAAAAAGABkAAAAGABEAAAAHABcAAAAHAA8AAAAHABgAAAAHABAAAAAHABkAAAAHABEAAAA=")
 tile_set = SubResource("TileSet_arx8d")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CanvasLayer2/PlayerTower"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Game Layer/PlayerTower"]
 position = Vector2(98, 593.5)
 shape = SubResource("RectangleShape2D_cv3lj")
 
-[node name="EnemyTower" type="Area2D" parent="CanvasLayer2"]
+[node name="UnitSpawn" type="Node2D" parent="Game Layer/PlayerTower"]
+position = Vector2(250, 600)
+
+[node name="EnemyTower" type="Area2D" parent="Game Layer"]
 position = Vector2(1850, 0)
 collision_layer = 12
 collision_mask = 2
 
-[node name="TileMapLayer" type="TileMapLayer" parent="CanvasLayer2/EnemyTower"]
+[node name="EnemyHealthBar" type="ProgressBar" parent="Game Layer/EnemyTower"]
+custom_minimum_size = Vector2(200, 0)
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = 510.0
+offset_right = 200.0
+offset_bottom = 533.0
+grow_vertical = 0
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_4jeie")
+theme_override_styles/fill = SubResource("StyleBoxFlat_hquly")
+value = 100.0
+
+[node name="TileMapLayer" type="TileMapLayer" parent="Game Layer/EnemyTower"]
 scale = Vector2(1.53, 1.53)
 tile_map_data = PackedByteArray("AAAFABYAAAAFAA4AAAAGABYAAAAGAA4AAAAAABcAAAAAAA8AAAAAABgAAAAAABAAAAAAABkAAAAAABEAAAABABYAAAABAA4AAAABABcAAAABAA8AAAABABgAAAABABAAAAABABkAAAABABEAAAACABYAAAACAA4AAAACABcAAAACAA8AAAACABgAAAACABAAAAACABkAAAACABEAAAADABYAAAADAA4AAAADABcAAAADAA8AAAADABgAAAADABAAAAADABkAAAADABEAAAAEABYAAAAEAA4AAAAEABcAAAAEAA8AAAAEABgAAAAEABAAAAAEABkAAAAEABEAAAAFABcAAAAFAA8AAAAFABgAAAAFABAAAAAFABkAAAAFABEAAAAGABcAAAAGAA8AAAAGABgAAAAGABAAAAAGABkAAAAGABEAAAAHABcAAAAHAA8AAAAHABgAAAAHABAAAAAHABkAAAAHABEAAAA=")
 tile_set = SubResource("TileSet_arx8d")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CanvasLayer2/EnemyTower"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Game Layer/EnemyTower"]
 position = Vector2(98, 593.5)
 shape = SubResource("RectangleShape2D_cv3lj")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="UnitSpawn" type="Node2D" parent="Game Layer/EnemyTower"]
+position = Vector2(-70, 600)
 
-[node name="UI" type="Control" parent="CanvasLayer"]
+[node name="UI Layer" type="CanvasLayer" parent="."]
+
+[node name="UI" type="Control" parent="UI Layer"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/UI"]
-layout_mode = 1
-anchors_preset = -1
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="HealthBar" type="ProgressBar" parent="CanvasLayer/UI/HBoxContainer"]
-custom_minimum_size = Vector2(500, 0)
-layout_mode = 2
-theme_override_styles/background = SubResource("StyleBoxFlat_4jeie")
-theme_override_styles/fill = SubResource("StyleBoxFlat_hquly")
-value = 100.0
-
-[node name="MoneyText" type="Label" parent="CanvasLayer/UI"]
+[node name="MoneyText" type="Label" parent="UI Layer/UI"]
 layout_mode = 0
 offset_left = 2.0
 offset_top = 40.0
@@ -759,7 +781,7 @@ offset_right = 42.0
 offset_bottom = 63.0
 text = "Money:"
 
-[node name="MoneyValue" type="Label" parent="CanvasLayer/UI"]
+[node name="MoneyValue" type="Label" parent="UI Layer/UI"]
 layout_mode = 0
 offset_left = 64.0
 offset_top = 40.0
@@ -767,5 +789,25 @@ offset_right = 104.0
 offset_bottom = 63.0
 text = "0"
 
-[connection signal="input_event" from="CanvasLayer2/PlayerTower" to="." method="_on_player_tower_input_event"]
-[connection signal="input_event" from="CanvasLayer2/EnemyTower" to="." method="_on_enemy_tower_input_event"]
+[node name="MinionButton" type="TextureButton" parent="UI Layer/UI"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -376.0
+offset_right = -296.0
+offset_bottom = 80.0
+grow_horizontal = 2
+texture_normal = ExtResource("3_4jeie")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="EnemySpawnTimer" type="Timer" parent="."]
+wait_time = 2.0
+autostart = true
+
+[connection signal="input_event" from="Game Layer/PlayerTower" to="." method="_on_player_tower_input_event"]
+[connection signal="input_event" from="Game Layer/EnemyTower" to="." method="_on_enemy_tower_input_event"]
+[connection signal="pressed" from="UI Layer/UI/MinionButton" to="." method="_on_minion_button_pressed"]
+[connection signal="pressed" from="UI Layer/UI/MinionButton" to="." method="_on_texture_button_pressed"]
+[connection signal="timeout" from="EnemySpawnTimer" to="." method="_on_enemy_spawn_timer_timeout"]

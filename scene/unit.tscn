@@ -1,0 +1,37 @@
+[gd_scene load_steps=5 format=3 uid="uid://c8srs8kms2owv"]
+
+[ext_resource type="Script" uid="uid://b1aemje2io0qa" path="res://src/unit.gd" id="1_f4vs5"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_f4vs5"]
+size = Vector3(50, 50, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_w23df"]
+size = Vector2(50, 50)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_f4vs5"]
+size = Vector2(35, 100)
+
+[node name="Unit" type="Area2D"]
+collision_layer = 0
+collision_mask = 8
+script = ExtResource("1_f4vs5")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="."]
+mesh = SubResource("BoxMesh_f4vs5")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_w23df")
+
+[node name="ShapeCast2D" type="ShapeCast2D" parent="."]
+shape = SubResource("RectangleShape2D_f4vs5")
+target_position = Vector2(100, 0)
+collision_mask = 0
+collide_with_areas = true
+collide_with_bodies = false
+
+[node name="Label" type="Label" parent="."]
+offset_left = -20.0
+offset_top = -12.0
+offset_right = 20.0
+offset_bottom = 11.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)

@@ -4,11 +4,11 @@ extends Node2D
 var camera_speed = 50
 
 
+func _ready() -> void:
+	Api.connect("new_data_recived", _on_Api_new_data_recieved)
+
 func _process(_delta: float) -> void:
 	_update_camera()
-	var result = await Api.new_data_recived
-	if result[0]:
-		_new_data_handler(result[1])
  
 
 func _update_camera() -> void:
@@ -64,3 +64,19 @@ func _on_enemy_tower_input_event(
 			}
 			var json := JSON.stringify(data)
 			Api.socket.send_text(json)
+
+func _on_Api_new_data_recieved(success: bool, result: Dictionary) -> void:
+	if success:
+		_new_data_handler(result)
+
+func _on_minion_button_pressed() -> void:
+	var unit = preload("res://scene/unit.tscn").instantiate()
+	unit.global_position = $"Game Layer/PlayerTower/UnitSpawn".global_position
+	unit.is_player = true
+	$"Game Layer".add_child(unit)
+
+func _on_enemy_spawn_timer_timeout() -> void:
+	var unit = preload("res://scene/unit.tscn").instantiate()
+	unit.global_position = $"Game Layer/EnemyTower/UnitSpawn".global_position
+	unit.is_player = false
+	$"Game Layer".add_child(unit)
