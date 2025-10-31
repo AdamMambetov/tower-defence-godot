@@ -52,6 +52,7 @@ layout_mode = 2
 text = "Начать"
 
 [node name="settings_btn" type="Button" parent="VBoxContainer"]
+visible = false
 layout_mode = 2
 text = "Настройки"
 

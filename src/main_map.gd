@@ -1,6 +1,7 @@
 extends Node2D
 
 
+const UNIT_SCENE = preload("res://scene/unit.tscn")
 var camera_speed = 50
 
 
@@ -26,57 +27,34 @@ func _update_camera() -> void:
 		)
 
 func _new_data_handler(data: Dictionary) -> void:
-	match data.get("event"):
+	match data.get("type"):
 		"start_game": prints("Опонент подключился, игра началсь!");
-		"change_data":
-			$CanvasLayer/UI/HBoxContainer/HealthBar.value = data.get("health")
-			$CanvasLayer/UI/MoneyValue.text = str(data.get("money"))
 		"end_game": prints("Игра закончена ")
+		"spawn":
+			var unit = UNIT_SCENE.instantiate()
+			unit.is_player = false
+			unit.global_position = $"Game Layer/EnemyTower".get_spawn_position()
+			unit.update_info(data.enemy)
+			$"Game Layer".add_child(unit)
 
-
-func _on_player_tower_input_event(
-	_viewport: Node, 
-	event: InputEvent, 
-	_shape_idx: int
-) -> void:
-	if event is InputEventMouseButton:
-		if event.pressed:
-			var data := {
-				"who": "cursor",
-				"where": "player",
-				"type": "click"
-			}
-			var json := JSON.stringify(data)
-			Api.socket.send_text(json)
-
-
-func _on_enemy_tower_input_event(
-	_viewport: Node,
-	event: InputEvent,
-	_shape_idx: int
-) -> void:
-	if event is InputEventMouseButton:
-		if event.pressed:
-			var data := {
-				"who": "cursor",
-				"where": "enemy",
-				"type": "click"
-			}
-			var json := JSON.stringify(data)
-			Api.socket.send_text(json)
 
 func _on_Api_new_data_recieved(success: bool, result: Dictionary) -> void:
 	if success:
 		_new_data_handler(result)
 
 func _on_minion_button_pressed() -> void:
-	var unit = preload("res://scene/unit.tscn").instantiate()
-	unit.global_position = $"Game Layer/PlayerTower/UnitSpawn".global_position
+	var info = {
+		type = "spawn",
+		enemy = {
+			speed = randi_range(10, 50),
+			damage = randi_range(5, 20),
+			health = randi_range(30, 100),
+		}
+	}
+	Api.socket.send_text(JSON.stringify(info))
+	
+	var unit = UNIT_SCENE.instantiate()
+	unit.global_position = $"Game Layer/PlayerTower".get_spawn_position()
 	unit.is_player = true
-	$"Game Layer".add_child(unit)
-
-func _on_enemy_spawn_timer_timeout() -> void:
-	var unit = preload("res://scene/unit.tscn").instantiate()
-	unit.global_position = $"Game Layer/EnemyTower/UnitSpawn".global_position
-	unit.is_player = false
+	unit.update_info(info.enemy)
 	$"Game Layer".add_child(unit)

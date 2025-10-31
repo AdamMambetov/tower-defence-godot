@@ -33,3 +33,9 @@ func _physics_process(delta: float) -> void:
 			position.x += speed * delta 
 		else:
 			position.x -= speed * delta 
+
+
+func update_info(info: Dictionary) -> void:
+	speed = info.speed
+	damage = info.damage
+	health = info.health
