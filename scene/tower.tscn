@@ -715,4 +715,4 @@ shape = SubResource("RectangleShape2D_cv3lj")
 position = Vector2(200, 0)
 
 [node name="UnitSpawnEnemy" type="Node2D" parent="."]
-position = Vector2(400, 0)
+position = Vector2(-200, 0)

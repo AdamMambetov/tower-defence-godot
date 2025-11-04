@@ -1,11 +1,10 @@
-extends Node
+extends HTTPRequest
 
 
 signal sign_result(success: bool, result: String)
 signal join_result(success: bool, result: String)
 signal new_data_recived(success: bool, result: Dictionary)
 
-@onready var http := HTTPRequest.new()
 var socket: WebSocketPeer
 var join_url: String
 var room_id: String
@@ -15,8 +14,8 @@ var prev_state = -1
 var access_token_timer: Timer
 
 const ACCESS_TOKEN_LIFE_TIME = 60*60
-const API_BASE_URL = "http://127.0.0.1:8000/"
-const WS_BASE_URL = "ws://127.0.0.1:8100/ws/"
+const API_BASE_URL = "http://10.144.97.136:8000/"
+const WS_BASE_URL = "ws://10.144.97.136:8100/ws/"
 
 const headers = {
 	form_data = "Content-Type: multipart/form-data; boundary=\"boundary\"",
@@ -26,9 +25,7 @@ const headers = {
 
 
 func _ready() -> void:
-	add_child(http)
 	_create_access_token_timer()
-	_try_auth()
 
 func _process(_delta: float) -> void:
 	if !is_instance_valid(socket):
@@ -42,7 +39,6 @@ func _process(_delta: float) -> void:
 		WebSocketPeer.STATE_OPEN:
 			while socket.get_available_packet_count():
 				var packet = socket.get_packet()
-				prints("Packet recieved!")
 				if not socket.was_string_packet():
 					printerr("Received non-text packet! Size: ", packet.size())
 					continue
@@ -71,20 +67,16 @@ func sign_in(username: String, password: String) -> void:
 	_add_field(body, "password", password)
 	_end_body(body)
 	
-	http.request_raw(
+	request_raw(
 		API_BASE_URL + "users/login/",
 		[headers.form_data],
 		HTTPClient.METHOD_POST,
 		body,
 	)
-	var res = await http.request_completed
+	var res = await request_completed
 	if res[0] == HTTPRequest.RESULT_SUCCESS and res[1] == 200:
 		var body_json = JSON.parse_string(res[3].get_string_from_utf8())
-		UserInfo.append_user_info({
-			access = body_json.access,
-			username = username,
-			password = password,
-		 })
+		UserInfo.append_user_info({ access = body_json.access })
 		sign_result.emit(true, res[3].get_string_from_utf8())
 		access_token_timer.start()
 		authorized = true
@@ -100,16 +92,15 @@ func sign_up(username: String, email: String, password: String) -> void:
 		email = email,
 		password = password,
 	})
-	http.request(
+	request(
 		API_BASE_URL + "users/register/",
 		[headers.json],
 		HTTPClient.METHOD_POST,
 		data,
 	)
 	
-	var res = await http.request_completed
+	var res = await request_completed
 	if res[0] == HTTPRequest.RESULT_SUCCESS and res[1] == 200:
-		UserInfo.append_user_info({ username = username, password = password })
 		sign_result.emit(true, "Вы успешно зарегистрированы!")
 		prints("POST", res[1], "users/register/", res[3])
 	else:
@@ -122,13 +113,13 @@ func join() -> void:
 		join_result.emit(false, "Вы не авторизованы!")
 		return
 	
-	http.request(
+	request(
 		API_BASE_URL + "queue/join/",
 		[headers.json, headers.jwt_token + UserInfo.get_user_info().access],
 		HTTPClient.METHOD_POST,
 	)
 	
-	var res = await http.request_completed
+	var res = await request_completed
 	if res[0] == HTTPRequest.RESULT_SUCCESS and res[1] == 200:
 		var body_json = JSON.parse_string(res[3].get_string_from_utf8())
 		prints("POST", res[1], "queue/join/", body_json)
@@ -147,6 +138,22 @@ func join() -> void:
 		var error = res[3].get_string_from_utf8()
 		printerr("Request Error: ", error)
 		join_result.emit(false, error)
+
+func get_user_info() -> Dictionary:
+	request(
+		API_BASE_URL + "users/me/",
+		[headers.json, headers.jwt_token + UserInfo.get_user_info().access],
+		HTTPClient.METHOD_GET,
+	)
+	var res = await request_completed
+	var body_json = JSON.parse_string(res[3].get_string_from_utf8())
+	if res[0] == HTTPRequest.RESULT_SUCCESS and res[1] == 200:
+		body_json.id = int(body_json.id)
+		UserInfo.append_user_info(body_json)
+	else:
+		printerr("Request Error: ", body_json.detail)
+	return body_json
+
 
 func _add_field(body: PackedByteArray, key: String, value: String) -> void:
 	var content = "\r\n--boundary\r\n" + "Content-Disposition: form-data; name=\"%s\"\r\n" % key + "Content-Type: text/plain; charset=UTF-8\r\n\r\n" + value
@@ -196,15 +203,6 @@ func _waiting_game_process(json: Dictionary) -> void:
 func _playing_game_process(json: Dictionary) -> void:
 	new_data_recived.emit(true, json)
 
-func _try_auth() -> void:
-	var user_info = UserInfo.get_user_info()
-	if user_info.is_empty():
-		authorized = false
-	elif user_info.has("access"):
-		sign_in(user_info.username, user_info.password)
-		var result = await sign_result
-		authorized = result[0]
-
 func _create_access_token_timer() -> void:
 	access_token_timer = Timer.new()
 	access_token_timer.autostart = false
@@ -214,6 +212,7 @@ func _create_access_token_timer() -> void:
 	add_child(access_token_timer)
 
 
-func  _on_access_token_timeout() -> void:
-	var result = UserInfo.get_user_info()
-	sign_in(result.username, result.password)
+func _on_access_token_timeout() -> void:
+	var user_info = UserInfo.get_user_info()
+	if !user_info.is_empty():
+		sign_in(user_info.username, user_info.password)
