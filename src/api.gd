@@ -60,6 +60,7 @@ func _process(_delta: float) -> void:
 			socket = null
 			prints("Connection closed","CODE:",code,"Reason:",reason)
 
+
 # login
 func sign_in(username: String, password: String) -> void:
 	var body = PackedByteArray()
@@ -181,7 +182,6 @@ func _connect() -> bool:
 			return false
 	prints("WebSocket connected:", join_url)
 	return socket.get_ready_state() == WebSocketPeer.STATE_OPEN
-
 
 func _waiting_game_process(json: Dictionary) -> void:
 	if waiting_opponent and json.has("room_id"):

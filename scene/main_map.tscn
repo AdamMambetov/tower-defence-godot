@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://d1vrkfxgttq3c"]
+[gd_scene load_steps=16 format=4 uid="uid://d1vrkfxgttq3c"]
 
 [ext_resource type="Script" uid="uid://cfltnwoeynwn2" path="res://src/main_map.gd" id="1_xf4q7"]
 [ext_resource type="Texture2D" uid="uid://d3a0835k1w76s" path="res://file/background/background_layer_1.png" id="2_13gc7"]
@@ -6,6 +6,107 @@
 [ext_resource type="Texture2D" uid="uid://rucn240baf47" path="res://icon.svg" id="3_4jeie"]
 [ext_resource type="Texture2D" uid="uid://tvmpg2wppelu" path="res://file/background/background_layer_2.png" id="3_arx8d"]
 [ext_resource type="Texture2D" uid="uid://2ncett1wa7rq" path="res://file/background/background_layer_3.png" id="4_w3aho"]
+[ext_resource type="Texture2D" uid="uid://m3rfco54lg6b" path="res://file/ground/Floor_Dry_01-128x64.png" id="7_vnlmr"]
+[ext_resource type="Texture2D" uid="uid://ledrt4o47suk" path="res://file/ground/Floor_Flora_01-128x64.png" id="8_vvnmp"]
+[ext_resource type="Texture2D" uid="uid://bchuaev1n0ddx" path="res://file/ground/Floor_Grass_01-128x64.png" id="9_ruj8r"]
+[ext_resource type="Texture2D" uid="uid://cvcepkwcgks10" path="res://file/ground/Floor_Stones_01-128x64.png" id="10_dmbqw"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_860pk"]
+texture = ExtResource("7_vnlmr")
+texture_region_size = Vector2i(128, 64)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+2:1/0 = 0
+1:1/0 = 0
+0:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+0:3/0 = 0
+0:4/0 = 0
+0:5/0 = 0
+1:5/0 = 0
+1:4/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+2:4/0 = 0
+2:5/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_f8sdw"]
+texture = ExtResource("8_vvnmp")
+texture_region_size = Vector2i(128, 64)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+2:1/0 = 0
+1:1/0 = 0
+0:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+2:3/0 = 0
+1:3/0 = 0
+0:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+2:5/0 = 0
+1:5/0 = 0
+0:5/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jjjxn"]
+texture = ExtResource("9_ruj8r")
+texture_region_size = Vector2i(128, 64)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+2:1/0 = 0
+1:1/0 = 0
+0:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+2:3/0 = 0
+1:3/0 = 0
+0:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+2:5/0 = 0
+1:5/0 = 0
+0:5/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_r5lgo"]
+texture = ExtResource("10_dmbqw")
+texture_region_size = Vector2i(128, 64)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+2:1/0 = 0
+1:1/0 = 0
+0:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+2:3/0 = 0
+1:3/0 = 0
+0:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+2:5/0 = 0
+1:5/0 = 0
+0:5/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_pig8g"]
+tile_layout = 5
+tile_offset_axis = 1
+tile_size = Vector2i(64, 32)
+sources/2 = SubResource("TileSetAtlasSource_860pk")
+sources/3 = SubResource("TileSetAtlasSource_f8sdw")
+sources/4 = SubResource("TileSetAtlasSource_jjjxn")
+sources/5 = SubResource("TileSetAtlasSource_r5lgo")
 
 [node name="MainMap" type="Node2D"]
 script = ExtResource("1_xf4q7")
@@ -21,38 +122,47 @@ limit_bottom = 644
 follow_viewport_enabled = true
 
 [node name="Background" type="Node2D" parent="Game Layer"]
-position = Vector2(576, 325)
+position = Vector2(850, 269)
 
 [node name="Parallax2D" type="Parallax2D" parent="Game Layer/Background"]
 scroll_scale = Vector2(0.5, 0.5)
-repeat_size = Vector2(1152, 0)
+repeat_size = Vector2(960, 0)
+repeat_times = 2
 
 [node name="Sprite2D" type="Sprite2D" parent="Game Layer/Background/Parallax2D"]
-scale = Vector2(3.6, 3.6)
+scale = Vector2(3, 3)
 texture = ExtResource("2_13gc7")
 
 [node name="Parallax2D2" type="Parallax2D" parent="Game Layer/Background"]
 scroll_scale = Vector2(0.8, 0.8)
-repeat_size = Vector2(1152, 0)
+repeat_size = Vector2(960, 0)
+repeat_times = 2
 
 [node name="Sprite2D" type="Sprite2D" parent="Game Layer/Background/Parallax2D2"]
-scale = Vector2(3.6, 3.6)
+scale = Vector2(3, 3)
 texture = ExtResource("3_arx8d")
 
 [node name="Parallax2D3" type="Parallax2D" parent="Game Layer/Background"]
-repeat_size = Vector2(1152, 0)
+repeat_size = Vector2(960, 0)
+repeat_times = 2
 
 [node name="Sprite2D" type="Sprite2D" parent="Game Layer/Background/Parallax2D3"]
-scale = Vector2(3.6, 3.6)
+scale = Vector2(3, 3)
 texture = ExtResource("4_w3aho")
 
+[node name="Floor" type="TileMapLayer" parent="Game Layer"]
+position = Vector2(0, -4)
+rotation = 0.46251225
+tile_map_data = PackedByteArray("AAADABAABQACAAAAAAAEAA8ABQACAAAAAAAFAA4ABQACAAAAAAAGAA0ABQACAAAAAAAHAAwABQACAAAAAAAIAAsABQACAAAAAAAJAAoABQACAAAAAAAKAAkABQACAAAAAAALAAgABQACAAAAAAAMAAcABQACAAAAAAAEABEABQACAAAAAAAFABAABQACAAAAAAAGAA8ABQACAAAAAAAHAA4ABQACAAAAAAAIAA0ABQACAAAAAAAJAAwABQACAAAAAAAKAAsABQACAAAAAAALAAoABQACAAAAAAAMAAkABQACAAAAAAANAAgABQACAAAAAAAOAAcABQACAAAAAAAPAAYABQACAAAAAAAQAAUABQACAAAAAAARAAQABQACAAAAAAANAAYABQACAAAAAAAOAAUABQACAAAAAAAPAAQABQACAAAAAAAQAAMABQACAAAAAAARAAIABQACAAAAAAASAAEABQACAAAAAAATAAAABQACAAAAAAAUAP//BQACAAAAAAAVAP7/BQACAAAAAAAWAP3/BQACAAAAAAAXAPz/BQACAAAAAAAYAPv/BQACAAAAAAAZAPr/BQACAAAAAAAaAPn/BQACAAAAAAAbAPj/BQACAAAAAAAcAPf/BQACAAAAAAAdAPb/BQACAAAAAAASAAMABQACAAAAAAATAAIABQACAAAAAAAUAAEABQACAAAAAAAVAAAABQACAAAAAAAWAP//BQACAAAAAAAXAP7/BQACAAAAAAAYAP3/BQACAAAAAAAZAPz/BQACAAAAAAAaAPv/BQACAAAAAAAbAPr/BQACAAAAAAAcAPn/BQACAAAAAAAdAPj/BQACAAAAAAAeAPf/BQACAAAAAAAfAPb/BQACAAAAAAAgAPX/BQACAAAAAAAhAPT/BQACAAAAAAAiAPP/BQACAAAAAAAeAPX/BQACAAAAAAAfAPT/BQACAAAAAAAgAPP/BQACAAAAAAAhAPL/BQACAAAAAAAiAPH/BQACAAAAAAAjAPD/BQACAAAAAAAkAO//BQACAAAAAAAjAPL/BQACAAAAAAAkAPH/BQACAAAAAAAlAPD/BQACAAAAAAA=")
+tile_set = SubResource("TileSet_pig8g")
+
 [node name="PlayerTower" parent="Game Layer" instance=ExtResource("2_hquly")]
-position = Vector2(150, 600)
+position = Vector2(150, 548)
 collision_layer = 10
 collision_mask = 4
 
 [node name="EnemyTower" parent="Game Layer" instance=ExtResource("2_hquly")]
-position = Vector2(1950, 600)
+position = Vector2(1950, 548)
 collision_layer = 12
 collision_mask = 2
 
@@ -68,7 +178,6 @@ grow_vertical = 2
 mouse_filter = 2
 
 [node name="MoneyText" type="Label" parent="UI Layer/UI"]
-visible = false
 layout_mode = 0
 offset_left = 2.0
 offset_top = 40.0
@@ -77,7 +186,6 @@ offset_bottom = 63.0
 text = "Money:"
 
 [node name="MoneyValue" type="Label" parent="UI Layer/UI"]
-visible = false
 layout_mode = 0
 offset_left = 64.0
 offset_top = 40.0
@@ -98,5 +206,18 @@ texture_normal = ExtResource("3_4jeie")
 ignore_texture_size = true
 stretch_mode = 4
 
-[connection signal="pressed" from="UI Layer/UI/MinionButton" to="." method="_on_texture_button_pressed"]
+[node name="MinionButton2" type="TextureButton" parent="UI Layer/UI"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -276.0
+offset_right = -196.0
+offset_bottom = 80.0
+grow_horizontal = 2
+texture_normal = ExtResource("3_4jeie")
+ignore_texture_size = true
+stretch_mode = 4
+
 [connection signal="pressed" from="UI Layer/UI/MinionButton" to="." method="_on_minion_button_pressed"]
+[connection signal="pressed" from="UI Layer/UI/MinionButton2" to="." method="_on_minion_button_2_pressed"]
