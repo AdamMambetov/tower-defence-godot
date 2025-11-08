@@ -58,6 +58,3 @@ func _on_minion_button_pressed() -> void:
 	unit.is_player = true
 	unit.update_info(info.enemy)
 	$"Game Layer".add_child(unit)
-
-func _on_minion_button_2_pressed() -> void:
-	pass # Replace with function body.

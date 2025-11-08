@@ -69,7 +69,7 @@ func sign_in(username: String, password: String) -> void:
 	_end_body(body)
 	
 	request_raw(
-		API_BASE_URL + "users/login/",
+		API_BASE_URL + "auth/login",
 		[headers.form_data],
 		HTTPClient.METHOD_POST,
 		body,
@@ -77,11 +77,11 @@ func sign_in(username: String, password: String) -> void:
 	var res = await request_completed
 	if res[0] == HTTPRequest.RESULT_SUCCESS and res[1] == 200:
 		var body_json = JSON.parse_string(res[3].get_string_from_utf8())
-		UserInfo.append_user_info({ access = body_json.access })
+		UserInfo.append_user_info(body_json)
 		sign_result.emit(true, res[3].get_string_from_utf8())
 		access_token_timer.start()
 		authorized = true
-		prints("POST", res[1], "users/login/", body_json)
+		prints("POST", res[1], "auth/login", body_json)
 	else:
 		sign_result.emit(false, res[3].get_string_from_utf8())
 		printerr("request error: ", res[3].get_string_from_utf8())
@@ -94,7 +94,7 @@ func sign_up(username: String, email: String, password: String) -> void:
 		password = password,
 	})
 	request(
-		API_BASE_URL + "users/register/",
+		API_BASE_URL + "auth/register",
 		[headers.json],
 		HTTPClient.METHOD_POST,
 		data,
@@ -103,7 +103,7 @@ func sign_up(username: String, email: String, password: String) -> void:
 	var res = await request_completed
 	if res[0] == HTTPRequest.RESULT_SUCCESS and res[1] == 200:
 		sign_result.emit(true, "Вы успешно зарегистрированы!")
-		prints("POST", res[1], "users/register/", res[3])
+		prints("POST", res[1], "auth/register", res[3])
 	else:
 		sign_result.emit(false, res[3].get_string_from_utf8())
 		printerr("request error: ", res, res[3].get_string_from_utf8())
@@ -115,7 +115,7 @@ func join() -> void:
 		return
 	
 	request(
-		API_BASE_URL + "queue/join/",
+		API_BASE_URL + "queue/join",
 		[headers.json, headers.jwt_token + UserInfo.get_user_info().access],
 		HTTPClient.METHOD_POST,
 	)
@@ -123,7 +123,7 @@ func join() -> void:
 	var res = await request_completed
 	if res[0] == HTTPRequest.RESULT_SUCCESS and res[1] == 200:
 		var body_json = JSON.parse_string(res[3].get_string_from_utf8())
-		prints("POST", res[1], "queue/join/", body_json)
+		prints("POST", res[1], "queue/join", body_json)
 		if body_json.has('waiting_room_id'):
 			Global.game_state = Global.GameState.WaitingGame
 			waiting_opponent = true
@@ -142,7 +142,7 @@ func join() -> void:
 
 func get_user_info() -> Dictionary:
 	request(
-		API_BASE_URL + "users/me/",
+		API_BASE_URL + "users/me",
 		[headers.json, headers.jwt_token + UserInfo.get_user_info().access],
 		HTTPClient.METHOD_GET,
 	)
@@ -154,6 +154,25 @@ func get_user_info() -> Dictionary:
 	else:
 		printerr("Request Error: ", body_json.detail)
 	return body_json
+
+func update_access_token() -> bool:
+	var refresh_token = UserInfo.get_user_info().refresh
+	request(
+		API_BASE_URL + "auth/refresh",
+		[headers.json],
+		HTTPClient.METHOD_POST,
+		JSON.stringify({ refresh = refresh_token }),
+	)
+	var res = await request_completed
+	var body_json = JSON.parse_string(res[3].get_string_from_utf8())
+	if res[0] == HTTPRequest.RESULT_SUCCESS and res[1] == 200:
+		UserInfo.append_user_info(body_json)
+		access_token_timer.start()
+		authorized = true
+		return true
+	else:
+		printerr("Request Error: ", body_json.detail)
+		return false
 
 
 func _add_field(body: PackedByteArray, key: String, value: String) -> void:
@@ -215,4 +234,4 @@ func _create_access_token_timer() -> void:
 func _on_access_token_timeout() -> void:
 	var user_info = UserInfo.get_user_info()
 	if !user_info.is_empty():
-		sign_in(user_info.username, user_info.password)
+		update_access_token()

@@ -35,14 +35,13 @@ func _ready() -> void:
 		accounts_state = AccountsState.SignIn
 	else:
 		$LoadingScreen.visible = true
-		var user_info = UserInfo.get_user_info()
-		Api.sign_in(user_info.username, user_info.password)
-		var res = await Api.sign_result
-		if !res[0]:
+		var success = await Api.update_access_token()
+		if !success:
 			accounts_state = AccountsState.SignIn
 			$LoadingScreen.visible = false
 			return
-		user_info = await Api.get_user_info()
+		
+		var user_info = await Api.get_user_info()
 		if user_info.has("detail"):
 			accounts_state = AccountsState.SignIn
 			$LoadingScreen.visible = false

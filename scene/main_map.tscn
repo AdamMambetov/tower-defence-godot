@@ -206,18 +206,4 @@ texture_normal = ExtResource("3_4jeie")
 ignore_texture_size = true
 stretch_mode = 4
 
-[node name="MinionButton2" type="TextureButton" parent="UI Layer/UI"]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -276.0
-offset_right = -196.0
-offset_bottom = 80.0
-grow_horizontal = 2
-texture_normal = ExtResource("3_4jeie")
-ignore_texture_size = true
-stretch_mode = 4
-
 [connection signal="pressed" from="UI Layer/UI/MinionButton" to="." method="_on_minion_button_pressed"]
-[connection signal="pressed" from="UI Layer/UI/MinionButton2" to="." method="_on_minion_button_2_pressed"]
