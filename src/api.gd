@@ -3,7 +3,7 @@ extends HTTPRequest
 
 signal sign_result(success: bool, result: String)
 signal join_result(success: bool, result: String)
-signal new_data_recived(success: bool, result: Dictionary)
+signal new_data_recived(result: Dictionary)
 
 var socket: WebSocketPeer
 var join_url: String
@@ -220,7 +220,7 @@ func _waiting_game_process(json: Dictionary) -> void:
 		prints("Received other message: ", json)
 
 func _playing_game_process(json: Dictionary) -> void:
-	new_data_recived.emit(true, json)
+	new_data_recived.emit(json)
 
 func _create_access_token_timer() -> void:
 	access_token_timer = Timer.new()

@@ -101,6 +101,7 @@ text = "Рандом"
 
 [node name="play_friend_btn" type="Button" parent="GameMenu/VBoxContainer"]
 layout_mode = 2
+disabled = true
 text = "С другом"
 
 [node name="AccountsMenu" type="ColorRect" parent="."]

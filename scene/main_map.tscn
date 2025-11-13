@@ -160,11 +160,16 @@ tile_set = SubResource("TileSet_pig8g")
 position = Vector2(150, 548)
 collision_layer = 10
 collision_mask = 4
+spawn_range_y = Vector2(0, 90)
 
 [node name="EnemyTower" parent="Game Layer" instance=ExtResource("2_hquly")]
 position = Vector2(1950, 548)
 collision_layer = 12
 collision_mask = 2
+spawn_range_y = Vector2(0, 90)
+
+[node name="Units" type="Node2D" parent="Game Layer"]
+y_sort_enabled = true
 
 [node name="UI Layer" type="CanvasLayer" parent="."]
 
@@ -191,9 +196,9 @@ offset_left = 64.0
 offset_top = 40.0
 offset_right = 104.0
 offset_bottom = 63.0
-text = "0"
+text = "200"
 
-[node name="MinionButton" type="TextureButton" parent="UI Layer/UI"]
+[node name="SoldierButton" type="TextureButton" parent="UI Layer/UI"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -206,4 +211,18 @@ texture_normal = ExtResource("3_4jeie")
 ignore_texture_size = true
 stretch_mode = 4
 
-[connection signal="pressed" from="UI Layer/UI/MinionButton" to="." method="_on_minion_button_pressed"]
+[node name="ArcherButton" type="TextureButton" parent="UI Layer/UI"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -276.0
+offset_right = -196.0
+offset_bottom = 80.0
+grow_horizontal = 2
+texture_normal = ExtResource("3_4jeie")
+ignore_texture_size = true
+stretch_mode = 4
+
+[connection signal="pressed" from="UI Layer/UI/SoldierButton" to="." method="_on_soldier_button_pressed"]
+[connection signal="pressed" from="UI Layer/UI/ArcherButton" to="." method="_on_archer_button_pressed"]
