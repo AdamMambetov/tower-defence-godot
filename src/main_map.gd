@@ -103,8 +103,7 @@ func _on_soldier_button_pressed() -> void:
 			#attack_speed = randf_range(0.5, 3.0),
 		#}
 	}
-	var error = Api.socket.put_var(info)
-	#var error = Api.socket.send_text(JSON.stringify(info))
+	var error = Api.socket.send_text(JSON.stringify(info))
 	if error:
 		printerr(error)
 
@@ -119,7 +118,6 @@ func _on_archer_button_pressed() -> void:
 			#attack_speed = randf_range(0.5, 3.0),
 		#}
 	}
-	var error = Api.socket.put_var(info)
-	#var error = Api.socket.send_text(JSON.stringify(info))
+	var error = Api.socket.send_text(JSON.stringify(info))
 	if error:
 		printerr(error)
