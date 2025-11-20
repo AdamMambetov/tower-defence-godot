@@ -46,44 +46,21 @@ func _new_data_handler(data: Dictionary) -> void:
 	match data.get("type"):
 		"start_game": prints("Опонент подключился, игра началась!");
 		"end_game": prints("Игра закончена!")
-		"rpc":
-			var error = rpc(data.func, data)
-			if error:
-				printerr("rpc: ", error)
-		#"spawn":
-			#var unit = Global.units[data.unit_name].instantiate()
-			#unit.is_player = true
-			#unit.global_position = $"Game Layer/PlayerTower".get_spawn_position()
-			#unit.is_archer = data.unit_name == "archer"
-			#unit.update_info(JSON.parse_string(data.unit_info))
-			#$"Game Layer/Units".add_child(unit)
-			#$"UI Layer/UI/MoneyValue".text = str(int(data.money))
-		#"spawn_enemy":
-			#var unit = Global.units[data.unit_name].instantiate()
-			#unit.is_player = false
-			#unit.global_position = $"Game Layer/EnemyTower".get_spawn_position()
-			#unit.is_archer = data.unit_name == "archer"
-			#unit.update_info(JSON.parse_string(data.unit_info))
-			#$"Game Layer/Units".add_child(unit)
-
-@rpc
-func spawn(data: Dictionary):
-	var unit = Global.units[data.unit_name].instantiate()
-	unit.is_player = true
-	unit.global_position = $"Game Layer/PlayerTower".get_spawn_position()
-	unit.is_archer = data.unit_name == "archer"
-	unit.update_info(JSON.parse_string(data.unit_info))
-	$"Game Layer/Units".add_child(unit)
-	$"UI Layer/UI/MoneyValue".text = str(int(data.money))
-
-@rpc
-func spawn_enemy(data: Dictionary):
-	var unit = Global.units[data.unit_name].instantiate()
-	unit.is_player = false
-	unit.global_position = $"Game Layer/EnemyTower".get_spawn_position()
-	unit.is_archer = data.unit_name == "archer"
-	unit.update_info(JSON.parse_string(data.unit_info))
-	$"Game Layer/Units".add_child(unit)
+		"spawn":
+			var unit = Global.units[data.unit_name].instantiate()
+			unit.is_player = true
+			unit.global_position = $"Game Layer/PlayerTower".get_spawn_position()
+			unit.is_archer = data.unit_name == "archer"
+			unit.update_info(JSON.parse_string(data.unit_info))
+			$"Game Layer/Units".add_child(unit)
+			$"UI Layer/UI/MoneyValue".text = str(int(data.money))
+		"spawn_enemy":
+			var unit = Global.units[data.unit_name].instantiate()
+			unit.is_player = false
+			unit.global_position = $"Game Layer/EnemyTower".get_spawn_position()
+			unit.is_archer = data.unit_name == "archer"
+			unit.update_info(JSON.parse_string(data.unit_info))
+			$"Game Layer/Units".add_child(unit)
 
 
 func _on_Api_new_data_recieved(result: Dictionary) -> void:
