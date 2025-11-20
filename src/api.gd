@@ -10,7 +10,7 @@ var join_url: String
 var room_id: String
 var waiting_opponent: bool
 var authorized: bool
-var prev_state = -1
+var prev_status = -1
 var access_token_timer: Timer
 
 const ACCESS_TOKEN_LIFE_TIME = 60*60
@@ -26,25 +26,19 @@ const headers = {
 
 func _ready() -> void:
 	_create_access_token_timer()
-	multiplayer.set_multiplayer_peer(socket)
 
 func _process(_delta: float) -> void:
 	if !is_instance_valid(socket):
 		return
 	socket.poll()
-	var state = socket.get_ready_state()
-	if state != prev_state:
-		prev_state = state
-		prints("State changed to: ", state)
-	match state:
-		WebSocketPeer.STATE_OPEN:
+	var status = socket.get_connection_status()
+	if status != prev_status:
+		prev_status = status
+		prints("Status changed to: ", status)
+	match status:
+		WebSocketMultiplayerPeer.CONNECTION_CONNECTED:
 			while socket.get_available_packet_count():
-				var packet = socket.get_packet()
-				if not socket.was_string_packet():
-					printerr("Received non-text packet! Size: ", packet.size())
-					continue
-
-				var data = packet.get_string_from_utf8()
+				var data = socket.get_packet().get_string_from_utf8()
 				var json = JSON.parse_string(data)
 				if json == null:
 					prints("Message no a JSON format: ", data)
@@ -55,7 +49,7 @@ func _process(_delta: float) -> void:
 						_waiting_game_process(json)
 					Global.GameState.PlayingGame:
 						_playing_game_process(json)
-		WebSocketPeer.STATE_CLOSED:
+		WebSocketMultiplayerPeer.CONNECTION_DISCONNECTED:
 			var code = socket.get_close_code()
 			var reason = socket.get_close_reason()
 			socket = null
@@ -192,16 +186,17 @@ func _connect() -> bool:
 	if err != OK:
 		printerr("Failed to initiate websocket:", err)
 		return false
+	multiplayer.multiplayer_peer = socket
 
 	var start_time = Time.get_ticks_msec()
-	while socket.get_ready_state() == WebSocketPeer.STATE_CONNECTING:
+	while socket.get_connection_status() == WebSocketMultiplayerPeer.CONNECTION_CONNECTING:
 		socket.poll()
 		await get_tree().process_frame
 		if Time.get_ticks_msec() - start_time > 5000:
 			printerr("WebSocket timeout")
 			return false
 	prints("WebSocket connected:", join_url)
-	return socket.get_ready_state() == WebSocketPeer.STATE_OPEN
+	return socket.get_connection_status() == WebSocketMultiplayerPeer.CONNECTION_CONNECTED
 
 func _waiting_game_process(json: Dictionary) -> void:
 	if waiting_opponent and json.has("room_id"):
