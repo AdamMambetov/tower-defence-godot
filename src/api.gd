@@ -14,8 +14,8 @@ var prev_state = -1
 var access_token_timer: Timer
 
 const ACCESS_TOKEN_LIFE_TIME = 60*60
-const API_BASE_URL = "http://10.144.97.136:8000/"
-const WS_BASE_URL = "ws://10.144.97.136:8100/ws/"
+const API_BASE_URL = "http://26.186.139.15:8000/"
+const WS_BASE_URL = "ws://26.186.139.15:8100/ws/"
 
 const headers = {
 	form_data = "Content-Type: multipart/form-data; boundary=\"boundary\"",
@@ -45,6 +45,7 @@ func _process(_delta: float) -> void:
 
 				var data = packet.get_string_from_utf8()
 				var json = JSON.parse_string(data)
+				prints(data, json)
 				if json == null:
 					prints("Message no a JSON format: ", data)
 					continue
@@ -59,6 +60,12 @@ func _process(_delta: float) -> void:
 			var reason = socket.get_close_reason()
 			socket = null
 			prints("Connection closed","CODE:",code,"Reason:",reason)
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		if is_instance_valid(socket):
+			socket.close()
+		socket = null
 
 
 # login
@@ -171,15 +178,16 @@ func update_access_token() -> bool:
 		authorized = true
 		return true
 	else:
-		printerr("Request Error: ", body_json.detail)
+		printerr("Request Error: ", res[1], ", ", body_json)
 		return false
 
 func attack(from_id: String, to_id: String) -> void:
-	socket.send_text(JSON.stringify({
-		type = "attack",
-		from = from_id,
-		to = to_id,
-	}))
+	if is_instance_valid(socket):
+		socket.send_text(JSON.stringify({
+			type = "attack",
+			from = from_id,
+			to = to_id,
+		}))
 
 
 func _add_field(body: PackedByteArray, key: String, value: String) -> void:

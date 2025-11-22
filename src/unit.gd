@@ -13,7 +13,7 @@ var id: String
 		var old = health
 		health = value
 		_on_set_health(old, value)
-var unit_state: String = UnitState.None:
+var unit_state: String:
 	set(value):
 		var old = unit_state
 		unit_state = value
@@ -47,7 +47,7 @@ func _physics_process(delta: float) -> void:
 
 func _init_unit_states() -> void:
 	UnitState = {
-		None = "none",
+		None = "",
 		Walk = "walk",
 		Attack = "attack",
 		WaitAttack = "wait_attack",
@@ -56,12 +56,13 @@ func _init_unit_states() -> void:
 
 
 func _on_set_health(old: float, new: float) -> void:
-	$Label.text = str(int(health))
-	if health <= 0:
+	prints(id, old, new)
+	$Label.text = str(int(new))
+	if new <= 0:
 		queue_free()
 
 func _on_set_unit_state(old: String, new: String) -> void:
-	pass
+	prints(id, old, new)
 
 
 func update_info(info: Dictionary) -> void:

@@ -26,7 +26,7 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	_update_camera()
- 
+
 
 func _update_camera() -> void:
 	var mouse_pos = get_viewport().get_mouse_position()
