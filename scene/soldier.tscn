@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=3 uid="uid://c47t04547xgiv"]
+[gd_scene load_steps=52 format=3 uid="uid://c47t04547xgiv"]
 
 [ext_resource type="Script" uid="uid://gsgp707rx6fo" path="res://src/soldier.gd" id="1_u8ado"]
 [ext_resource type="Texture2D" uid="uid://c1qmp8lnc82b4" path="res://file/soldier/Soldier-Attack01.png" id="2_0i558"]
@@ -320,6 +320,22 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fyscm"]
 size = Vector2(35, 100)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0i558"]
+bg_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3f3g7"]
+bg_color = Color(0.3285419, 0.68161446, 0.51560247, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+anti_aliasing = false
+
 [node name="Soldier" type="Area2D"]
 collision_layer = 0
 collision_mask = 8
@@ -335,9 +351,8 @@ shape = SubResource("RectangleShape2D_s1ucn")
 [node name="Animations" type="AnimatedSprite2D" parent="."]
 scale = Vector2(3, 3)
 sprite_frames = SubResource("SpriteFrames_map1f")
-animation = &"attack_02"
-frame = 4
-frame_progress = 0.72845566
+animation = &"idle"
+frame_progress = 0.35681224
 
 [node name="ShapeCast2D" type="ShapeCast2D" parent="."]
 shape = SubResource("RectangleShape2D_fyscm")
@@ -346,12 +361,15 @@ collision_mask = 0
 collide_with_areas = true
 collide_with_bodies = false
 
-[node name="Label" type="Label" parent="."]
-offset_left = -20.0
-offset_top = -39.0
-offset_right = 20.0
-offset_bottom = -16.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-
 [node name="WaitAttackTimer" type="Timer" parent="."]
 one_shot = true
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+offset_left = -22.0
+offset_top = -45.0
+offset_right = 23.0
+offset_bottom = -40.0
+theme_override_styles/background = SubResource("StyleBoxFlat_0i558")
+theme_override_styles/fill = SubResource("StyleBoxFlat_3f3g7")
+value = 50.0
+show_percentage = false

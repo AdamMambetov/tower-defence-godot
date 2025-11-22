@@ -174,6 +174,13 @@ func update_access_token() -> bool:
 		printerr("Request Error: ", body_json.detail)
 		return false
 
+func attack(from_id: String, to_id: String) -> void:
+	socket.send_text(JSON.stringify({
+		type = "attack",
+		from = from_id,
+		to = to_id,
+	}))
+
 
 func _add_field(body: PackedByteArray, key: String, value: String) -> void:
 	var content = "\r\n--boundary\r\n" + "Content-Disposition: form-data; name=\"%s\"\r\n" % key + "Content-Type: text/plain; charset=UTF-8\r\n\r\n" + value
@@ -229,7 +236,6 @@ func _create_access_token_timer() -> void:
 	access_token_timer.wait_time = ACCESS_TOKEN_LIFE_TIME
 	access_token_timer.timeout.connect(_on_access_token_timeout)
 	add_child(access_token_timer)
-
 
 func _on_access_token_timeout() -> void:
 	var user_info = UserInfo.get_user_info()

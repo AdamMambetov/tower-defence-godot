@@ -17,7 +17,12 @@ var current_enemy: Node
 
 func _ready() -> void:
 	super._ready()
+	Api.connect("new_data_recived", _on_Api_new_data_recieved)
+	
 	wait_attack_timer.wait_time = attack_speed
+	$ProgressBar.max_value = health
+	$ProgressBar.value = health
+	
 	animated_sprite.flip_h = !is_player
 	animated_sprite.play("walk")
 
@@ -44,13 +49,13 @@ func _physics_process(delta: float) -> void:
 			move_unit(delta)
 
 
-func _on_set_health() -> void:
-	if health > 0:
-		return
-	unit_state = UnitState.Death
+func _on_set_health(_old: float, new: float) -> void:
+	$ProgressBar.value = new
+	if new <= 0:
+		unit_state = UnitState.Death
 
-func _on_set_unit_state() -> void:
-	match unit_state:
+func _on_set_unit_state(_old: String, new: String) -> void:
+	match new:
 		UnitState.Walk:
 			animated_sprite.play("walk")
 		UnitState.Attack:
@@ -59,7 +64,7 @@ func _on_set_unit_state() -> void:
 			if unit_state != UnitState.Attack:
 				return
 			if is_instance_valid(current_enemy):
-				current_enemy.health -= damage
+				Api.attack(self.id, current_enemy.id)
 				if current_enemy.health <= 0:
 					current_enemy = null
 					unit_state = UnitState.None
@@ -77,3 +82,10 @@ func _on_set_unit_state() -> void:
 			animated_sprite.play("death")
 			await animated_sprite.animation_finished
 			queue_free()
+
+func _on_Api_new_data_recieved(result: Dictionary) -> void:
+	if !result.has(id):
+		return
+	
+	if result.type == "attack":
+		health = result.get(id)
