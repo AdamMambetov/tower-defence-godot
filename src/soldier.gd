@@ -63,12 +63,12 @@ func _on_set_unit_state(_old: String, new: String) -> void:
 			await animated_sprite.animation_finished
 			if unit_state != UnitState.Attack:
 				return
-			if is_instance_valid(current_enemy):
+			if is_instance_valid(current_enemy) and is_player:
 				Api.attack(self.id, current_enemy.id)
-				if current_enemy.health <= 0:
-					current_enemy = null
-					unit_state = UnitState.None
-					return
+				#if current_enemy.health <= 0:
+					#current_enemy = null
+					#unit_state = UnitState.None
+					#return
 			current_enemy = null
 			unit_state = UnitState.WaitAttack
 		UnitState.WaitAttack:
@@ -84,8 +84,10 @@ func _on_set_unit_state(_old: String, new: String) -> void:
 			queue_free()
 
 func _on_Api_new_data_recieved(result: Dictionary) -> void:
+	print(result)
 	if !result.has(id):
 		return
+	print("has id ", result)
 	
 	if result.type == "attack":
 		health = result.get(id)

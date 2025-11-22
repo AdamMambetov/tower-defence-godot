@@ -75,12 +75,6 @@ func _on_soldier_button_pressed() -> void:
 	var info = {
 		type = "spawn",
 		unit_name = "knight",
-		#enemy = {
-			#speed = randi_range(10, 50),
-			#damage = randi_range(5, 20),
-			#health = randi_range(30, 100),
-			#attack_speed = randf_range(0.5, 3.0),
-		#}
 	}
 	var error = Api.socket.send_text(JSON.stringify(info))
 	if error:
@@ -90,12 +84,6 @@ func _on_archer_button_pressed() -> void:
 	var info = {
 		type = "spawn",
 		unit_name = "archer",
-		#enemy = {
-			#speed = randi_range(10, 50),
-			#damage = randi_range(5, 20),
-			#health = randi_range(30, 100),
-			#attack_speed = randf_range(0.5, 3.0),
-		#}
 	}
 	var error = Api.socket.send_text(JSON.stringify(info))
 	if error:

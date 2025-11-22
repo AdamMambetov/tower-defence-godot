@@ -181,13 +181,30 @@ func update_access_token() -> bool:
 		printerr("Request Error: ", res[1], ", ", body_json)
 		return false
 
+func spawn_unit(unit_name: String) -> void:
+	if !is_instance_valid(socket):
+		printerr("spawn_unit: socket not valid")
+		return
+	
+	var info = {
+		type = "spawn",
+		unit_name = unit_name,
+	}
+	var error = Api.socket.send_text(JSON.stringify(info))
+	if error:
+		printerr(error)
+	
+
 func attack(from_id: String, to_id: String) -> void:
-	if is_instance_valid(socket):
-		socket.send_text(JSON.stringify({
-			type = "attack",
-			from = from_id,
-			to = to_id,
-		}))
+	if !is_instance_valid(socket):
+		printerr("attack: socket not valid")
+		return
+	prints("from", from_id, "to", to_id)
+	socket.send_text(JSON.stringify({
+		type = "attack",
+		from = from_id,
+		to = to_id,
+	}))
 
 
 func _add_field(body: PackedByteArray, key: String, value: String) -> void:
