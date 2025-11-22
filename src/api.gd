@@ -45,7 +45,6 @@ func _process(_delta: float) -> void:
 
 				var data = packet.get_string_from_utf8()
 				var json = JSON.parse_string(data)
-				prints(data, json)
 				if json == null:
 					prints("Message no a JSON format: ", data)
 					continue
@@ -199,7 +198,6 @@ func attack(from_id: String, to_id: String) -> void:
 	if !is_instance_valid(socket):
 		printerr("attack: socket not valid")
 		return
-	prints("from", from_id, "to", to_id)
 	socket.send_text(JSON.stringify({
 		type = "attack",
 		from = from_id,

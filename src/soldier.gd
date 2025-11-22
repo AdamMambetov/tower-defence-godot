@@ -25,6 +25,8 @@ func _ready() -> void:
 	
 	animated_sprite.flip_h = !is_player
 	animated_sprite.play("walk")
+	await get_tree().create_timer(0.1).timeout
+	animated_sprite.play(SOLDIER_ATTACK)
 
 func _physics_process(delta: float) -> void:
 	match unit_state:
@@ -84,10 +86,14 @@ func _on_set_unit_state(_old: String, new: String) -> void:
 			queue_free()
 
 func _on_Api_new_data_recieved(result: Dictionary) -> void:
-	print(result)
 	if !result.has(id):
 		return
-	print("has id ", result)
 	
 	if result.type == "attack":
 		health = result.get(id)
+
+func _on_animations_animation_finished() -> void:
+	print("animation finished")
+
+func _on_animations_animation_changed() -> void:
+	print("animation changed")

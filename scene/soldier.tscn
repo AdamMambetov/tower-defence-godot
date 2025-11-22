@@ -351,8 +351,9 @@ shape = SubResource("RectangleShape2D_s1ucn")
 [node name="Animations" type="AnimatedSprite2D" parent="."]
 scale = Vector2(3, 3)
 sprite_frames = SubResource("SpriteFrames_map1f")
-animation = &"idle"
-frame_progress = 0.35681224
+animation = &"attack_01"
+frame = 5
+frame_progress = 1.0
 
 [node name="ShapeCast2D" type="ShapeCast2D" parent="."]
 shape = SubResource("RectangleShape2D_fyscm")
@@ -373,3 +374,6 @@ theme_override_styles/background = SubResource("StyleBoxFlat_0i558")
 theme_override_styles/fill = SubResource("StyleBoxFlat_3f3g7")
 value = 50.0
 show_percentage = false
+
+[connection signal="animation_changed" from="Animations" to="." method="_on_animations_animation_changed"]
+[connection signal="animation_finished" from="Animations" to="." method="_on_animations_animation_finished"]
