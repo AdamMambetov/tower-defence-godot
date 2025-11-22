@@ -25,8 +25,6 @@ func _ready() -> void:
 	
 	animated_sprite.flip_h = !is_player
 	animated_sprite.play("walk")
-	await get_tree().create_timer(0.1).timeout
-	animated_sprite.play(SOLDIER_ATTACK)
 
 func _physics_process(delta: float) -> void:
 	match unit_state:
@@ -54,6 +52,10 @@ func _physics_process(delta: float) -> void:
 func _on_set_health(_old: float, new: float) -> void:
 	$ProgressBar.value = new
 	if new <= 0:
+		if animated_sprite.frame == animated_sprite.sprite_frames.get_frame_count(
+				ARCHER_ATTACK if is_archer else SOLDIER_ATTACK) - 1:
+			await animated_sprite.animation_finished
+			await get_tree().physics_frame
 		unit_state = UnitState.Death
 
 func _on_set_unit_state(_old: String, new: String) -> void:
@@ -91,9 +93,3 @@ func _on_Api_new_data_recieved(result: Dictionary) -> void:
 	
 	if result.type == "attack":
 		health = result.get(id)
-
-func _on_animations_animation_finished() -> void:
-	print("animation finished")
-
-func _on_animations_animation_changed() -> void:
-	print("animation changed")
