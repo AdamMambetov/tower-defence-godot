@@ -7,22 +7,6 @@ var camera_speed = 50
 
 func _ready() -> void:
 	Api.connect("new_data_recived", _on_Api_new_data_recieved)
-	
-	#for i in 3:
-		#var info = {
-			#type = "spawn",
-			#enemy = {
-				#speed = randi_range(10, 50),
-				#damage = randi_range(5, 20),
-				#health = randi_range(30, 100),
-				#attack_speed = randf_range(0.5, 3.0),
-			#}
-		#}
-		#var unit = UNIT_SCENE.instantiate()
-		#unit.global_position = $"Game Layer/EnemyTower".get_spawn_position()
-		#unit.is_player = false
-		#unit.update_info(info.enemy)
-		#$"Game Layer/Units".add_child(unit)
 
 func _process(_delta: float) -> void:
 	_update_camera()
@@ -44,8 +28,11 @@ func _update_camera() -> void:
 
 func _new_data_handler(data: Dictionary) -> void:
 	match data.get("type"):
-		"start_game": prints("Опонент подключился, игра началась!");
-		"end_game": prints("Игра закончена!")
+		"start_game":
+			prints("Опонент подключился, игра началась!");
+		"end_game":
+			get_tree().paused = true
+			$"UI Layer/UI/EndGame".visible = true
 		"spawn":
 			spawn_unit(true, JSON.parse_string(data.unit_info))
 			$"UI Layer/UI/MoneyValue".text = str(int(data.money))
@@ -88,3 +75,8 @@ func _on_archer_button_pressed() -> void:
 	var error = Api.socket.send_text(JSON.stringify(info))
 	if error:
 		printerr(error)
+
+func _on_exit_btn_pressed() -> void:
+	Api.socket.close()
+	get_tree().paused = false
+	get_tree().change_scene_to_file("res://scene/main_menu.tscn")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=4 uid="uid://d1vrkfxgttq3c"]
+[gd_scene load_steps=20 format=4 uid="uid://d1vrkfxgttq3c"]
 
 [ext_resource type="Script" uid="uid://cfltnwoeynwn2" path="res://src/main_map.gd" id="1_xf4q7"]
 [ext_resource type="Texture2D" uid="uid://d3a0835k1w76s" path="res://file/background/background_layer_1.png" id="2_13gc7"]
@@ -107,6 +107,14 @@ sources/2 = SubResource("TileSetAtlasSource_860pk")
 sources/3 = SubResource("TileSetAtlasSource_f8sdw")
 sources/4 = SubResource("TileSetAtlasSource_jjjxn")
 sources/5 = SubResource("TileSetAtlasSource_r5lgo")
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fdj6w"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_q0pbl"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vnlmr"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vvnmp"]
 
 [node name="MainMap" type="Node2D"]
 script = ExtResource("1_xf4q7")
@@ -224,5 +232,62 @@ texture_normal = ExtResource("3_4jeie")
 ignore_texture_size = true
 stretch_mode = 4
 
+[node name="EndGame" type="Control" parent="UI Layer/UI"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="ColorRect" parent="UI Layer/UI/EndGame"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.5019608)
+
+[node name="ColorRect" type="ColorRect" parent="UI Layer/UI/EndGame"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -200.0
+offset_right = 200.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.34781694, 0.34781697, 0.3478169, 1)
+
+[node name="SignUp" type="VBoxContainer" parent="UI Layer/UI/EndGame/ColorRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="UI Layer/UI/EndGame/ColorRect/SignUp"]
+layout_mode = 2
+text = "Ты выиграл / Ты проиграл"
+horizontal_alignment = 1
+
+[node name="exit_btn" type="Button" parent="UI Layer/UI/EndGame/ColorRect/SignUp"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_fdj6w")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_q0pbl")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_vnlmr")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_vvnmp")
+text = "Выход"
+
 [connection signal="pressed" from="UI Layer/UI/SoldierButton" to="." method="_on_soldier_button_pressed"]
 [connection signal="pressed" from="UI Layer/UI/ArcherButton" to="." method="_on_archer_button_pressed"]
+[connection signal="pressed" from="UI Layer/UI/EndGame/ColorRect/SignUp/exit_btn" to="." method="_on_exit_btn_pressed"]

@@ -14,8 +14,8 @@ var prev_state = -1
 var access_token_timer: Timer
 
 const ACCESS_TOKEN_LIFE_TIME = 60*60
-const API_BASE_URL = "http://26.186.139.15:8000/"
-const WS_BASE_URL = "ws://26.186.139.15:8100/ws/"
+const API_BASE_URL = "http://172.27.97.136:8000/"
+const WS_BASE_URL = "ws://172.27.97.136:8100/ws/"
 
 const headers = {
 	form_data = "Content-Type: multipart/form-data; boundary=\"boundary\"",
