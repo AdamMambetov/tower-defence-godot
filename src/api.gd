@@ -4,6 +4,7 @@ extends HTTPRequest
 signal sign_result(success: bool, result: String)
 signal join_result(success: bool, result: String)
 signal new_data_recived(result: Dictionary)
+signal socket_closed()
 
 var socket: WebSocketPeer
 var join_url: String
@@ -59,6 +60,7 @@ func _process(_delta: float) -> void:
 			var reason = socket.get_close_reason()
 			socket = null
 			prints("Connection closed","CODE:",code,"Reason:",reason)
+			socket_closed.emit()
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:

@@ -233,6 +233,7 @@ ignore_texture_size = true
 stretch_mode = 4
 
 [node name="EndGame" type="Control" parent="UI Layer/UI"]
+process_mode = 2
 visible = false
 layout_mode = 1
 anchors_preset = 15
