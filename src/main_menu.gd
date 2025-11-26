@@ -135,6 +135,9 @@ func _on_username_le_text_changed(new_text: String) -> void:
 	username = new_text
 
 func _on_play_random_btn_pressed() -> void:
+	if (await Api.check_room_exists()):
+		Api.reconnect()
+		return
 	Api.join()
 	$LoadingScreen.visible = true
 	var result = await Api.join_result

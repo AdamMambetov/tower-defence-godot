@@ -7,8 +7,6 @@ signal new_data_recived(result: Dictionary)
 signal socket_closed()
 
 var socket: WebSocketPeer
-var join_url: String
-var room_id: String
 var waiting_opponent: bool
 var authorized: bool
 var prev_state = -1
@@ -135,14 +133,14 @@ func join() -> void:
 		if body_json.has('waiting_room_id'):
 			Global.game_state = Global.GameState.WaitingGame
 			waiting_opponent = true
-			room_id = body_json.waiting_room_id
-			join_url = "%swaiting_room/%s/" % [WS_BASE_URL, room_id]
+			var room_id = body_json.waiting_room_id
+			await _connect("%swaiting_room/%s/" % [WS_BASE_URL, room_id])
 		else:
 			Global.game_state = Global.GameState.PlayingGame
-			room_id = body_json.room_id
-			join_url = "%splay_room/%s/" % [WS_BASE_URL, room_id]
+			UserInfo.set_room_id(body_json.room_id)
+			await _connect("%splay_room/%s/" % [WS_BASE_URL, UserInfo.get_room_id()])
 			join_result.emit(true, "")
-		await _connect()
+		
 	else:
 		var error = res[3].get_string_from_utf8()
 		printerr("Request Error: ", error)
@@ -194,7 +192,6 @@ func spawn_unit(unit_name: String) -> void:
 	var error = Api.socket.send_text(JSON.stringify(info))
 	if error:
 		printerr(error)
-	
 
 func attack(from_id: String, to_id: String) -> void:
 	if !is_instance_valid(socket):
@@ -206,6 +203,28 @@ func attack(from_id: String, to_id: String) -> void:
 		to = to_id,
 	}))
 
+func check_room_exists() -> bool:
+	request(
+		API_BASE_URL + "game/check_room_exists",
+		[headers.json, headers.jwt_token + UserInfo.get_user_info().access],
+		HTTPClient.METHOD_POST,
+	)
+	
+	var res = await request_completed
+	if res[0] == HTTPRequest.RESULT_SUCCESS and res[1] == 200:
+		var body_json = JSON.parse_string(res[3].get_string_from_utf8())
+		prints("POST", res[1], "game/check_room_exists", body_json)
+		if body_json.has('success'):
+			return body_json.success
+	else:
+		var error = res[3].get_string_from_utf8()
+		printerr("Request Error: ", error)
+	return false
+
+func reconnect() -> void:
+	var join_url = "%splay_room/%s/" % [WS_BASE_URL, UserInfo.get_room_id()]
+	await _connect(join_url)
+
 
 func _add_field(body: PackedByteArray, key: String, value: String) -> void:
 	var content = "\r\n--boundary\r\n" + "Content-Disposition: form-data; name=\"%s\"\r\n" % key + "Content-Type: text/plain; charset=UTF-8\r\n\r\n" + value
@@ -214,7 +233,7 @@ func _add_field(body: PackedByteArray, key: String, value: String) -> void:
 func _end_body(body: PackedByteArray):
 	body.append_array("\r\n--boundary--\r\n".to_utf8_buffer())
 
-func _connect() -> bool:
+func _connect(join_url: String) -> bool:
 	socket = WebSocketPeer.new()
 	socket.handshake_headers = PackedStringArray([
 		"access: " + UserInfo.get_user_info().access,
@@ -237,10 +256,10 @@ func _connect() -> bool:
 func _waiting_game_process(json: Dictionary) -> void:
 	if waiting_opponent and json.has("room_id"):
 		waiting_opponent = false
-		room_id = json.room_id
-		join_url = "%splay_room/%s/" % [WS_BASE_URL, room_id]
+		UserInfo.set_room_id(json.room_id)
+		var join_url = "%splay_room/%s/" % [WS_BASE_URL, UserInfo.get_room_id()]
 		for i in 3:
-			if await _connect():
+			if await _connect(join_url):
 				Global.game_state = Global.GameState.PlayingGame
 				join_result.emit(true, "")
 				await get_tree().create_timer(1.0).timeout
