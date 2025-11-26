@@ -118,6 +118,7 @@ sources/5 = SubResource("TileSetAtlasSource_r5lgo")
 
 [node name="MainMap" type="Node2D"]
 script = ExtResource("1_xf4q7")
+_end_game_label_path = NodePath("UI Layer/UI/EndGame/ColorRect/VerticalBox/Label")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 anchor_mode = 0
@@ -266,7 +267,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.34781694, 0.34781697, 0.3478169, 1)
 
-[node name="SignUp" type="VBoxContainer" parent="UI Layer/UI/EndGame/ColorRect"]
+[node name="VerticalBox" type="VBoxContainer" parent="UI Layer/UI/EndGame/ColorRect"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -275,12 +276,12 @@ grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="Label" type="Label" parent="UI Layer/UI/EndGame/ColorRect/SignUp"]
+[node name="Label" type="Label" parent="UI Layer/UI/EndGame/ColorRect/VerticalBox"]
 layout_mode = 2
 text = "Ты выиграл / Ты проиграл"
 horizontal_alignment = 1
 
-[node name="exit_btn" type="Button" parent="UI Layer/UI/EndGame/ColorRect/SignUp"]
+[node name="exit_btn" type="Button" parent="UI Layer/UI/EndGame/ColorRect/VerticalBox"]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_fdj6w")
@@ -291,4 +292,4 @@ text = "Выход"
 
 [connection signal="pressed" from="UI Layer/UI/SoldierButton" to="." method="_on_soldier_button_pressed"]
 [connection signal="pressed" from="UI Layer/UI/ArcherButton" to="." method="_on_archer_button_pressed"]
-[connection signal="pressed" from="UI Layer/UI/EndGame/ColorRect/SignUp/exit_btn" to="." method="_on_exit_btn_pressed"]
+[connection signal="pressed" from="UI Layer/UI/EndGame/ColorRect/VerticalBox/exit_btn" to="." method="_on_exit_btn_pressed"]

@@ -4,9 +4,13 @@ extends Node2D
 const UNIT_SCENE = preload("res://scene/soldier.tscn")
 var camera_speed = 50
 
+@export var _end_game_label_path: NodePath
+@onready var end_game_label: Label = get_node(_end_game_label_path)
+
 
 func _ready() -> void:
 	Api.connect("new_data_recived", _on_Api_new_data_recieved)
+	Api.connect("socket_closed", _on_Api_socket_closed)
 
 func _process(_delta: float) -> void:
 	_update_camera()
@@ -27,11 +31,12 @@ func _update_camera() -> void:
 		)
 
 func _new_data_handler(data: Dictionary) -> void:
-	match data.get("type"):
+	match data.type:
 		"start_game":
 			prints("Опонент подключился, игра началась!");
 		"end_game":
 			get_tree().paused = true
+			end_game_label.text = "Победитель " + data.winner
 			$"UI Layer/UI/EndGame".visible = true
 		"spawn":
 			spawn_unit(true, JSON.parse_string(data.unit_info))
@@ -80,3 +85,8 @@ func _on_exit_btn_pressed() -> void:
 	Api.socket.close()
 	get_tree().paused = false
 	get_tree().change_scene_to_file("res://scene/main_menu.tscn")
+
+func _on_Api_socket_closed() -> void:
+	get_tree().paused = true
+	end_game_label.text = "Соединение с сервером разорвано. %s, Ты проиграл!" % [UserInfo.get_user_info().username]
+	$"UI Layer/UI/EndGame".visible = true
