@@ -1,4 +1,4 @@
-class_name Unit extends Area2D
+class_name Unit extends Node2D
 
 
 var UnitState: Dictionary[String, String]
@@ -19,24 +19,30 @@ var unit_state: String:
 		unit_state = value
 		_on_set_unit_state(old, value)
 
-@export var shape_cast_path: NodePath
-@onready var shape_cast: ShapeCast2D = get_node(shape_cast_path)
+@export var _unit_area_path: NodePath
+@onready var unit_area: Area2D = get_node(_unit_area_path)
+@export var _attack_area_path: NodePath
+@onready var attack_area: Area2D = get_node(_attack_area_path)
+@export var _attack_collision_path: NodePath
+@onready var attack_collision: CollisionShape2D = get_node(_attack_collision_path)
 
 
 func _ready() -> void:
 	_init_unit_states()
-	set_collision_layer_value(2, is_player)
-	set_collision_layer_value(3, !is_player)
-	set_collision_mask_value(2, !is_player)
-	set_collision_mask_value(3, is_player)
-	shape_cast.set_collision_mask_value(2, !is_player)
-	shape_cast.set_collision_mask_value(3, is_player)
-	shape_cast.rotation_degrees = 0 if is_player else -180
+	unit_area.set_collision_layer_value(2, is_player)
+	unit_area.set_collision_layer_value(3, !is_player)
+	unit_area.set_collision_mask_value(2, !is_player)
+	unit_area.set_collision_mask_value(3, is_player)
+	attack_area.set_collision_mask_value(2, !is_player)
+	attack_area.set_collision_mask_value(3, is_player)
+	attack_area.position = attack_collision.shape.size.x / 2
+	attack_area.position *= -1 if !is_player else 1
 
 func _physics_process(delta: float) -> void:
-	if shape_cast.is_colliding():
-		for res in shape_cast.collision_result:
-			var enemy = res.collider
+	if unit_area.has_overlapping_areas():
+		var areas = unit_area.get_overlapping_areas()
+		for area in areas:
+			var enemy = area.get_parent()
 			if !is_instance_valid(enemy):
 				continue
 			enemy.health -= damage * delta

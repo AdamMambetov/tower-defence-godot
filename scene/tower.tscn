@@ -688,12 +688,14 @@ sources/0 = SubResource("TileSetAtlasSource_13gc7")
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cv3lj"]
 size = Vector2(196, 87)
 
-[node name="Tower" type="Area2D"]
-collision_layer = 8
-collision_mask = 0
+[node name="Tower" type="Node2D"]
 script = ExtResource("1_tfrn6")
 
-[node name="PlayerHealthBar" type="ProgressBar" parent="."]
+[node name="TowerArea" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 0
+
+[node name="PlayerHealthBar" type="ProgressBar" parent="TowerArea"]
 custom_minimum_size = Vector2(200, 0)
 offset_left = -100.0
 offset_top = -90.0
@@ -703,16 +705,16 @@ theme_override_styles/background = SubResource("StyleBoxFlat_4jeie")
 theme_override_styles/fill = SubResource("StyleBoxFlat_hquly")
 value = 100.0
 
-[node name="TileMapLayer" type="TileMapLayer" parent="."]
+[node name="TileMapLayer" type="TileMapLayer" parent="TowerArea"]
 scale = Vector2(1.53, 1.53)
 tile_map_data = PackedByteArray("AAD8////AAAAAA8AAAD8/wAAAAAAABAAAAD8/wEAAAAAABEAAAD9//7/AAABAA4AAAD9////AAABAA8AAAD9/wAAAAABABAAAAD9/wEAAAABABEAAAD+//7/AAACAA4AAAD+////AAACAA8AAAD+/wAAAAACABAAAAD+/wEAAAACABEAAAD///7/AAADAA4AAAD/////AAADAA8AAAD//wAAAAADABAAAAD//wEAAAADABEAAAAAAP7/AAAEAA4AAAAAAP//AAAEAA8AAAAAAAAAAAAEABAAAAAAAAEAAAAEABEAAAABAP7/AAAFAA4AAAABAP//AAAFAA8AAAABAAAAAAAFABAAAAABAAEAAAAFABEAAAACAP7/AAAGAA4AAAACAP//AAAGAA8AAAACAAAAAAAGABAAAAACAAEAAAAGABEAAAADAP//AAAHAA8AAAADAAAAAAAHABAAAAADAAEAAAAHABEAAAA=")
 tile_set = SubResource("TileSet_arx8d")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TowerArea"]
 shape = SubResource("RectangleShape2D_cv3lj")
 
-[node name="UnitSpawnPlayer" type="Node2D" parent="."]
+[node name="UnitSpawnPlayer" type="Node2D" parent="TowerArea"]
 position = Vector2(200, 0)
 
-[node name="UnitSpawnEnemy" type="Node2D" parent="."]
+[node name="UnitSpawnEnemy" type="Node2D" parent="TowerArea"]
 position = Vector2(-200, 0)

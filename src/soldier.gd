@@ -1,37 +1,35 @@
 extends Unit
 
 
-@export var animated_sprite_path: NodePath
-@onready var animated_sprite: AnimatedSprite2D = get_node(animated_sprite_path)
+const ATTACKS = [&"attack_1", &"attack_2", &"attack_3"]
+
+@export var _animations_path: NodePath
+@onready var animations: AnimatedSprite2D = get_node(_animations_path)
 
 @export var wait_attack_timer_path: NodePath
 @onready var wait_attack_timer: Timer = get_node(wait_attack_timer_path)
 
-const SOLDIER_ATTACK = &"attack_01"
-const ARCHER_ATTACK = &"shoot"
-
-# if false unit is soldier else archer
-@export var is_archer = false
 var current_enemy: Node
 
 
 func _ready() -> void:
 	super._ready()
-	WS.new_data_received.connect(_on_Api_new_data_recieved)
+	WS.new_data_received.connect(_on_WS_new_data_recieved)
 	
 	wait_attack_timer.wait_time = attack_speed
 	$ProgressBar.max_value = health
 	$ProgressBar.value = health
 	
-	animated_sprite.flip_h = !is_player
-	animated_sprite.play("walk")
+	animations.flip_h = !is_player
+	animations.play(&"run")
 
 func _physics_process(delta: float) -> void:
 	match unit_state:
 		UnitState.None:
-			if shape_cast.is_colliding():
-				for res in shape_cast.collision_result:
-					var enemy = res.collider
+			if attack_area.has_overlapping_areas():
+				var areas = attack_area.get_overlapping_areas()
+				for area in areas:
+					var enemy = area.get_parent()
 					if !is_instance_valid(enemy):
 						continue
 					if enemy.health <= 0:
@@ -43,52 +41,65 @@ func _physics_process(delta: float) -> void:
 			else:
 				unit_state = UnitState.Walk
 		UnitState.Walk:
-			if shape_cast.is_colliding():
+			if attack_area.has_overlapping_areas():
 				unit_state = UnitState.None
 				return
 			move_unit(delta)
 
 
+func _init_unit_states() -> void:
+	UnitState = {
+		None = "",
+		Run = "run",
+		Attack = "attack",
+		WaitAttack = "wait_attack",
+		Death = "death",
+	}
+
 func _on_set_health(_old: float, new: float) -> void:
 	$ProgressBar.value = new
 	if new <= 0:
-		if animated_sprite.frame == animated_sprite.sprite_frames.get_frame_count(
-				ARCHER_ATTACK if is_archer else SOLDIER_ATTACK) - 1:
-			await animated_sprite.animation_finished
+		var current_frame = animations \
+				.sprite_frames \
+				.get_frame_count(animations.animation) - 1
+		if animations.frame == current_frame:
+			await animations.animation_finished
 			await get_tree().physics_frame
 		unit_state = UnitState.Death
 
 func _on_set_unit_state(_old: String, new: String) -> void:
 	match new:
-		UnitState.Walk:
-			animated_sprite.play("walk")
+		UnitState.Run:
+			animations.play(&"run")
 		UnitState.Attack:
-			animated_sprite.play(ARCHER_ATTACK if is_archer else SOLDIER_ATTACK)
-			await animated_sprite.animation_finished
+			animations.play(ATTACKS[ATTACKS.find(animations.animation) + 1])
+			await animations.animation_finished
 			if unit_state != UnitState.Attack:
 				return
 			if is_instance_valid(current_enemy) and is_player:
 				WS.attack(self.id, current_enemy.id)
-				# If enemy 
 				#if current_enemy.health <= 0:
 					#current_enemy = null
 					#unit_state = UnitState.None
 					#return
 			current_enemy = null
-			unit_state = UnitState.WaitAttack
+			if animations.animation == ATTACKS.back():
+				unit_state = UnitState.WaitAttack
+			else:
+				unit_state = UnitState.None
 		UnitState.WaitAttack:
-			animated_sprite.play("idle")
+			animations.play(&"idle")
 			wait_attack_timer.start()
 			await wait_attack_timer.timeout
 			if unit_state != UnitState.WaitAttack:
 				return
 			unit_state = UnitState.None
 		UnitState.Death:
-			animated_sprite.play("death")
-			await animated_sprite.animation_finished
+			animations.play(&"death")
+			await animations.animation_finished
 			queue_free()
 
-func _on_Api_new_data_recieved(result: Dictionary) -> void:
+func _on_WS_new_data_recieved(result: Dictionary) -> void:
 	if !result.has(id):
 		return
 	
