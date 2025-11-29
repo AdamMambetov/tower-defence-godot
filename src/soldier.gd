@@ -17,7 +17,7 @@ var current_enemy: Node
 
 func _ready() -> void:
 	super._ready()
-	Api.connect("new_data_recived", _on_Api_new_data_recieved)
+	WS.new_data_received.connect(_on_Api_new_data_recieved)
 	
 	wait_attack_timer.wait_time = attack_speed
 	$ProgressBar.max_value = health
@@ -68,7 +68,8 @@ func _on_set_unit_state(_old: String, new: String) -> void:
 			if unit_state != UnitState.Attack:
 				return
 			if is_instance_valid(current_enemy) and is_player:
-				Api.attack(self.id, current_enemy.id)
+				WS.attack(self.id, current_enemy.id)
+				# If enemy 
 				#if current_enemy.health <= 0:
 					#current_enemy = null
 					#unit_state = UnitState.None

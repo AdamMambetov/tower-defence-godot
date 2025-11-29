@@ -2,6 +2,8 @@ extends Node2D
 
 
 const UNIT_SCENE = preload("res://scene/soldier.tscn")
+const CONNECTION_CLOSED_TEXT = "Соединение с сервером разорвано. %s, Ты проиграл!"
+
 var camera_speed = 50
 
 @export var _end_game_label_path: NodePath
@@ -9,8 +11,8 @@ var camera_speed = 50
 
 
 func _ready() -> void:
-	Api.connect("new_data_recived", _on_Api_new_data_recieved)
-	Api.connect("socket_closed", _on_Api_socket_closed)
+	WS.new_data_received.connect(_on_WS_new_data_recieved)
+	WS.socket_closed.connect(_on_WS_socket_closed)
 
 func _process(_delta: float) -> void:
 	_update_camera()
@@ -35,6 +37,7 @@ func _new_data_handler(data: Dictionary) -> void:
 		"start_game":
 			prints("Опонент подключился, игра началась!");
 		"end_game":
+			UserInfo.set_room_id("")
 			get_tree().paused = true
 			end_game_label.text = "Победитель " + data.winner
 			$"UI Layer/UI/EndGame".visible = true
@@ -57,18 +60,23 @@ func spawn_unit(is_player: bool, data: Dictionary) -> void:
 	$"Game Layer/Units".add_child(unit)
 
 
-func _on_Api_new_data_recieved(result: Dictionary) -> void:
+func _on_WS_new_data_recieved(result: Dictionary) -> void:
 	if result.has("success"):
 		if !result.success:
 			return
 	_new_data_handler(result)
+
+func _on_WS_socket_closed() -> void:
+	get_tree().paused = true
+	end_game_label.text = CONNECTION_CLOSED_TEXT % [UserInfo.get_user_info().username]
+	$"UI Layer/UI/EndGame".visible = true
 
 func _on_soldier_button_pressed() -> void:
 	var info = {
 		type = "spawn",
 		unit_name = "knight",
 	}
-	var error = Api.socket.send_text(JSON.stringify(info))
+	var error = WS.socket.send_text(JSON.stringify(info))
 	if error:
 		printerr(error)
 
@@ -77,16 +85,11 @@ func _on_archer_button_pressed() -> void:
 		type = "spawn",
 		unit_name = "archer",
 	}
-	var error = Api.socket.send_text(JSON.stringify(info))
+	var error = WS.socket.send_text(JSON.stringify(info))
 	if error:
 		printerr(error)
 
 func _on_exit_btn_pressed() -> void:
-	Api.socket.close()
+	WS.socket.close()
 	get_tree().paused = false
 	get_tree().change_scene_to_file("res://scene/main_menu.tscn")
-
-func _on_Api_socket_closed() -> void:
-	get_tree().paused = true
-	end_game_label.text = "Соединение с сервером разорвано. %s, Ты проиграл!" % [UserInfo.get_user_info().username]
-	$"UI Layer/UI/EndGame".visible = true

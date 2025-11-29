@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 Global="*res://src/global.gd"
 Api="*res://src/api.gd"
+WS="*res://src/web_socket.gd"
 
 [display]
 

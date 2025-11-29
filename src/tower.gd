@@ -13,7 +13,7 @@ var health: float = 100:
 
 
 func _ready() -> void:
-	Api.connect("new_data_recived", _on_Api_new_data_recieved)
+	WS.new_data_received.connect(_on_WS_new_data_received)
 	get_collision_layer_value(2)
 
 
@@ -25,7 +25,7 @@ func get_spawn_position() -> Vector2:
 	return result
 
 
-func _on_Api_new_data_recieved(result: Dictionary) -> void:
+func _on_WS_new_data_received(result: Dictionary) -> void:
 	if result.type != "attack":
 		return
 	

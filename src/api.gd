@@ -3,18 +3,12 @@ extends HTTPRequest
 
 signal sign_result(success: bool, result: String)
 signal join_result(success: bool, result: String)
-signal new_data_recived(result: Dictionary)
-signal socket_closed()
 
-var socket: WebSocketPeer
-var waiting_opponent: bool
 var authorized: bool
-var prev_state = -1
 var access_token_timer: Timer
 
 const ACCESS_TOKEN_LIFE_TIME = 60*60
-const API_BASE_URL = "http://172.27.97.136:8000/"
-const WS_BASE_URL = "ws://172.27.97.136:8100/ws/"
+const API_BASE_URL = "http://26.186.139.15:8000/"
 
 const headers = {
 	form_data = "Content-Type: multipart/form-data; boundary=\"boundary\"",
@@ -25,46 +19,6 @@ const headers = {
 
 func _ready() -> void:
 	_create_access_token_timer()
-
-func _process(_delta: float) -> void:
-	if !is_instance_valid(socket):
-		return
-	socket.poll()
-	var state = socket.get_ready_state()
-	if state != prev_state:
-		prev_state = state
-		prints("State changed to: ", state)
-	match state:
-		WebSocketPeer.STATE_OPEN:
-			while socket.get_available_packet_count():
-				var packet = socket.get_packet()
-				if not socket.was_string_packet():
-					printerr("Received non-text packet! Size: ", packet.size())
-					continue
-
-				var data = packet.get_string_from_utf8()
-				var json = JSON.parse_string(data)
-				if json == null:
-					prints("Message no a JSON format: ", data)
-					continue
-
-				match Global.game_state:
-					Global.GameState.WaitingGame:
-						_waiting_game_process(json)
-					Global.GameState.PlayingGame:
-						_playing_game_process(json)
-		WebSocketPeer.STATE_CLOSED:
-			var code = socket.get_close_code()
-			var reason = socket.get_close_reason()
-			socket = null
-			prints("Connection closed","CODE:",code,"Reason:",reason)
-			socket_closed.emit()
-
-func _notification(what: int) -> void:
-	if what == NOTIFICATION_WM_CLOSE_REQUEST:
-		if is_instance_valid(socket):
-			socket.close()
-		socket = null
 
 
 # login
@@ -132,13 +86,17 @@ func join() -> void:
 		prints("POST", res[1], "queue/join", body_json)
 		if body_json.has('waiting_room_id'):
 			Global.game_state = Global.GameState.WaitingGame
-			waiting_opponent = true
+			WS.waiting_opponent = true
 			var room_id = body_json.waiting_room_id
-			await _connect("%swaiting_room/%s/" % [WS_BASE_URL, room_id])
+			await WS.connect_to_url(
+				WS.construct_url(WS.WAITING_ROOM_URL, room_id)
+			)
 		else:
 			Global.game_state = Global.GameState.PlayingGame
 			UserInfo.set_room_id(body_json.room_id)
-			await _connect("%splay_room/%s/" % [WS_BASE_URL, UserInfo.get_room_id()])
+			await WS.connect_to_url(
+				WS.construct_url(WS.PLAY_ROOM_URL, body_json.room_id)
+			)
 			join_result.emit(true, "")
 		
 	else:
@@ -180,29 +138,6 @@ func update_access_token() -> bool:
 		printerr("Request Error: ", res[1], ", ", body_json)
 		return false
 
-func spawn_unit(unit_name: String) -> void:
-	if !is_instance_valid(socket):
-		printerr("spawn_unit: socket not valid")
-		return
-	
-	var info = {
-		type = "spawn",
-		unit_name = unit_name,
-	}
-	var error = Api.socket.send_text(JSON.stringify(info))
-	if error:
-		printerr(error)
-
-func attack(from_id: String, to_id: String) -> void:
-	if !is_instance_valid(socket):
-		printerr("attack: socket not valid")
-		return
-	socket.send_text(JSON.stringify({
-		type = "attack",
-		from = from_id,
-		to = to_id,
-	}))
-
 func check_room_exists() -> bool:
 	request(
 		API_BASE_URL + "game/check_room_exists",
@@ -221,10 +156,6 @@ func check_room_exists() -> bool:
 		printerr("Request Error: ", error)
 	return false
 
-func reconnect() -> void:
-	var join_url = "%splay_room/%s/" % [WS_BASE_URL, UserInfo.get_room_id()]
-	await _connect(join_url)
-
 
 func _add_field(body: PackedByteArray, key: String, value: String) -> void:
 	var content = "\r\n--boundary\r\n" + "Content-Disposition: form-data; name=\"%s\"\r\n" % key + "Content-Type: text/plain; charset=UTF-8\r\n\r\n" + value
@@ -232,46 +163,6 @@ func _add_field(body: PackedByteArray, key: String, value: String) -> void:
 
 func _end_body(body: PackedByteArray):
 	body.append_array("\r\n--boundary--\r\n".to_utf8_buffer())
-
-func _connect(join_url: String) -> bool:
-	socket = WebSocketPeer.new()
-	socket.handshake_headers = PackedStringArray([
-		"access: " + UserInfo.get_user_info().access,
-	])
-	var err = socket.connect_to_url(join_url)
-	if err != OK:
-		printerr("Failed to initiate websocket:", err)
-		return false
-
-	var start_time = Time.get_ticks_msec()
-	while socket.get_ready_state() == WebSocketPeer.STATE_CONNECTING:
-		socket.poll()
-		await get_tree().process_frame
-		if Time.get_ticks_msec() - start_time > 5000:
-			printerr("WebSocket timeout")
-			return false
-	prints("WebSocket connected:", join_url)
-	return socket.get_ready_state() == WebSocketPeer.STATE_OPEN
-
-func _waiting_game_process(json: Dictionary) -> void:
-	if waiting_opponent and json.has("room_id"):
-		waiting_opponent = false
-		UserInfo.set_room_id(json.room_id)
-		var join_url = "%splay_room/%s/" % [WS_BASE_URL, UserInfo.get_room_id()]
-		for i in 3:
-			if await _connect(join_url):
-				Global.game_state = Global.GameState.PlayingGame
-				join_result.emit(true, "")
-				await get_tree().create_timer(1.0).timeout
-				return
-		socket = null
-		Global.game_state = Global.GameState.Menu
-		join_result.emit(false, "Не удалось найти противника.")
-	else:
-		prints("Received other message: ", json)
-
-func _playing_game_process(json: Dictionary) -> void:
-	new_data_recived.emit(json)
 
 func _create_access_token_timer() -> void:
 	access_token_timer = Timer.new()
