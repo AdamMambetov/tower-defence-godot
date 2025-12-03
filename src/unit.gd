@@ -35,8 +35,8 @@ func _ready() -> void:
 	unit_area.set_collision_mask_value(3, is_player)
 	attack_area.set_collision_mask_value(2, !is_player)
 	attack_area.set_collision_mask_value(3, is_player)
-	attack_area.position = attack_collision.shape.size.x / 2
-	attack_area.position *= -1 if !is_player else 1
+	attack_area.position.x = attack_collision.shape.size.x / 2
+	attack_area.position.x *= -1 if !is_player else 1
 
 func _physics_process(delta: float) -> void:
 	if unit_area.has_overlapping_areas():
@@ -63,7 +63,7 @@ func _init_unit_states() -> void:
 
 func _on_set_health(old: float, new: float) -> void:
 	prints(id, old, new)
-	$Label.text = str(int(new))
+	$UnitArea/Label.text = str(int(new))
 	if new <= 0:
 		queue_free()
 

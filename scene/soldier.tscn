@@ -347,6 +347,8 @@ size = Vector2(70, 60)
 
 [node name="Soldier" type="Node2D"]
 script = ExtResource("1_u8ado")
+_animations_path = NodePath("SoldierArea/Animations")
+wait_attack_timer_path = NodePath("SoldierArea/WaitAttackTimer")
 _unit_area_path = NodePath("SoldierArea")
 _attack_area_path = NodePath("AttackArea")
 _attack_collision_path = NodePath("AttackArea/CollisionShape2D")
@@ -362,7 +364,7 @@ shape = SubResource("RectangleShape2D_s1ucn")
 [node name="Animations" type="AnimatedSprite2D" parent="SoldierArea"]
 position = Vector2(-35, -100)
 sprite_frames = SubResource("SpriteFrames_map1f")
-animation = &"attack_3"
+animation = &"walk"
 centered = false
 
 [node name="ShapeCast2D" type="ShapeCast2D" parent="SoldierArea"]

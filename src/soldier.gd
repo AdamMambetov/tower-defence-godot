@@ -2,6 +2,8 @@ extends Unit
 
 
 const ATTACKS = [&"attack_1", &"attack_2", &"attack_3"]
+const ANIMATIONS_POS_PLAYER = Vector2(-35, -100)
+const ANIMATIONS_POS_ENEMY = Vector2(-100, -100)
 
 @export var _animations_path: NodePath
 @onready var animations: AnimatedSprite2D = get_node(_animations_path)
@@ -17,10 +19,11 @@ func _ready() -> void:
 	WS.new_data_received.connect(_on_WS_new_data_recieved)
 	
 	wait_attack_timer.wait_time = attack_speed
-	$ProgressBar.max_value = health
-	$ProgressBar.value = health
+	$SoldierArea/ProgressBar.max_value = health
+	$SoldierArea/ProgressBar.value = health
 	
 	animations.flip_h = !is_player
+	animations.position = ANIMATIONS_POS_PLAYER if is_player else ANIMATIONS_POS_ENEMY
 	animations.play(&"run")
 
 func _physics_process(delta: float) -> void:
@@ -39,8 +42,8 @@ func _physics_process(delta: float) -> void:
 				if is_instance_valid(current_enemy):
 					unit_state = UnitState.Attack
 			else:
-				unit_state = UnitState.Walk
-		UnitState.Walk:
+				unit_state = UnitState.Run
+		UnitState.Run:
 			if attack_area.has_overlapping_areas():
 				unit_state = UnitState.None
 				return
@@ -57,7 +60,7 @@ func _init_unit_states() -> void:
 	}
 
 func _on_set_health(_old: float, new: float) -> void:
-	$ProgressBar.value = new
+	$SoldierArea/ProgressBar.value = new
 	if new <= 0:
 		var current_frame = animations \
 				.sprite_frames \

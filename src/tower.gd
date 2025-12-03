@@ -11,7 +11,7 @@ var health: float = 100:
 		health = value
 		if health <= 0.0:
 			health = 0.0
-		$PlayerHealthBar.value = health
+		$TowerArea/PlayerHealthBar.value = health
 
 @export var _tower_area_path: NodePath
 @onready var tower_area: Area2D = get_node(_tower_area_path)
@@ -26,9 +26,9 @@ func _ready() -> void:
 
 
 func get_spawn_position() -> Vector2:
-	var result = $"UnitSpawnPlayer".global_position \
+	var result = $TowerArea/UnitSpawnPlayer.global_position \
 		if tower_area.get_collision_layer_value(2) \
-		else $"UnitSpawnEnemy".global_position
+		else $TowerArea/UnitSpawnEnemy.global_position
 	result.y += randf_range(spawn_range_y.x, spawn_range_y.y)
 	return result
 
