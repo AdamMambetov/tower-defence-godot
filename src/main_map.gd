@@ -51,7 +51,6 @@ func _new_data_handler(data: Dictionary) -> void:
 func spawn_unit(is_player: bool, data: Dictionary) -> void:
 	var unit = Global.units[data.name].instantiate()
 	unit.is_player = is_player
-	#unit.is_archer = data.name == "archer"
 	unit.update_info(data)
 	if is_player:
 		unit.global_position = $"Game Layer/PlayerTower".get_spawn_position()
@@ -69,7 +68,9 @@ func _on_WS_new_data_recieved(result: Dictionary) -> void:
 func _on_WS_socket_closed() -> void:
 	if get_tree() != null:
 		get_tree().paused = true
-	end_game_label.text = CONNECTION_CLOSED_TEXT % [UserInfo.get_user_info().username]
+	end_game_label.text = CONNECTION_CLOSED_TEXT % [
+		UserInfo.get_user_info().username,
+	]
 	$"UI Layer/UI/EndGame".visible = true
 
 func _on_soldier_button_pressed() -> void:

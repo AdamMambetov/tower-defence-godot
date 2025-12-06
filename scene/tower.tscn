@@ -715,7 +715,7 @@ tile_set = SubResource("TileSet_arx8d")
 shape = SubResource("RectangleShape2D_cv3lj")
 
 [node name="UnitSpawnPlayer" type="Node2D" parent="TowerArea"]
-position = Vector2(400, 0)
+position = Vector2(200, 0)
 
 [node name="UnitSpawnEnemy" type="Node2D" parent="TowerArea"]
-position = Vector2(-400, 0)
+position = Vector2(-200, 0)
