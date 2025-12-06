@@ -4,10 +4,13 @@ extends Node2D
 const UNIT_SCENE = preload("res://scene/soldier.tscn")
 const CONNECTION_CLOSED_TEXT = "Соединение с сервером разорвано. %s, Ты проиграл!"
 
-var camera_speed = 50
+var camera_speed := 50.0
+var move_by_mouse := true
 
 @export var _end_game_label_path: NodePath
 @onready var end_game_label: Label = get_node(_end_game_label_path)
+@export var _camera_path: NodePath
+@onready var camera: Camera2D = get_node(_camera_path)
 
 
 func _ready() -> void:
@@ -15,7 +18,8 @@ func _ready() -> void:
 	WS.socket_closed.connect(_on_WS_socket_closed)
 
 func _process(_delta: float) -> void:
-	_update_camera()
+	if move_by_mouse:
+		_update_camera()
 
 
 func _update_camera() -> void:
@@ -26,10 +30,10 @@ func _update_camera() -> void:
 	if abs(camera_scale) > 0.6:
 		camera_scale = remap(camera_scale, 0.6, 1, 0, 1) if camera_scale > 0 \
 				else remap(camera_scale, -1, -0.6, -1, 0)
-		$Camera2D.position.x = clampf(
-			$Camera2D.position.x + camera_speed * camera_scale,
-			$Camera2D.limit_left,
-			$Camera2D.limit_right,
+		camera.position.x = clampf(
+			camera.position.x + camera_speed * camera_scale,
+			camera.limit_left,
+			camera.limit_right,
 		)
 
 func _new_data_handler(data: Dictionary) -> void:
@@ -95,3 +99,18 @@ func _on_exit_btn_pressed() -> void:
 	WS.socket.close()
 	get_tree().paused = false
 	get_tree().change_scene_to_file("res://scene/main_menu.tscn")
+
+func _on_go_mine_button_pressed() -> void:
+	move_by_mouse = false
+	$"UI Layer/UI/Mine".visible = true
+	$"UI Layer/UI/Battle".visible = false
+	camera.limit_left = -1152
+	camera.position.x = -1152
+
+func _on_go_battle_button_pressed() -> void:
+	$"UI Layer/UI/Mine".visible = false
+	$"UI Layer/UI/Battle".visible = true
+	camera.position.x = 0
+	await get_tree().create_timer(0.2).timeout
+	camera.limit_left = 0
+	move_by_mouse = true

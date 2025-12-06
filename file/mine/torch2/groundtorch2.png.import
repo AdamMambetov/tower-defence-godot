@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://7oqbbmoglxqu"
-path="res://.godot/imported/icons8--66.png-223342337c7f8cede4ddf153d9cb263d.ctex"
+uid="uid://cyysqr3nxql4s"
+path="res://.godot/imported/groundtorch2.png-3c7749f9418ad2cf02e9342d572e03c9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://file/icons8--66.png"
-dest_files=["res://.godot/imported/icons8--66.png-223342337c7f8cede4ddf153d9cb263d.ctex"]
+source_file="res://file/mine/torch2/groundtorch2.png"
+dest_files=["res://.godot/imported/groundtorch2.png-3c7749f9418ad2cf02e9342d572e03c9.ctex"]
 
 [params]
 
