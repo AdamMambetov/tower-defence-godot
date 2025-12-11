@@ -705,6 +705,18 @@ offset_bottom = -67.0
 theme_override_styles/background = SubResource("StyleBoxFlat_4jeie")
 theme_override_styles/fill = SubResource("StyleBoxFlat_hquly")
 value = 100.0
+show_percentage = false
+
+[node name="HealthValue" type="Label" parent="TowerArea/PlayerHealthBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "1000"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="TileMapLayer" type="TileMapLayer" parent="TowerArea"]
 scale = Vector2(1.53, 1.53)

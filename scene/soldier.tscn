@@ -1,13 +1,13 @@
-[gd_scene load_steps=54 format=3 uid="uid://c47t04547xgiv"]
+[gd_scene load_steps=53 format=3 uid="uid://c47t04547xgiv"]
 
 [ext_resource type="Script" uid="uid://gsgp707rx6fo" path="res://src/soldier.gd" id="1_u8ado"]
-[ext_resource type="Texture2D" uid="uid://qge66yf17jud" path="res://file/soldier/Soldier Attack 1.png" id="2_ptrgl"]
-[ext_resource type="Texture2D" uid="uid://cay2msoxpug2y" path="res://file/soldier/Soldier Attack 2.png" id="3_cy618"]
-[ext_resource type="Texture2D" uid="uid://df83qtgqsp447" path="res://file/soldier/Soldier Idle.png" id="5_08bl5"]
-[ext_resource type="Texture2D" uid="uid://iomcq4lauq3g" path="res://file/soldier/Soldier Run.png" id="6_5ix1c"]
-[ext_resource type="Texture2D" uid="uid://ca0bt5qb4w6vl" path="res://file/soldier/Soldier Walk.png" id="8_3f3g7"]
-[ext_resource type="Texture2D" uid="uid://dxv3y6yrdf47r" path="res://file/soldier/Soldier Attack 3.png" id="10_r1u0s"]
-[ext_resource type="Texture2D" uid="uid://d0feasgrom121" path="res://file/soldier/Soldier Dead.png" id="11_87ii4"]
+[ext_resource type="Texture2D" uid="uid://qge66yf17jud" path="res://file/character/soldier/Soldier Attack 1.png" id="2_ptrgl"]
+[ext_resource type="Texture2D" uid="uid://cay2msoxpug2y" path="res://file/character/soldier/Soldier Attack 2.png" id="3_cy618"]
+[ext_resource type="Texture2D" uid="uid://df83qtgqsp447" path="res://file/character/soldier/Soldier Idle.png" id="5_08bl5"]
+[ext_resource type="Texture2D" uid="uid://iomcq4lauq3g" path="res://file/character/soldier/Soldier Run.png" id="6_5ix1c"]
+[ext_resource type="Texture2D" uid="uid://ca0bt5qb4w6vl" path="res://file/character/soldier/Soldier Walk.png" id="8_3f3g7"]
+[ext_resource type="Texture2D" uid="uid://dxv3y6yrdf47r" path="res://file/character/soldier/Soldier Attack 3.png" id="10_r1u0s"]
+[ext_resource type="Texture2D" uid="uid://d0feasgrom121" path="res://file/character/soldier/Soldier Dead.png" id="11_87ii4"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_s1ucn"]
 size = Vector2(40, 60)
@@ -291,7 +291,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"run",
-"speed": 5.0
+"speed": 7.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -320,11 +320,8 @@ animations = [{
 }],
 "loop": true,
 "name": &"walk",
-"speed": 5.0
+"speed": 6.0
 }]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_fyscm"]
-size = Vector2(18, 60)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0i558"]
 bg_color = Color(0, 0, 0, 1)
@@ -365,16 +362,8 @@ shape = SubResource("RectangleShape2D_s1ucn")
 position = Vector2(-35, -100)
 sprite_frames = SubResource("SpriteFrames_map1f")
 animation = &"walk"
+frame_progress = 0.8568919
 centered = false
-
-[node name="ShapeCast2D" type="ShapeCast2D" parent="SoldierArea"]
-visible = false
-position = Vector2(-3, -2)
-shape = SubResource("RectangleShape2D_fyscm")
-target_position = Vector2(79, 0)
-collision_mask = 0
-collide_with_areas = true
-collide_with_bodies = false
 
 [node name="WaitAttackTimer" type="Timer" parent="SoldierArea"]
 one_shot = true
@@ -388,6 +377,7 @@ theme_override_styles/background = SubResource("StyleBoxFlat_0i558")
 theme_override_styles/fill = SubResource("StyleBoxFlat_3f3g7")
 value = 50.0
 show_percentage = false
+metadata/_edit_use_anchors_ = true
 
 [node name="AttackArea" type="Area2D" parent="."]
 

@@ -6,12 +6,13 @@ extends Node2D
 
 var id: String = "tower"
 
-var health: float = 100:
+var health: float = 1000:
 	set(value):
 		health = value
 		if health <= 0.0:
 			health = 0.0
 		$TowerArea/PlayerHealthBar.value = health
+		$TowerArea/PlayerHealthBar/HealthValue.text = str(int(health))
 
 @export var _tower_area_path: NodePath
 @onready var tower_area: Area2D = get_node(_tower_area_path)
