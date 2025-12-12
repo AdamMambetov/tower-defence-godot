@@ -1,9 +1,17 @@
 extends Unit
 
 
+class UnitState:
+	const None = ""
+	const Run = "run"
+	const Attack = "attack"
+	const WaitAttack = "wait_attack"
+	const Death = "death"
+
+
 const ATTACKS = [&"attack_1", &"attack_2", &"attack_3"]
-const ANIMATIONS_POS_PLAYER = Vector2(-35, -100)
-const ANIMATIONS_POS_ENEMY = Vector2(-100, -100)
+const ANIMATIONS_POS_RIGHT = Vector2(-35, -100)
+const ANIMATIONS_POS_LEFT = Vector2(-100, -100)
 
 @export var _animations_path: NodePath
 @onready var animations: AnimatedSprite2D = get_node(_animations_path)
@@ -21,10 +29,6 @@ func _ready() -> void:
 	wait_attack_timer.wait_time = attack_speed
 	$SoldierArea/ProgressBar.max_value = health
 	$SoldierArea/ProgressBar.value = health
-	
-	animations.flip_h = !is_player
-	animations.position = ANIMATIONS_POS_PLAYER if is_player else ANIMATIONS_POS_ENEMY
-	animations.play(&"run")
 
 func _physics_process(delta: float) -> void:
 	match unit_state:
@@ -49,15 +53,6 @@ func _physics_process(delta: float) -> void:
 				return
 			move_unit(delta)
 
-
-func _init_unit_states() -> void:
-	UnitState = {
-		None = "",
-		Run = "run",
-		Attack = "attack",
-		WaitAttack = "wait_attack",
-		Death = "death",
-	}
 
 func _on_set_health(_old: float, new: float) -> void:
 	$SoldierArea/ProgressBar.value = new
@@ -108,3 +103,12 @@ func _on_WS_new_data_recieved(result: Dictionary) -> void:
 	
 	if result.type == "attack":
 		health = result.get(id)
+
+func _on_set_direction(_old: Vector2, new: Vector2) -> void:
+	match new:
+		Vector2.RIGHT:
+			animations.flip_h = false
+			animations.position = ANIMATIONS_POS_RIGHT
+		Vector2.LEFT:
+			animations.flip_h = true
+			animations.position = ANIMATIONS_POS_LEFT

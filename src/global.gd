@@ -7,6 +7,11 @@ enum GameState {
 	PlayingGame,
 }
 
+enum Route {
+	Tower,
+	Mine,
+}
+
 
 const units = {
 	knight = preload("res://scene/soldier.tscn"),

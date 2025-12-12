@@ -1,8 +1,6 @@
 class_name Unit extends Node2D
 
 
-var UnitState: Dictionary[String, String]
-
 var id: String
 @export var speed = 50
 @export var damage = 5
@@ -13,30 +11,38 @@ var id: String
 		var old = health
 		health = value
 		_on_set_health(old, value)
+
 var unit_state: String:
 	set(value):
 		var old = unit_state
 		unit_state = value
 		_on_set_unit_state(old, value)
 
+var direction: Vector2 = Vector2.RIGHT:
+	set(value):
+		var old = direction
+		direction = value
+		_on_set_direction(old, value)
+
 @export var _unit_area_path: NodePath
 @onready var unit_area: Area2D = get_node(_unit_area_path)
+
 @export var _attack_area_path: NodePath
 @onready var attack_area: Area2D = get_node(_attack_area_path)
+
 @export var _attack_collision_path: NodePath
 @onready var attack_collision: CollisionShape2D = get_node(_attack_collision_path)
 
 
 func _ready() -> void:
-	_init_unit_states()
 	unit_area.set_collision_layer_value(2, is_player)
 	unit_area.set_collision_layer_value(3, !is_player)
 	unit_area.set_collision_mask_value(2, !is_player)
 	unit_area.set_collision_mask_value(3, is_player)
 	attack_area.set_collision_mask_value(2, !is_player)
 	attack_area.set_collision_mask_value(3, is_player)
-	attack_collision.position.x = attack_collision.shape.size.x / 2
-	attack_collision.position.x *= -1 if !is_player else 1
+	direction = Vector2.RIGHT if is_player else Vector2.LEFT
+	attack_collision.position.x = attack_collision.shape.size.x / 2 * direction.x
 
 func _physics_process(delta: float) -> void:
 	if unit_area.has_overlapping_areas():
@@ -51,16 +57,6 @@ func _physics_process(delta: float) -> void:
 		move_unit(delta)
 
 
-func _init_unit_states() -> void:
-	UnitState = {
-		None = "",
-		Walk = "walk",
-		Attack = "attack",
-		WaitAttack = "wait_attack",
-		Death = "death",
-	}
-
-
 func _on_set_health(old: float, new: float) -> void:
 	prints(id, old, new)
 	$UnitArea/Label.text = str(int(new))
@@ -68,6 +64,9 @@ func _on_set_health(old: float, new: float) -> void:
 		queue_free()
 
 func _on_set_unit_state(old: String, new: String) -> void:
+	prints(id, old, new)
+
+func _on_set_direction(old: Vector2, new: Vector2) -> void:
 	prints(id, old, new)
 
 
@@ -79,7 +78,4 @@ func update_info(info: Dictionary) -> void:
 	id = info.id
 
 func move_unit(delta: float) -> void:
-	if is_player:
-		position.x += speed * delta 
-	else:
-		position.x -= speed * delta 
+	position += speed * delta * direction

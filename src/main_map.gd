@@ -1,11 +1,25 @@
 extends Node2D
 
 
+enum MapState {
+	Battle,
+	Town,
+	Mine,
+	EndGame,
+}
+
 const UNIT_SCENE = preload("res://scene/soldier.tscn")
 const CONNECTION_CLOSED_TEXT = "Соединение с сервером разорвано. %s, Ты проиграл!"
 
-var camera_speed := 50.0
-var move_by_mouse := true
+var camera_speed: float = 50.0
+var move_by_mouse: bool = true
+var map_state: MapState = MapState.Battle:
+	set(value):
+		map_state = value
+		$"UI Layer/UI/EndGame".visible = map_state == MapState.EndGame
+		$"UI Layer/UI/Town".visible = map_state == MapState.Town
+		$"UI Layer/UI/Battle".visible = map_state == MapState.Battle
+		$"UI Layer/UI/Mine".visible = map_state == MapState.Mine
 
 @export var _end_game_label_path: NodePath
 @onready var end_game_label: Label = get_node(_end_game_label_path)
@@ -16,6 +30,9 @@ var move_by_mouse := true
 func _ready() -> void:
 	WS.new_data_received.connect(_on_WS_new_data_recieved)
 	WS.socket_closed.connect(_on_WS_socket_closed)
+	map_state = map_state
+	$"UI Layer/UI/Town".position = Vector2.ZERO
+	$"UI Layer/UI/Mine".position = Vector2.ZERO
 
 func _process(_delta: float) -> void:
 	if move_by_mouse:
@@ -44,7 +61,7 @@ func _new_data_handler(data: Dictionary) -> void:
 			UserInfo.set_room_id("")
 			get_tree().paused = true
 			end_game_label.text = "Победитель " + data.winner
-			$"UI Layer/UI/EndGame".visible = true
+			map_state = MapState.EndGame
 		"spawn":
 			spawn_unit(true, JSON.parse_string(data.unit_info))
 			$"UI Layer/UI/MoneyValue".text = str(int(data.money))
@@ -75,7 +92,7 @@ func _on_WS_socket_closed() -> void:
 	end_game_label.text = CONNECTION_CLOSED_TEXT % [
 		UserInfo.get_user_info().username,
 	]
-	$"UI Layer/UI/EndGame".visible = true
+	map_state = MapState.EndGame
 
 func _on_soldier_button_pressed() -> void:
 	var info = {
@@ -100,17 +117,22 @@ func _on_exit_btn_pressed() -> void:
 	get_tree().paused = false
 	get_tree().change_scene_to_file("res://scene/main_menu.tscn")
 
-func _on_go_mine_button_pressed() -> void:
-	move_by_mouse = false
-	$"UI Layer/UI/Mine".visible = true
-	$"UI Layer/UI/Battle".visible = false
-	camera.limit_left = -1152
-	camera.position.x = -1152
-
 func _on_go_battle_button_pressed() -> void:
-	$"UI Layer/UI/Mine".visible = false
-	$"UI Layer/UI/Battle".visible = true
+	map_state = MapState.Battle
 	camera.position.x = 0
 	await get_tree().create_timer(0.2).timeout
 	camera.limit_left = 0
 	move_by_mouse = true
+
+func _on_go_town_button_pressed() -> void:
+	move_by_mouse = false
+	camera.make_current()
+	map_state = MapState.Town
+	camera.limit_left = -1152
+	camera.position.x = -1152
+
+func _on_go_mine_button_pressed() -> void:
+	move_by_mouse = false
+	map_state = MapState.Mine
+	$MineLocation/Camera.make_current()
+	pass

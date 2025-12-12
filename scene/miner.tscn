@@ -207,6 +207,7 @@ anti_aliasing = false
 
 [node name="Miner" type="Node2D"]
 script = ExtResource("1_v7bnt")
+_animations_path = NodePath("Area/Animations")
 damage = 1
 is_player = true
 _unit_area_path = NodePath("Area")
@@ -225,9 +226,6 @@ position = Vector2(-17, -30)
 sprite_frames = SubResource("SpriteFrames_hhjk5")
 animation = &"idle"
 centered = false
-
-[node name="WaitAttackTimer" type="Timer" parent="Area"]
-one_shot = true
 
 [node name="AttackArea" type="Area2D" parent="."]
 
