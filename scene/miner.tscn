@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://dj5hqb604ukgc" path="res://file/character/miner/SteamMan_walk.png" id="5_2envy"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6ensq"]
-size = Vector2(27, 37)
+size = Vector2(1, 37)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8l213"]
 atlas = ExtResource("2_pnxvj")
@@ -187,7 +187,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_d86kl"]
-size = Vector2(20, 37)
+size = Vector2(14, 37)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pnxvj"]
 bg_color = Color(0, 0, 0, 1)
@@ -225,13 +225,14 @@ shape = SubResource("RectangleShape2D_6ensq")
 [node name="Animations" type="AnimatedSprite2D" parent="Area"]
 position = Vector2(-17, -30)
 sprite_frames = SubResource("SpriteFrames_hhjk5")
-animation = &"idle"
+animation = &"attack"
+frame = 4
 centered = false
 
 [node name="AttackArea" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea"]
-position = Vector2(10, 0)
+position = Vector2(8, 0)
 shape = SubResource("RectangleShape2D_d86kl")
 
 [node name="ProgressBar" type="ProgressBar" parent="."]
