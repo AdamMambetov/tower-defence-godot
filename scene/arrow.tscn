@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3 uid="uid://tdrcmstg8kvg"]
+
+[ext_resource type="Texture2D" uid="uid://68xjghn7ptmv" path="res://file/character/samurai/Arrow.png" id="1_rufgg"]
+[ext_resource type="Script" uid="uid://cup1tdogyi7u7" path="res://src/arrow.gd" id="1_yspra"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yspra"]
+size = Vector2(54, 8)
+
+[node name="Arrow" type="Node2D"]
+script = ExtResource("1_yspra")
+_sprite_path = NodePath("Sprite2D")
+_area_path = NodePath("Area2D")
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_yspra")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_rufgg")
+
+[node name="LifeTimeTimer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]
+[connection signal="timeout" from="LifeTimeTimer" to="." method="_on_life_time_timer_timeout"]

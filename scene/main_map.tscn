@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=4 uid="uid://d1vrkfxgttq3c"]
+[gd_scene load_steps=37 format=4 uid="uid://d1vrkfxgttq3c"]
 
 [ext_resource type="Script" uid="uid://cfltnwoeynwn2" path="res://src/main_map.gd" id="1_xf4q7"]
 [ext_resource type="Texture2D" uid="uid://d3a0835k1w76s" path="res://file/background/background_layer_1.png" id="2_13gc7"]
@@ -11,7 +11,6 @@
 [ext_resource type="Texture2D" uid="uid://bchuaev1n0ddx" path="res://file/ground/Floor_Grass_01-128x64.png" id="9_ruj8r"]
 [ext_resource type="Texture2D" uid="uid://dtmukdrrgbx22" path="res://file/mine/2017_03_29_stairs.png" id="9_vvnmp"]
 [ext_resource type="Texture2D" uid="uid://cvcepkwcgks10" path="res://file/ground/Floor_Stones_01-128x64.png" id="10_dmbqw"]
-[ext_resource type="PackedScene" uid="uid://bps3g2ej7nq58" path="res://scene/miner.tscn" id="11_esod0"]
 [ext_resource type="PackedScene" uid="uid://ujlgdhhk7fhs" path="res://scene/torch.tscn" id="11_ruj8r"]
 [ext_resource type="Texture2D" uid="uid://dbdinqdwcxsk8" path="res://file/icon/chevron-left.png" id="11_vnlmr"]
 [ext_resource type="Texture2D" uid="uid://d4nxn471aolc3" path="res://file/mine/background 1/Plan 5.png" id="12_pig8g"]
@@ -5414,6 +5413,9 @@ scale = Vector2(1.5, 1.5)
 position = Vector2(-183, 630)
 scale = Vector2(1.5, 1.5)
 
+[node name="MinerSpawn" type="Node2D" parent="."]
+position = Vector2(26, 594.225)
+
 [node name="MineLocation" type="Node2D" parent="."]
 position = Vector2(0, 1000)
 
@@ -5464,9 +5466,6 @@ route = 1
 
 [node name="Units" type="Node2D" parent="."]
 y_sort_enabled = true
-
-[node name="Miner" parent="Units" instance=ExtResource("11_esod0")]
-position = Vector2(12, 582)
 
 [node name="UI Layer" type="CanvasLayer" parent="."]
 
@@ -5567,13 +5566,38 @@ ignore_texture_size = true
 stretch_mode = 4
 
 [node name="ArcherButton" type="TextureButton" parent="UI Layer/UI/Battle"]
-visible = false
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -276.0
 offset_right = -196.0
+offset_bottom = 80.0
+grow_horizontal = 2
+texture_normal = ExtResource("3_4jeie")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="MinotaurButton" type="TextureButton" parent="UI Layer/UI/Battle"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -175.0
+offset_right = -95.0
+offset_bottom = 80.0
+grow_horizontal = 2
+texture_normal = ExtResource("3_4jeie")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="MinerButton" type="TextureButton" parent="UI Layer/UI/Battle"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -78.0
+offset_right = 2.0
 offset_bottom = 80.0
 grow_horizontal = 2
 texture_normal = ExtResource("3_4jeie")
@@ -5593,6 +5617,7 @@ texture_normal = ExtResource("11_vnlmr")
 
 [node name="EndGame" type="Control" parent="UI Layer/UI"]
 process_mode = 2
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -5677,6 +5702,8 @@ texture_normal = ExtResource("12_vvnmp")
 [connection signal="pressed" from="UI Layer/UI/Town/GoMineButton" to="." method="_on_go_mine_button_pressed"]
 [connection signal="pressed" from="UI Layer/UI/Battle/SoldierButton" to="." method="_on_soldier_button_pressed"]
 [connection signal="pressed" from="UI Layer/UI/Battle/ArcherButton" to="." method="_on_archer_button_pressed"]
+[connection signal="pressed" from="UI Layer/UI/Battle/MinotaurButton" to="." method="_on_minotaur_button_pressed"]
+[connection signal="pressed" from="UI Layer/UI/Battle/MinerButton" to="." method="_on_miner_button_pressed"]
 [connection signal="pressed" from="UI Layer/UI/Battle/GoTownButton" to="." method="_on_go_town_button_pressed"]
 [connection signal="pressed" from="UI Layer/UI/EndGame/ColorRect/VerticalBox/exit_btn" to="." method="_on_exit_btn_pressed"]
 [connection signal="pressed" from="UI Layer/UI/Mine/GoTownButton" to="." method="_on_go_town_button_pressed"]

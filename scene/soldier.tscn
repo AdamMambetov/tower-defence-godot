@@ -347,6 +347,7 @@ script = ExtResource("1_u8ado")
 _animations_path = NodePath("SoldierArea/Animations")
 wait_attack_timer_path = NodePath("SoldierArea/WaitAttackTimer")
 _unit_area_path = NodePath("SoldierArea")
+_unit_collision_path = NodePath("SoldierArea/CollisionShape2D")
 _attack_area_path = NodePath("AttackArea")
 _attack_collision_path = NodePath("AttackArea/CollisionShape2D")
 

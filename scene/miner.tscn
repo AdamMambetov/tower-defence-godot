@@ -211,12 +211,13 @@ _animations_path = NodePath("Area/Animations")
 damage = 1
 is_player = true
 _unit_area_path = NodePath("Area")
+_unit_collision_path = NodePath("Area/CollisionShape2D")
 _attack_area_path = NodePath("AttackArea")
 _attack_collision_path = NodePath("AttackArea/CollisionShape2D")
 
 [node name="Area" type="Area2D" parent="."]
 collision_layer = 2
-collision_mask = 16
+collision_mask = 24
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area"]
 shape = SubResource("RectangleShape2D_6ensq")

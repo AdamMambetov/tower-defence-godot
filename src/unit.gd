@@ -27,6 +27,9 @@ var direction: Vector2 = Vector2.RIGHT:
 @export var _unit_area_path: NodePath
 @onready var unit_area: Area2D = get_node(_unit_area_path)
 
+@export var _unit_collision_path: NodePath
+@onready var unit_collision: CollisionShape2D = get_node(_unit_collision_path)
+
 @export var _attack_area_path: NodePath
 @onready var attack_area: Area2D = get_node(_attack_area_path)
 
@@ -42,7 +45,8 @@ func _ready() -> void:
 	attack_area.set_collision_mask_value(2, !is_player)
 	attack_area.set_collision_mask_value(3, is_player)
 	direction = Vector2.RIGHT if is_player else Vector2.LEFT
-	attack_collision.position.x = attack_collision.shape.size.x / 2 * direction.x
+	attack_collision.position.x = attack_collision.shape.size.x / 2 * direction.x \
+			+ unit_collision.shape.size.x / 2
 
 func _physics_process(delta: float) -> void:
 	if unit_area.has_overlapping_areas():

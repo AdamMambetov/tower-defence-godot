@@ -74,7 +74,10 @@ func spawn_unit(is_player: bool, data: Dictionary) -> void:
 	unit.is_player = is_player
 	unit.update_info(data)
 	if is_player:
-		unit.global_position = $"Game Layer/PlayerTower".get_spawn_position()
+		if data.unit_type == "miner":
+			unit.global_position = $MinerSpawn.global_position
+		else:
+			unit.global_position = $"Game Layer/PlayerTower".get_spawn_position()
 	else:
 		unit.global_position = $"Game Layer/EnemyTower".get_spawn_position()
 	$"Game Layer/Units".add_child(unit)
@@ -106,7 +109,25 @@ func _on_soldier_button_pressed() -> void:
 func _on_archer_button_pressed() -> void:
 	var info = {
 		type = "spawn",
-		unit_name = "archer",
+		unit_name = "samurai",
+	}
+	var error = WS.socket.send_text(JSON.stringify(info))
+	if error:
+		printerr(error)
+
+func _on_minotaur_button_pressed() -> void:
+	var info = {
+		type = "spawn",
+		unit_name = "minotaur",
+	}
+	var error = WS.socket.send_text(JSON.stringify(info))
+	if error:
+		printerr(error)
+
+func _on_miner_button_pressed() -> void:
+	var info = {
+		type = "spawn",
+		unit_name = "miner",
 	}
 	var error = WS.socket.send_text(JSON.stringify(info))
 	if error:
