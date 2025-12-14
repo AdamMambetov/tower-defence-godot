@@ -344,32 +344,32 @@ size = Vector2(53, 60)
 
 [node name="Soldier" type="Node2D"]
 script = ExtResource("1_u8ado")
-_animations_path = NodePath("SoldierArea/Animations")
-wait_attack_timer_path = NodePath("SoldierArea/WaitAttackTimer")
-_unit_area_path = NodePath("SoldierArea")
-_unit_collision_path = NodePath("SoldierArea/CollisionShape2D")
+_animations_path = NodePath("UnitArea/Animations")
+wait_attack_timer_path = NodePath("UnitArea/WaitAttackTimer")
+_unit_area_path = NodePath("UnitArea")
+_unit_collision_path = NodePath("UnitArea/CollisionShape2D")
 _attack_area_path = NodePath("AttackArea")
 _attack_collision_path = NodePath("AttackArea/CollisionShape2D")
 
-[node name="SoldierArea" type="Area2D" parent="."]
+[node name="UnitArea" type="Area2D" parent="."]
 collision_layer = 0
 collision_mask = 8
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="SoldierArea"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="UnitArea"]
 position = Vector2(0, -2)
 shape = SubResource("RectangleShape2D_s1ucn")
 
-[node name="Animations" type="AnimatedSprite2D" parent="SoldierArea"]
+[node name="Animations" type="AnimatedSprite2D" parent="UnitArea"]
 position = Vector2(-35, -100)
 sprite_frames = SubResource("SpriteFrames_map1f")
 animation = &"walk"
 frame_progress = 0.8568919
 centered = false
 
-[node name="WaitAttackTimer" type="Timer" parent="SoldierArea"]
+[node name="WaitAttackTimer" type="Timer" parent="UnitArea"]
 one_shot = true
 
-[node name="ProgressBar" type="ProgressBar" parent="SoldierArea"]
+[node name="ProgressBar" type="ProgressBar" parent="UnitArea"]
 offset_left = -22.0
 offset_top = -45.0
 offset_right = 23.0
@@ -386,5 +386,5 @@ metadata/_edit_use_anchors_ = true
 position = Vector2(26.5, -2)
 shape = SubResource("RectangleShape2D_t5i3t")
 
-[connection signal="animation_changed" from="SoldierArea/Animations" to="SoldierArea" method="_on_animations_animation_changed"]
-[connection signal="animation_finished" from="SoldierArea/Animations" to="SoldierArea" method="_on_animations_animation_finished"]
+[connection signal="animation_changed" from="UnitArea/Animations" to="UnitArea" method="_on_animations_animation_changed"]
+[connection signal="animation_finished" from="UnitArea/Animations" to="UnitArea" method="_on_animations_animation_finished"]

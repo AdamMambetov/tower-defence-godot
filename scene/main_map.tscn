@@ -1,9 +1,8 @@
-[gd_scene load_steps=37 format=4 uid="uid://d1vrkfxgttq3c"]
+[gd_scene load_steps=44 format=4 uid="uid://d1vrkfxgttq3c"]
 
 [ext_resource type="Script" uid="uid://cfltnwoeynwn2" path="res://src/main_map.gd" id="1_xf4q7"]
 [ext_resource type="Texture2D" uid="uid://d3a0835k1w76s" path="res://file/background/background_layer_1.png" id="2_13gc7"]
 [ext_resource type="PackedScene" uid="uid://bgqto2ho3d3ol" path="res://scene/tower.tscn" id="2_hquly"]
-[ext_resource type="Texture2D" uid="uid://rucn240baf47" path="res://icon.svg" id="3_4jeie"]
 [ext_resource type="Texture2D" uid="uid://tvmpg2wppelu" path="res://file/background/background_layer_2.png" id="3_arx8d"]
 [ext_resource type="Texture2D" uid="uid://2ncett1wa7rq" path="res://file/background/background_layer_3.png" id="4_w3aho"]
 [ext_resource type="Texture2D" uid="uid://m3rfco54lg6b" path="res://file/ground/Floor_Dry_01-128x64.png" id="7_vnlmr"]
@@ -21,6 +20,14 @@
 [ext_resource type="Texture2D" uid="uid://cbwi4vl02s7kq" path="res://file/mine/background 1/Plan 2.png" id="15_vrvtq"]
 [ext_resource type="Texture2D" uid="uid://dmoo2bpw1prh1" path="res://file/mine/background 1/Plan 1.png" id="16_utjqm"]
 [ext_resource type="PackedScene" uid="uid://cxyryuu4mixwb" path="res://scene/teleport.tscn" id="17_pig8g"]
+[ext_resource type="Texture2D" uid="uid://kgodj2irm8ts" path="res://file/icon/money_bg.png" id="20_byx81"]
+[ext_resource type="Texture2D" uid="uid://crhe2nx8l374s" path="res://file/icon/UI_Flat_Banner02a.png" id="20_oafc4"]
+[ext_resource type="Texture2D" uid="uid://cgr62eyayb85a" path="res://file/icon/SoldierPreview.png" id="20_vrvtq"]
+[ext_resource type="Texture2D" uid="uid://43h3swf8yjog" path="res://file/icon/SamuraiPreview.png" id="21_esod0"]
+[ext_resource type="Texture2D" uid="uid://cashwb0j287jg" path="res://file/icon/money.png" id="21_oafc4"]
+[ext_resource type="Texture2D" uid="uid://bu87dp4eekawj" path="res://file/icon/MinotaurPreview.png" id="22_utjqm"]
+[ext_resource type="Texture2D" uid="uid://b14vjvk7aec8y" path="res://file/icon/MinerPreview.png" id="23_byx81"]
+[ext_resource type="Texture2D" uid="uid://clgt2ok7ey150" path="res://file/icon/WitchPreview.png" id="28_t3s1h"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_860pk"]
 texture = ExtResource("7_vnlmr")
@@ -5337,6 +5344,7 @@ sources/0 = SubResource("TileSetAtlasSource_t2adl")
 [node name="MainMap" type="Node2D"]
 script = ExtResource("1_xf4q7")
 _end_game_label_path = NodePath("UI Layer/UI/EndGame/ColorRect/VerticalBox/Label")
+_money_value_path = NodePath("UI Layer/UI/Battle/MoneyBackground/VBoxContainer/MoneyValue")
 _camera_path = NodePath("Camera2D")
 
 [node name="Camera2D" type="Camera2D" parent="."]
@@ -5536,73 +5544,41 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MoneyText" type="Label" parent="UI Layer/UI/Battle"]
+[node name="TextureRect" type="TextureRect" parent="UI Layer/UI/Battle"]
+self_modulate = Color(0.60784316, 0.5058824, 0.45882353, 1)
 layout_mode = 0
-offset_left = 2.0
-offset_top = 40.0
-offset_right = 59.0
-offset_bottom = 63.0
-text = "Money:"
+offset_left = 9.0
+offset_right = 722.0
+offset_bottom = 135.0
+texture = ExtResource("20_oafc4")
 
-[node name="MoneyValue" type="Label" parent="UI Layer/UI/Battle"]
+[node name="MoneyBackground" type="TextureRect" parent="UI Layer/UI/Battle"]
+custom_minimum_size = Vector2(80, 80)
 layout_mode = 0
-offset_left = 64.0
-offset_top = 40.0
-offset_right = 104.0
-offset_bottom = 63.0
+offset_left = 110.0
+offset_top = 9.0
+offset_right = 190.0
+offset_bottom = 89.0
+texture = ExtResource("20_byx81")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI Layer/UI/Battle/MoneyBackground"]
+layout_mode = 0
+offset_right = 72.0
+offset_bottom = 77.0
+
+[node name="MoneyIcon" type="TextureRect" parent="UI Layer/UI/Battle/MoneyBackground/VBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+texture = ExtResource("21_oafc4")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="MoneyValue" type="Label" parent="UI Layer/UI/Battle/MoneyBackground/VBoxContainer"]
+layout_mode = 2
 text = "200"
-
-[node name="SoldierButton" type="TextureButton" parent="UI Layer/UI/Battle"]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -376.0
-offset_right = -296.0
-offset_bottom = 80.0
-grow_horizontal = 2
-texture_normal = ExtResource("3_4jeie")
-ignore_texture_size = true
-stretch_mode = 4
-
-[node name="ArcherButton" type="TextureButton" parent="UI Layer/UI/Battle"]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -276.0
-offset_right = -196.0
-offset_bottom = 80.0
-grow_horizontal = 2
-texture_normal = ExtResource("3_4jeie")
-ignore_texture_size = true
-stretch_mode = 4
-
-[node name="MinotaurButton" type="TextureButton" parent="UI Layer/UI/Battle"]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -175.0
-offset_right = -95.0
-offset_bottom = 80.0
-grow_horizontal = 2
-texture_normal = ExtResource("3_4jeie")
-ignore_texture_size = true
-stretch_mode = 4
-
-[node name="MinerButton" type="TextureButton" parent="UI Layer/UI/Battle"]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -78.0
-offset_right = 2.0
-offset_bottom = 80.0
-grow_horizontal = 2
-texture_normal = ExtResource("3_4jeie")
-ignore_texture_size = true
-stretch_mode = 4
+horizontal_alignment = 2
 
 [node name="GoTownButton" type="TextureButton" parent="UI Layer/UI/Battle"]
 layout_mode = 1
@@ -5614,6 +5590,89 @@ offset_right = 48.0
 offset_bottom = 24.0
 grow_vertical = 2
 texture_normal = ExtResource("11_vnlmr")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI Layer/UI/Battle"]
+layout_mode = 0
+offset_left = 231.0
+offset_top = 9.0
+offset_right = 531.0
+offset_bottom = 96.0
+theme_override_constants/separation = 20
+
+[node name="Miner" type="VBoxContainer" parent="UI Layer/UI/Battle/HBoxContainer"]
+layout_mode = 2
+
+[node name="MinerButton" type="TextureButton" parent="UI Layer/UI/Battle/HBoxContainer/Miner"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture_normal = ExtResource("23_byx81")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="MinerPrice" type="Label" parent="UI Layer/UI/Battle/HBoxContainer/Miner"]
+layout_mode = 2
+text = "999999"
+horizontal_alignment = 1
+
+[node name="Soldier" type="VBoxContainer" parent="UI Layer/UI/Battle/HBoxContainer"]
+layout_mode = 2
+
+[node name="SoldierButton" type="TextureButton" parent="UI Layer/UI/Battle/HBoxContainer/Soldier"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture_normal = ExtResource("20_vrvtq")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="SoldierPrice" type="Label" parent="UI Layer/UI/Battle/HBoxContainer/Soldier"]
+layout_mode = 2
+text = "999999"
+horizontal_alignment = 1
+
+[node name="Samurai" type="VBoxContainer" parent="UI Layer/UI/Battle/HBoxContainer"]
+layout_mode = 2
+
+[node name="SamuraiButton" type="TextureButton" parent="UI Layer/UI/Battle/HBoxContainer/Samurai"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture_normal = ExtResource("21_esod0")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="SamuraiPrice" type="Label" parent="UI Layer/UI/Battle/HBoxContainer/Samurai"]
+layout_mode = 2
+text = "999999"
+horizontal_alignment = 1
+
+[node name="Minotaur" type="VBoxContainer" parent="UI Layer/UI/Battle/HBoxContainer"]
+layout_mode = 2
+
+[node name="MinotaurButton" type="TextureButton" parent="UI Layer/UI/Battle/HBoxContainer/Minotaur"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture_normal = ExtResource("22_utjqm")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="MinotaurPrice" type="Label" parent="UI Layer/UI/Battle/HBoxContainer/Minotaur"]
+layout_mode = 2
+text = "999999"
+horizontal_alignment = 1
+
+[node name="Witch" type="VBoxContainer" parent="UI Layer/UI/Battle/HBoxContainer"]
+layout_mode = 2
+
+[node name="WitchButton" type="TextureButton" parent="UI Layer/UI/Battle/HBoxContainer/Witch"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture_normal = ExtResource("28_t3s1h")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="MinotaurPrice" type="Label" parent="UI Layer/UI/Battle/HBoxContainer/Witch"]
+layout_mode = 2
+text = "999999"
+horizontal_alignment = 1
 
 [node name="EndGame" type="Control" parent="UI Layer/UI"]
 process_mode = 2
@@ -5700,10 +5759,11 @@ texture_normal = ExtResource("12_vvnmp")
 
 [connection signal="pressed" from="UI Layer/UI/Town/GoBattleButton" to="." method="_on_go_battle_button_pressed"]
 [connection signal="pressed" from="UI Layer/UI/Town/GoMineButton" to="." method="_on_go_mine_button_pressed"]
-[connection signal="pressed" from="UI Layer/UI/Battle/SoldierButton" to="." method="_on_soldier_button_pressed"]
-[connection signal="pressed" from="UI Layer/UI/Battle/ArcherButton" to="." method="_on_archer_button_pressed"]
-[connection signal="pressed" from="UI Layer/UI/Battle/MinotaurButton" to="." method="_on_minotaur_button_pressed"]
-[connection signal="pressed" from="UI Layer/UI/Battle/MinerButton" to="." method="_on_miner_button_pressed"]
 [connection signal="pressed" from="UI Layer/UI/Battle/GoTownButton" to="." method="_on_go_town_button_pressed"]
+[connection signal="pressed" from="UI Layer/UI/Battle/HBoxContainer/Miner/MinerButton" to="." method="_on_miner_button_pressed"]
+[connection signal="pressed" from="UI Layer/UI/Battle/HBoxContainer/Soldier/SoldierButton" to="." method="_on_soldier_button_pressed"]
+[connection signal="pressed" from="UI Layer/UI/Battle/HBoxContainer/Samurai/SamuraiButton" to="." method="_on_archer_button_pressed"]
+[connection signal="pressed" from="UI Layer/UI/Battle/HBoxContainer/Minotaur/MinotaurButton" to="." method="_on_minotaur_button_pressed"]
+[connection signal="pressed" from="UI Layer/UI/Battle/HBoxContainer/Witch/WitchButton" to="." method="_on_witch_button_pressed"]
 [connection signal="pressed" from="UI Layer/UI/EndGame/ColorRect/VerticalBox/exit_btn" to="." method="_on_exit_btn_pressed"]
 [connection signal="pressed" from="UI Layer/UI/Mine/GoTownButton" to="." method="_on_go_town_button_pressed"]

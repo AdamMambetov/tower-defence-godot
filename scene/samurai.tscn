@@ -291,33 +291,33 @@ size = Vector2(530, 60)
 
 [node name="Samurai" type="Node2D"]
 script = ExtResource("1_uwns0")
-_animations_path = NodePath("SamuraiArea/Animations")
-wait_attack_timer_path = NodePath("SamuraiArea/WaitAttackTimer")
+_animations_path = NodePath("UnitArea/Animations")
+wait_attack_timer_path = NodePath("UnitArea/WaitAttackTimer")
 is_player = true
-_unit_area_path = NodePath("SamuraiArea")
-_unit_collision_path = NodePath("SamuraiArea/CollisionShape2D")
+_unit_area_path = NodePath("UnitArea")
+_unit_collision_path = NodePath("UnitArea/CollisionShape2D")
 _attack_area_path = NodePath("AttackArea")
 _attack_collision_path = NodePath("AttackArea/CollisionShape2D")
 metadata/_custom_type_script = "uid://b1aemje2io0qa"
 
-[node name="SamuraiArea" type="Area2D" parent="."]
+[node name="UnitArea" type="Area2D" parent="."]
 collision_layer = 0
 collision_mask = 8
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="SamuraiArea"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="UnitArea"]
 position = Vector2(0, -7)
 shape = SubResource("RectangleShape2D_geeh1")
 
-[node name="Animations" type="AnimatedSprite2D" parent="SamuraiArea"]
+[node name="Animations" type="AnimatedSprite2D" parent="UnitArea"]
 position = Vector2(-64, -100)
 sprite_frames = SubResource("SpriteFrames_wvx3n")
 animation = &"idle"
 centered = false
 
-[node name="WaitAttackTimer" type="Timer" parent="SamuraiArea"]
+[node name="WaitAttackTimer" type="Timer" parent="UnitArea"]
 one_shot = true
 
-[node name="ProgressBar" type="ProgressBar" parent="SamuraiArea"]
+[node name="ProgressBar" type="ProgressBar" parent="UnitArea"]
 offset_top = -57.0
 offset_right = 45.0
 offset_bottom = -52.0
@@ -336,5 +336,5 @@ shape = SubResource("RectangleShape2D_2xip1")
 [node name="ArrowSpawn" type="Node2D" parent="."]
 position = Vector2(20, -25)
 
-[connection signal="animation_changed" from="SamuraiArea/Animations" to="SamuraiArea" method="_on_animations_animation_changed"]
-[connection signal="animation_finished" from="SamuraiArea/Animations" to="SamuraiArea" method="_on_animations_animation_finished"]
+[connection signal="animation_changed" from="UnitArea/Animations" to="UnitArea" method="_on_animations_animation_changed"]
+[connection signal="animation_finished" from="UnitArea/Animations" to="UnitArea" method="_on_animations_animation_finished"]

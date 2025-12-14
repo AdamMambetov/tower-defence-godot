@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ds7i4kirip0k1"
-path="res://.godot/imported/RedBG.png-8b00ed032cb309fb330fd8c910ffc4e0.ctex"
+uid="uid://crsycjbvgikkj"
+path="res://.godot/imported/B_witch_idle.png-47eff1add052213387eca45a6b6c2898.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://file/RedBG.png"
-dest_files=["res://.godot/imported/RedBG.png-8b00ed032cb309fb330fd8c910ffc4e0.ctex"]
+source_file="res://file/character/witch/B_witch_idle.png"
+dest_files=["res://.godot/imported/B_witch_idle.png-47eff1add052213387eca45a6b6c2898.ctex"]
 
 [params]
 

@@ -23,6 +23,8 @@ var map_state: MapState = MapState.Battle:
 
 @export var _end_game_label_path: NodePath
 @onready var end_game_label: Label = get_node(_end_game_label_path)
+@export var _money_value_path: NodePath
+@onready var money_value: Label = get_node(_money_value_path)
 @export var _camera_path: NodePath
 @onready var camera: Camera2D = get_node(_camera_path)
 
@@ -64,7 +66,7 @@ func _new_data_handler(data: Dictionary) -> void:
 			map_state = MapState.EndGame
 		"spawn":
 			spawn_unit(true, JSON.parse_string(data.unit_info))
-			$"UI Layer/UI/MoneyValue".text = str(int(data.money))
+			money_value.text = str(int(data.money))
 		"spawn_enemy":
 			spawn_unit(false, JSON.parse_string(data.unit_info))
 
@@ -128,6 +130,15 @@ func _on_miner_button_pressed() -> void:
 	var info = {
 		type = "spawn",
 		unit_name = "miner",
+	}
+	var error = WS.socket.send_text(JSON.stringify(info))
+	if error:
+		printerr(error)
+
+func _on_witch_button_pressed() -> void:
+	var info = {
+		type = "spawn",
+		unit_name = "witch",
 	}
 	var error = WS.socket.send_text(JSON.stringify(info))
 	if error:
