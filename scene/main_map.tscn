@@ -5346,6 +5346,13 @@ script = ExtResource("1_xf4q7")
 _end_game_label_path = NodePath("UI Layer/UI/EndGame/ColorRect/VerticalBox/Label")
 _money_value_path = NodePath("UI Layer/UI/Battle/MoneyBackground/VBoxContainer/MoneyValue")
 _camera_path = NodePath("Camera2D")
+_price_nodes = Dictionary[String, NodePath]({
+"miner": NodePath("UI Layer/UI/Battle/HBoxContainer/Miner/MinerPrice"),
+"minotaur": NodePath("UI Layer/UI/Battle/HBoxContainer/Minotaur/MinotaurPrice"),
+"samurai": NodePath("UI Layer/UI/Battle/HBoxContainer/Samurai/SamuraiPrice"),
+"soldier": NodePath("UI Layer/UI/Battle/HBoxContainer/Soldier/SoldierPrice"),
+"witch": NodePath("UI Layer/UI/Battle/HBoxContainer/Witch/MinotaurPrice")
+})
 
 [node name="Camera2D" type="Camera2D" parent="."]
 anchor_mode = 0

@@ -27,11 +27,13 @@ var map_state: MapState = MapState.Battle:
 @onready var money_value: Label = get_node(_money_value_path)
 @export var _camera_path: NodePath
 @onready var camera: Camera2D = get_node(_camera_path)
+@export var _price_nodes: Dictionary[String, NodePath]
 
 
 func _ready() -> void:
 	WS.new_data_received.connect(_on_WS_new_data_recieved)
 	WS.socket_closed.connect(_on_WS_socket_closed)
+	
 	map_state = map_state
 	$"UI Layer/UI/Town".position = Vector2.ZERO
 	$"UI Layer/UI/Mine".position = Vector2.ZERO
@@ -59,6 +61,9 @@ func _new_data_handler(data: Dictionary) -> void:
 	match data.type:
 		"start_game":
 			prints("Опонент подключился, игра началась!");
+			var prices = JSON.parse_string(data.hero_prices)
+			for el in prices:
+				get_node(_price_nodes.get(el.name)).text = str(el.price)
 		"end_game":
 			UserInfo.set_room_id("")
 			get_tree().paused = true
@@ -102,7 +107,7 @@ func _on_WS_socket_closed() -> void:
 func _on_soldier_button_pressed() -> void:
 	var info = {
 		type = "spawn",
-		unit_name = "knight",
+		unit_name = "soldier",
 	}
 	var error = WS.socket.send_text(JSON.stringify(info))
 	if error:
