@@ -1,3 +1,4 @@
+@tool
 extends Node2D
 
 
@@ -24,6 +25,10 @@ func _ready() -> void:
 	tower_area.set_collision_layer_value(3, !is_player)
 	tower_area.set_collision_mask_value(2, !is_player)
 	tower_area.set_collision_mask_value(3, is_player)
+
+func _physics_process(_delta: float) -> void:
+	$"SpawnAreaPreview".global_position = $"TowerArea/UnitSpawnPlayer".global_position if is_player else $"TowerArea/UnitSpawnEnemy".global_position
+	$"SpawnAreaPreview".shape.size = spawn_range_y
 
 
 func get_spawn_position() -> Vector2:

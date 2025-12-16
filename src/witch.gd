@@ -52,7 +52,7 @@ func _physics_process(delta: float) -> void:
 
 
 func _on_set_health(_old: float, new: float) -> void:
-	$SoldierArea/ProgressBar.value = new
+	$UnitArea/ProgressBar.value = new
 	if new <= 0:
 		var current_frame = animations \
 				.sprite_frames \

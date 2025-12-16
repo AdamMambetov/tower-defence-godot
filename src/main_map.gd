@@ -63,7 +63,7 @@ func _new_data_handler(data: Dictionary) -> void:
 			prints("Опонент подключился, игра началась!");
 			var prices = JSON.parse_string(data.hero_prices)
 			for el in prices:
-				get_node(_price_nodes.get(el.name)).text = str(el.price)
+				get_node(_price_nodes.get(el[0])).text = str(el[1])
 		"end_game":
 			UserInfo.set_room_id("")
 			get_tree().paused = true
@@ -84,10 +84,10 @@ func spawn_unit(is_player: bool, data: Dictionary) -> void:
 		if data.unit_type == "miner":
 			unit.global_position = $MinerSpawn.global_position
 		else:
-			unit.global_position = $"Game Layer/PlayerTower".get_spawn_position()
+			unit.global_position = $"PlayerTower".get_spawn_position()
 	else:
-		unit.global_position = $"Game Layer/EnemyTower".get_spawn_position()
-	$"Game Layer/Units".add_child(unit)
+		unit.global_position = $"EnemyTower".get_spawn_position()
+	$"Units".add_child(unit)
 
 
 func _on_WS_new_data_recieved(result: Dictionary) -> void:

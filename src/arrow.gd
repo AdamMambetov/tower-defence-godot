@@ -20,8 +20,6 @@ var direction: Vector2 = Vector2.RIGHT:
 
 
 func _ready() -> void:
-	area_node.set_collision_layer_value(2, is_player)
-	area_node.set_collision_layer_value(3, !is_player)
 	area_node.set_collision_mask_value(2, !is_player)
 	area_node.set_collision_mask_value(3, is_player)
 	direction = Vector2.RIGHT if is_player else Vector2.LEFT

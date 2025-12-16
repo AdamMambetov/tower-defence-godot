@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=4 uid="uid://d1vrkfxgttq3c"]
+[gd_scene load_steps=45 format=4 uid="uid://d1vrkfxgttq3c"]
 
 [ext_resource type="Script" uid="uid://cfltnwoeynwn2" path="res://src/main_map.gd" id="1_xf4q7"]
 [ext_resource type="Texture2D" uid="uid://d3a0835k1w76s" path="res://file/background/background_layer_1.png" id="2_13gc7"]
@@ -3597,6 +3597,9 @@ texture_region_size = Vector2i(96, 96)
 tile_size = Vector2i(96, 96)
 sources/0 = SubResource("TileSetAtlasSource_oafc4")
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_t3s1h"]
+size = Vector2(5, 70)
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_t2adl"]
 texture = ExtResource("9_vvnmp")
 texture_region_size = Vector2i(96, 96)
@@ -5412,13 +5415,17 @@ tile_map_data = PackedByteArray("AADX/xEAAAADAAAAAADX/xIAAAADAAEAAADY/xEAAAADAAA
 tile_set = SubResource("TileSet_t3s1h")
 
 [node name="PlayerTower" parent="." instance=ExtResource("2_hquly")]
-position = Vector2(150, 548)
+position = Vector2(150, 568)
 is_player = true
-spawn_range_y = Vector2(0, 90)
+spawn_range_y = Vector2(5, 70)
 
 [node name="EnemyTower" parent="." instance=ExtResource("2_hquly")]
-position = Vector2(1950, 548)
-spawn_range_y = Vector2(0, 90)
+position = Vector2(1950, 568)
+spawn_range_y = Vector2(5, 70)
+
+[node name="SpawnAreaPreview" parent="EnemyTower" index="1"]
+position = Vector2(-200, 0)
+shape = SubResource("RectangleShape2D_t3s1h")
 
 [node name="Torch" parent="." instance=ExtResource("11_ruj8r")]
 position = Vector2(-182, 561)
@@ -5774,3 +5781,5 @@ texture_normal = ExtResource("12_vvnmp")
 [connection signal="pressed" from="UI Layer/UI/Battle/HBoxContainer/Witch/WitchButton" to="." method="_on_witch_button_pressed"]
 [connection signal="pressed" from="UI Layer/UI/EndGame/ColorRect/VerticalBox/exit_btn" to="." method="_on_exit_btn_pressed"]
 [connection signal="pressed" from="UI Layer/UI/Mine/GoTownButton" to="." method="_on_go_town_button_pressed"]
+
+[editable path="EnemyTower"]

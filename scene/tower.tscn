@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=4 uid="uid://bgqto2ho3d3ol"]
+[gd_scene load_steps=9 format=4 uid="uid://bgqto2ho3d3ol"]
 
 [ext_resource type="Texture2D" uid="uid://dnhk6e8h8p3f0" path="res://file/castle/tile_castle.png" id="1_t5t8u"]
 [ext_resource type="Script" uid="uid://2sxhxqae7k0" path="res://src/tower.gd" id="1_tfrn6"]
@@ -688,6 +688,9 @@ sources/0 = SubResource("TileSetAtlasSource_13gc7")
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cv3lj"]
 size = Vector2(196, 87)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tfrn6"]
+size = Vector2(112.97, 90)
+
 [node name="Tower" type="Node2D"]
 script = ExtResource("1_tfrn6")
 _tower_area_path = NodePath("TowerArea")
@@ -731,3 +734,6 @@ position = Vector2(200, 0)
 
 [node name="UnitSpawnEnemy" type="Node2D" parent="TowerArea"]
 position = Vector2(-200, 0)
+
+[node name="SpawnAreaPreview" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_tfrn6")

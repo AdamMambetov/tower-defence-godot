@@ -26,8 +26,8 @@ func _ready() -> void:
 	WS.new_data_received.connect(_on_WS_new_data_recieved)
 	
 	wait_attack_timer.wait_time = attack_speed
-	$SoldierArea/ProgressBar.max_value = health
-	$SoldierArea/ProgressBar.value = health
+	$UnitArea/ProgressBar.max_value = health
+	$UnitArea/ProgressBar.value = health
 
 func _physics_process(delta: float) -> void:
 	match unit_state:
@@ -54,7 +54,7 @@ func _physics_process(delta: float) -> void:
 
 
 func _on_set_health(_old: float, new: float) -> void:
-	$SoldierArea/ProgressBar.value = new
+	$UnitArea/ProgressBar.value = new
 	if new <= 0:
 		var current_frame = animations \
 				.sprite_frames \
