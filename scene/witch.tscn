@@ -312,6 +312,7 @@ anti_aliasing = false
 size = Vector2(70, 37)
 
 [node name="Witch" type="Node2D"]
+scale = Vector2(1.5, 1.5)
 script = ExtResource("1_keajo")
 AnimationPos = Dictionary[String, Vector2]({
 "AttackLeft": Vector2(-84, -25),

@@ -18,6 +18,7 @@ const units = {
 	samurai = preload("res://scene/samurai.tscn"),
 	minotaur = preload("res://scene/minotaur.tscn"),
 	miner = preload("res://scene/miner.tscn"),
+	witch = preload("res://scene/witch.tscn"),
 }
 
 var game_state: GameState

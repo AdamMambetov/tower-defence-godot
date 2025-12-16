@@ -27,12 +27,16 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	position += speed * delta * direction
+	
+	var unit = area.get_parent()
+	WS.attack(id, unit.id)
+	queue_free()
 
 
 func update_info(info: Dictionary) -> void:
 	id = info.id
 	damage = info.damage
-	$LifeTimeTimer.wait_time = (info.distance - $Area2D/CollisionShape2D.shape.size.x / 2) / speed
+	$LifeTimeTimer.wait_time = (info.distance - $Area2D/CollisionShape2D.shape.size.x / 2 + 50) / speed
 
 
 func _on_set_direction(_old: Vector2, new: Vector2) -> void:
@@ -41,11 +45,6 @@ func _on_set_direction(_old: Vector2, new: Vector2) -> void:
 			sprite.flip_h = false
 		Vector2.LEFT:
 			sprite.flip_h = true
-
-func _on_area_2d_area_entered(area: Area2D) -> void:
-	var unit = area.get_parent()
-	WS.attack(id, unit.id)
-	queue_free()
 
 func _on_life_time_timer_timeout() -> void:
 	queue_free()

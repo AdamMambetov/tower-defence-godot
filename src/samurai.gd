@@ -67,9 +67,7 @@ func _on_set_unit_state(_old: String, new: String) -> void:
 			animations.play(&"run")
 		UnitState.Attack:
 			animations.play(&"shot")
-			print("shot start")
 			await animations.animation_finished
-			print("shot end")
 			if unit_state != UnitState.Attack:
 				return
 			var arrow = ARROW_SCENE.instantiate()
