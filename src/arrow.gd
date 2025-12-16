@@ -28,9 +28,10 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	position += speed * delta * direction
 	
-	var unit = area.get_parent()
-	WS.attack(id, unit.id)
-	queue_free()
+	if area_node.has_overlapping_areas():
+		var unit = area_node.get_overlapping_areas()[0].get_parent()
+		WS.attack(id, unit.id)
+		queue_free()
 
 
 func update_info(info: Dictionary) -> void:
