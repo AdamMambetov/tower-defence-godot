@@ -689,7 +689,7 @@ sources/0 = SubResource("TileSetAtlasSource_13gc7")
 size = Vector2(196, 87)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tfrn6"]
-size = Vector2(5, 60)
+size = Vector2(0, 0)
 
 [node name="Tower" type="Node2D"]
 script = ExtResource("1_tfrn6")

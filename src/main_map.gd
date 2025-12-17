@@ -150,7 +150,8 @@ func _on_witch_button_pressed() -> void:
 		printerr(error)
 
 func _on_exit_btn_pressed() -> void:
-	WS.socket.close()
+	if WS.socket != null:
+		WS.socket.close()
 	get_tree().paused = false
 	get_tree().change_scene_to_file("res://scene/main_menu.tscn")
 

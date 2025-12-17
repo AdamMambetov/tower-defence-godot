@@ -68,7 +68,8 @@ func spawn_unit(unit_name: String) -> void:
 	if error:
 		printerr(error)
 
-func attack(from_id: String, to_id: String) -> void:
+# to_id - String or Array[String]
+func attack(from_id: String, to_id) -> void:
 	if !is_instance_valid(socket):
 		printerr("attack: socket not valid")
 		return

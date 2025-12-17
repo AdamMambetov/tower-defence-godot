@@ -85,13 +85,15 @@ func _on_set_unit_state(_old: String, new: String) -> void:
 				return
 			if is_player:
 				var areas = attack_area.get_overlapping_areas()
+				var enemy_ids = []
 				for area in areas:
 					var enemy = area.get_parent()
 					if !is_instance_valid(enemy):
 						continue
 					if enemy.health <= 0:
 						continue
-					WS.attack(self.id, enemy.id)
+					enemy_ids.push_back(enemy.id)
+				WS.attack(self.id, enemy_ids)
 			unit_state = UnitState.WaitAttack
 		UnitState.WaitAttack:
 			animations.position = AnimationPos.Idle
