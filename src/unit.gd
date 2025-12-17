@@ -92,4 +92,4 @@ func _on_WS_new_data_recieved(result: Dictionary) -> void:
 		return
 	
 	if result.type == "attack":
-		health = result.get(id)
+		health = result.attacked_units.get(id)

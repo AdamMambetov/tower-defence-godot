@@ -2,7 +2,13 @@
 extends Node2D
 
 
-@export var is_player: bool
+@export var is_player: bool = false:
+	set(value):
+		is_player = value
+		if scale.x < 0 and is_player:
+			scale.x *= -1
+		elif scale.x > 0 and !is_player:
+			scale.x *= -1
 @export var spawn_range_y: Vector2
 
 var id: String = "tower"
@@ -25,9 +31,9 @@ func _ready() -> void:
 	tower_area.set_collision_layer_value(3, !is_player)
 	tower_area.set_collision_mask_value(2, !is_player)
 	tower_area.set_collision_mask_value(3, is_player)
+	scale.x *= -1 if !is_player else 1
 
 func _physics_process(_delta: float) -> void:
-	$"Area2D/SpawnAreaPreview".global_position = $"TowerArea/UnitSpawnPlayer".global_position if is_player else $"TowerArea/UnitSpawnEnemy".global_position
 	$"Area2D/SpawnAreaPreview".shape.size = spawn_range_y
 
 
