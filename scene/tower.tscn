@@ -4,12 +4,6 @@
 [ext_resource type="Script" uid="uid://2sxhxqae7k0" path="res://src/tower.gd" id="1_tfrn6"]
 [ext_resource type="Texture2D" uid="uid://de4upe6ulcpfk" path="res://file/castle/tile_castle_grey.png" id="3_3l8j4"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4jeie"]
-bg_color = Color(0, 0, 0, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hquly"]
-bg_color = Color(1, 0, 0, 1)
-
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tawd1"]
 texture = ExtResource("1_t5t8u")
 8:0/0 = 0
@@ -8260,6 +8254,12 @@ size = Vector2(270, 139)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tfrn6"]
 size = Vector2(5, 60)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4jeie"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hquly"]
+bg_color = Color(1, 0, 0, 1)
+
 [node name="Tower" type="Node2D"]
 script = ExtResource("1_tfrn6")
 is_player = true
@@ -8269,29 +8269,6 @@ _tower_area_path = NodePath("TowerArea")
 [node name="TowerArea" type="Area2D" parent="."]
 collision_layer = 8
 collision_mask = 0
-
-[node name="PlayerHealthBar" type="ProgressBar" parent="TowerArea"]
-custom_minimum_size = Vector2(200, 0)
-offset_left = -109.0
-offset_top = -277.0
-offset_right = 91.0
-offset_bottom = -254.0
-theme_override_styles/background = SubResource("StyleBoxFlat_4jeie")
-theme_override_styles/fill = SubResource("StyleBoxFlat_hquly")
-max_value = 1000.0
-value = 1000.0
-show_percentage = false
-
-[node name="HealthValue" type="Label" parent="TowerArea/PlayerHealthBar"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "1000"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="TileMapLayer" type="TileMapLayer" parent="TowerArea"]
 scale = Vector2(1.53, 1.53)
@@ -8345,3 +8322,26 @@ collision_mask = 0
 
 [node name="SpawnAreaPreview" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("RectangleShape2D_tfrn6")
+
+[node name="PlayerHealthBar" type="ProgressBar" parent="."]
+custom_minimum_size = Vector2(200, 0)
+offset_left = -109.0
+offset_top = -277.0
+offset_right = 91.0
+offset_bottom = -254.0
+theme_override_styles/background = SubResource("StyleBoxFlat_4jeie")
+theme_override_styles/fill = SubResource("StyleBoxFlat_hquly")
+max_value = 1000.0
+value = 1000.0
+show_percentage = false
+
+[node name="HealthValue" type="Label" parent="PlayerHealthBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "1000"
+horizontal_alignment = 1
+vertical_alignment = 1

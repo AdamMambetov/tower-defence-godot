@@ -5,10 +5,13 @@ extends Node2D
 @export var is_player: bool = false:
 	set(value):
 		is_player = value
-		if scale.x < 0 and is_player:
-			scale.x *= -1
-		elif scale.x > 0 and !is_player:
-			scale.x *= -1
+		if is_player:
+			$TowerArea.scale.x = 1
+			$Area2D.scale.x = 1
+		else:
+			$TowerArea.scale.x = -1
+			$Area2D.scale.x = -1
+
 @export var spawn_range_y: Vector2
 
 var id: String = "tower"

@@ -3571,6 +3571,12 @@ position = Vector2(1950, 568)
 scale = Vector2(-1, 1)
 is_player = false
 
+[node name="TowerArea" parent="EnemyTower" index="0"]
+scale = Vector2(-1, 1)
+
+[node name="Area2D" parent="EnemyTower" index="1"]
+scale = Vector2(-1, 1)
+
 [node name="Torch" parent="." instance=ExtResource("11_ruj8r")]
 position = Vector2(-203, 561)
 scale = Vector2(1.5, 1.5)
