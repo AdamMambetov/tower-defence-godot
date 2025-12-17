@@ -38,6 +38,7 @@ var direction: Vector2 = Vector2.RIGHT:
 
 
 func _ready() -> void:
+	WS.new_data_received.connect(_on_WS_new_data_recieved)
 	unit_area.set_collision_layer_value(2, is_player)
 	unit_area.set_collision_layer_value(3, !is_player)
 	unit_area.set_collision_mask_value(2, !is_player)
@@ -61,6 +62,17 @@ func _physics_process(delta: float) -> void:
 		move_unit(delta)
 
 
+func update_info(info: Dictionary) -> void:
+	speed = info.speed
+	damage = info.damage
+	health = info.health
+	attack_speed = info.attack_speed
+	id = info.id
+
+func move_unit(delta: float) -> void:
+	position += speed * delta * direction
+
+
 func _on_set_health(old: float, new: float) -> void:
 	prints(id, old, new)
 	$UnitArea/Label.text = str(int(new))
@@ -73,13 +85,11 @@ func _on_set_unit_state(old: String, new: String) -> void:
 func _on_set_direction(old: Vector2, new: Vector2) -> void:
 	prints(id, old, new)
 
-
-func update_info(info: Dictionary) -> void:
-	speed = info.speed
-	damage = info.damage
-	health = info.health
-	attack_speed = info.attack_speed
-	id = info.id
-
-func move_unit(delta: float) -> void:
-	position += speed * delta * direction
+func _on_WS_new_data_recieved(result: Dictionary) -> void:
+	if !result.has("attacked_units"):
+		return
+	if !result.attacked_units.has(id):
+		return
+	
+	if result.type == "attack":
+		health = result.get(id)

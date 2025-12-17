@@ -20,7 +20,6 @@ class UnitState:
 
 func _ready() -> void:
 	super._ready()
-	WS.new_data_received.connect(_on_WS_new_data_recieved)
 	
 	wait_attack_timer.wait_time = attack_speed
 	$UnitArea/ProgressBar.max_value = health
@@ -108,13 +107,6 @@ func _on_set_unit_state(_old: String, new: String) -> void:
 			animations.play(&"death")
 			await animations.animation_finished
 			queue_free()
-
-func _on_WS_new_data_recieved(result: Dictionary) -> void:
-	if !result.has(id):
-		return
-	
-	if result.type == "attack":
-		health = result.get(id)
 
 func _on_set_direction(_old: Vector2, new: Vector2) -> void:
 	match new:

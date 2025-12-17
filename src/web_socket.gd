@@ -73,10 +73,11 @@ func attack(from_id: String, to_id) -> void:
 	if !is_instance_valid(socket):
 		printerr("attack: socket not valid")
 		return
+
 	socket.send_text(JSON.stringify({
 		type = "attack",
 		from = from_id,
-		to = to_id,
+		to = to_id if typeof(to_id) == TYPE_ARRAY else [to_id],
 	}))
 
 func connect_to_url(join_url: String) -> bool:
