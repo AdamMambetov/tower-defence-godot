@@ -43,10 +43,8 @@ func _physics_process(_delta: float) -> void:
 
 
 func get_spawn_position() -> Vector2:
-	var result = $TowerArea/UnitSpawnPlayer.global_position \
-		if tower_area.get_collision_layer_value(2) \
-		else $TowerArea/UnitSpawnEnemy.global_position
-	result.y += randf_range(spawn_range_y.x, spawn_range_y.y)
+	var result = $Area2D/SpawnAreaPreview.global_position
+	result.y += randf_range(-spawn_range_y.y, spawn_range_y.y)
 	return result
 
 

@@ -3633,7 +3633,6 @@ route = 1
 y_sort_enabled = true
 
 [node name="UI Layer" type="CanvasLayer" parent="."]
-visible = false
 
 [node name="UI" type="Control" parent="UI Layer"]
 layout_mode = 3
