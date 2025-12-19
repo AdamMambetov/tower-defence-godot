@@ -3565,6 +3565,7 @@ tile_set = SubResource("TileSet_t3s1h")
 
 [node name="EnemyTower" parent="." instance=ExtResource("2_hquly")]
 position = Vector2(1950, 568)
+is_player = false
 
 [node name="PlayerTower" parent="." instance=ExtResource("2_hquly")]
 position = Vector2(150, 568)
