@@ -73,3 +73,6 @@ func _on_set_direction(_old: Vector2, new: Vector2) -> void:
 		Vector2.LEFT:
 			animations.flip_h = true
 			animations.position = ANIMATIONS_POS_LEFT
+
+func _on_set_health(_old: float, _new: float) -> void:
+	return
