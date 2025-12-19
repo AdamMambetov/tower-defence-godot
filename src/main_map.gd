@@ -37,6 +37,7 @@ func _ready() -> void:
 	map_state = map_state
 	$"UI Layer/UI/Town".position = Vector2.ZERO
 	$"UI Layer/UI/Mine".position = Vector2.ZERO
+	spawn_request("miner")
 
 func _process(_delta: float) -> void:
 	if move_by_mouse:
@@ -83,13 +84,22 @@ func spawn_unit(is_player: bool, data: Dictionary) -> void:
 	unit.update_info(data)
 	if is_player:
 		if data.unit_type == "miner":
-			pos = $MinerSpawn.global_position
+			pos = $"PlayerTower".global_position
 		else:
 			pos.x = $"PlayerTower".global_position.x
 	else:
 		pos.x = $"EnemyTower".global_position.x
 	unit.global_position = pos
 	$"Units".add_child(unit)
+
+func spawn_request(unit_name: String) -> void:
+	var info = {
+		type = "spawn",
+		unit_name = unit_name,
+	}
+	var error = WS.socket.send_text(JSON.stringify(info))
+	if error:
+		printerr(error)
 
 
 func _on_WS_new_data_recieved(result: Dictionary) -> void:
@@ -107,49 +117,19 @@ func _on_WS_socket_closed() -> void:
 	map_state = MapState.EndGame
 
 func _on_soldier_button_pressed() -> void:
-	var info = {
-		type = "spawn",
-		unit_name = "soldier",
-	}
-	var error = WS.socket.send_text(JSON.stringify(info))
-	if error:
-		printerr(error)
+	spawn_request("soldier")
 
 func _on_archer_button_pressed() -> void:
-	var info = {
-		type = "spawn",
-		unit_name = "samurai",
-	}
-	var error = WS.socket.send_text(JSON.stringify(info))
-	if error:
-		printerr(error)
+	spawn_request("samurai")
 
 func _on_minotaur_button_pressed() -> void:
-	var info = {
-		type = "spawn",
-		unit_name = "minotaur",
-	}
-	var error = WS.socket.send_text(JSON.stringify(info))
-	if error:
-		printerr(error)
+	spawn_request("minotaur")
 
 func _on_miner_button_pressed() -> void:
-	var info = {
-		type = "spawn",
-		unit_name = "miner",
-	}
-	var error = WS.socket.send_text(JSON.stringify(info))
-	if error:
-		printerr(error)
+	spawn_request("miner")
 
 func _on_witch_button_pressed() -> void:
-	var info = {
-		type = "spawn",
-		unit_name = "witch",
-	}
-	var error = WS.socket.send_text(JSON.stringify(info))
-	if error:
-		printerr(error)
+	spawn_request("witch")
 
 func _on_exit_btn_pressed() -> void:
 	if WS.socket != null:

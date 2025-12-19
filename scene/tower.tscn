@@ -1,8 +1,9 @@
-[gd_scene load_steps=25 format=4 uid="uid://bgqto2ho3d3ol"]
+[gd_scene load_steps=26 format=4 uid="uid://bgqto2ho3d3ol"]
 
 [ext_resource type="Texture2D" uid="uid://dnhk6e8h8p3f0" path="res://file/castle/tile_castle.png" id="1_t5t8u"]
 [ext_resource type="Script" uid="uid://2sxhxqae7k0" path="res://src/tower.gd" id="1_tfrn6"]
 [ext_resource type="Texture2D" uid="uid://de4upe6ulcpfk" path="res://file/castle/tile_castle_grey.png" id="3_3l8j4"]
+[ext_resource type="Texture2D" uid="uid://dhrk1x0gr7j2p" path="res://file/mine/circle.png" id="4_jlhg4"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tawd1"]
 texture = ExtResource("1_t5t8u")
@@ -8335,3 +8336,10 @@ grow_vertical = 2
 text = "1000"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+position = Vector2(0, -117)
+scale = Vector2(0.08, 0.08)
+color = Color(0.86769986, 0.47229427, 0, 1)
+energy = 3.0
+texture = ExtResource("4_jlhg4")

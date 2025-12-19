@@ -42,11 +42,14 @@ func update_scale() -> void:
 		$TowerArea.scale.x = -1
 		$Area2D.scale.x = -1
 
+
 func _on_WS_new_data_received(result: Dictionary) -> void:
 	if result.type != "attack":
 		return
 	
-	if result.has("me_tower") and tower_area.get_collision_layer_value(2):
+	if result.has("me_tower") and is_player:
 		health = result.me_tower
-	elif result.has("enemy_tower") and tower_area.get_collision_layer_value(3):
+		prints("me_tower", result.me_tower)
+	elif result.has("enemy_tower") and !is_player:
 		health = result.enemy_tower
+		prints("enemy_tower", result.enemy_tower)
