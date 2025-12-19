@@ -5,14 +5,7 @@ extends Node2D
 @export var is_player: bool:
 	set(value):
 		is_player = value
-		if !is_instance_valid($TowerArea) or !is_instance_valid($Area2D):
-			return
-		if is_player:
-			$TowerArea.scale.x = 1
-			$Area2D.scale.x = 1
-		else:
-			$TowerArea.scale.x = -1
-			$Area2D.scale.x = -1
+		update_scale()
 
 @export var spawn_range_y: Vector2
 
@@ -32,21 +25,22 @@ var health: float = 1000:
 
 func _ready() -> void:
 	WS.new_data_received.connect(_on_WS_new_data_received)
-	is_player = is_player
 	tower_area.set_collision_layer_value(2, is_player)
 	tower_area.set_collision_layer_value(3, !is_player)
 	tower_area.set_collision_mask_value(2, !is_player)
 	tower_area.set_collision_mask_value(3, is_player)
-
-func _physics_process(_delta: float) -> void:
-	$"Area2D/SpawnAreaPreview".shape.size = spawn_range_y
+	update_scale()
 
 
-func get_spawn_position() -> Vector2:
-	var result = $Area2D/SpawnAreaPreview.global_position
-	result.y += randf_range(-spawn_range_y.y, spawn_range_y.y)
-	return result
-
+func update_scale() -> void:
+	if !is_instance_valid($TowerArea) or !is_instance_valid($Area2D):
+		return
+	if is_player:
+		$TowerArea.scale.x = 1
+		$Area2D.scale.x = 1
+	else:
+		$TowerArea.scale.x = -1
+		$Area2D.scale.x = -1
 
 func _on_WS_new_data_received(result: Dictionary) -> void:
 	if result.type != "attack":

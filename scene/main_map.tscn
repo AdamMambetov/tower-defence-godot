@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=4 uid="uid://d1vrkfxgttq3c"]
+[gd_scene load_steps=34 format=4 uid="uid://d1vrkfxgttq3c"]
 
 [ext_resource type="Script" uid="uid://cfltnwoeynwn2" path="res://src/main_map.gd" id="1_xf4q7"]
 [ext_resource type="Texture2D" uid="uid://d3a0835k1w76s" path="res://file/background/background_layer_1.png" id="2_13gc7"]
@@ -13,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://bsm33n3acha7t" path="res://file/icon/chevron-down.png" id="13_dmbqw"]
 [ext_resource type="Texture2D" uid="uid://jv7comr35mg0" path="res://file/mine/background 1/Plan 4.png" id="13_esod0"]
 [ext_resource type="Texture2D" uid="uid://b2gwlkrgfxpj4" path="res://file/mine/background 1/Plan 3.png" id="14_egpmm"]
+[ext_resource type="PackedScene" uid="uid://c47t04547xgiv" path="res://scene/soldier.tscn" id="14_utjqm"]
 [ext_resource type="Texture2D" uid="uid://cbwi4vl02s7kq" path="res://file/mine/background 1/Plan 2.png" id="15_vrvtq"]
 [ext_resource type="Texture2D" uid="uid://dmoo2bpw1prh1" path="res://file/mine/background 1/Plan 1.png" id="16_utjqm"]
 [ext_resource type="PackedScene" uid="uid://cxyryuu4mixwb" path="res://scene/teleport.tscn" id="17_pig8g"]
@@ -3564,11 +3565,11 @@ tile_map_data = PackedByteArray("AADX/xEAAAADAAAAAADX/xIAAAADAAEAAADY/xEAAAADAAA
 tile_set = SubResource("TileSet_t3s1h")
 
 [node name="EnemyTower" parent="." instance=ExtResource("2_hquly")]
-position = Vector2(1950, 568)
+position = Vector2(1950, 570)
 is_player = false
 
 [node name="PlayerTower" parent="." instance=ExtResource("2_hquly")]
-position = Vector2(150, 568)
+position = Vector2(150, 570)
 
 [node name="Torch" parent="." instance=ExtResource("11_ruj8r")]
 position = Vector2(-203, 561)
@@ -3632,7 +3633,18 @@ route = 1
 [node name="Units" type="Node2D" parent="."]
 y_sort_enabled = true
 
+[node name="Soldier" parent="Units" instance=ExtResource("14_utjqm")]
+position = Vector2(457, 586)
+is_player = true
+
+[node name="Soldier2" parent="Units" instance=ExtResource("14_utjqm")]
+position = Vector2(297, 568)
+
+[node name="Soldier3" parent="Units" instance=ExtResource("14_utjqm")]
+position = Vector2(375, 538)
+
 [node name="UI Layer" type="CanvasLayer" parent="."]
+visible = false
 
 [node name="UI" type="Control" parent="UI Layer"]
 layout_mode = 3

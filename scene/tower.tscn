@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=4 uid="uid://bgqto2ho3d3ol"]
+[gd_scene load_steps=25 format=4 uid="uid://bgqto2ho3d3ol"]
 
 [ext_resource type="Texture2D" uid="uid://dnhk6e8h8p3f0" path="res://file/castle/tile_castle.png" id="1_t5t8u"]
 [ext_resource type="Script" uid="uid://2sxhxqae7k0" path="res://src/tower.gd" id="1_tfrn6"]
@@ -8251,9 +8251,6 @@ sources/1 = SubResource("TileSetAtlasSource_y4fy0")
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cv3lj"]
 size = Vector2(270, 139)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_tfrn6"]
-size = Vector2(5, 60)
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4jeie"]
 bg_color = Color(0, 0, 0, 1)
 
@@ -8315,13 +8312,6 @@ y_sort_origin = 6
 visible = false
 position = Vector2(-12, -20.5)
 shape = SubResource("RectangleShape2D_cv3lj")
-
-[node name="Area2D" type="Area2D" parent="."]
-collision_layer = 0
-collision_mask = 0
-
-[node name="SpawnAreaPreview" type="CollisionShape2D" parent="Area2D"]
-shape = SubResource("RectangleShape2D_tfrn6")
 
 [node name="PlayerHealthBar" type="ProgressBar" parent="."]
 custom_minimum_size = Vector2(200, 0)

@@ -78,15 +78,17 @@ func _new_data_handler(data: Dictionary) -> void:
 
 func spawn_unit(is_player: bool, data: Dictionary) -> void:
 	var unit = Global.units[data.name].instantiate()
+	var pos = Vector2(0, data.y)
 	unit.is_player = is_player
 	unit.update_info(data)
 	if is_player:
 		if data.unit_type == "miner":
-			unit.global_position = $MinerSpawn.global_position
+			pos = $MinerSpawn.global_position
 		else:
-			unit.global_position = $"PlayerTower".get_spawn_position()
+			pos.x = $"PlayerTower".global_position.x
 	else:
-		unit.global_position = $"EnemyTower".get_spawn_position()
+		pos.x = $"EnemyTower".global_position.x
+	unit.global_position = pos
 	$"Units".add_child(unit)
 
 
