@@ -96,7 +96,8 @@ func _on_set_unit_state(_old: String, new: String) -> void:
 			await animations.animation_finished
 			queue_free()
 
-func _on_set_direction(_old: Vector2, new: Vector2) -> void:
+func _on_set_direction(old: Vector2, new: Vector2) -> void:
+	super._on_set_direction(old, new)
 	match new:
 		Vector2.RIGHT:
 			animations.flip_h = false

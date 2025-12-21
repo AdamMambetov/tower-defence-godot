@@ -24,7 +24,8 @@ var health: float = 1000:
 
 
 func _ready() -> void:
-	WS.new_data_received.connect(_on_WS_new_data_received)
+	if is_instance_valid(WS):
+		WS.new_data_received.connect(_on_WS_new_data_received)
 	tower_area.set_collision_layer_value(2, is_player)
 	tower_area.set_collision_layer_value(3, !is_player)
 	tower_area.set_collision_mask_value(2, !is_player)

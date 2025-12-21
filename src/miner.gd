@@ -33,6 +33,8 @@ func _physics_process(delta: float) -> void:
 					if area.get_collision_layer_value(4):
 						var tower = area.get_parent()
 						if route != Global.Route.Tower or !tower.is_player:
+							move_unit(delta)
+							unit_state = UnitState.Walk
 							continue
 						route = Global.Route.Mine
 					# if ore
@@ -49,7 +51,9 @@ func _physics_process(delta: float) -> void:
 						break
 					# if teleport
 					if area.get_collision_layer_value(6):
-						pass
+						move_unit(delta)
+						unit_state = UnitState.Walk
+						continue
 			else:
 				unit_state = UnitState.Walk
 		UnitState.Walk:
@@ -81,7 +85,8 @@ func _on_set_unit_state(_old: String, new: String) -> void:
 			current_ore = null
 			unit_state = UnitState.None
 
-func _on_set_direction(_old: Vector2, new: Vector2) -> void:
+func _on_set_direction(old: Vector2, new: Vector2) -> void:
+	super._on_set_direction(old, new)
 	match new:
 		Vector2.RIGHT:
 			animations.flip_h = false

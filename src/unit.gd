@@ -46,8 +46,6 @@ func _ready() -> void:
 	attack_area.set_collision_mask_value(2, !is_player)
 	attack_area.set_collision_mask_value(3, is_player)
 	direction = Vector2.RIGHT if is_player else Vector2.LEFT
-	attack_collision.position.x = attack_collision.shape.size.x / 2 * direction.x \
-			+ unit_collision.shape.size.x / 2 * direction.x
 
 func _physics_process(delta: float) -> void:
 	if unit_area.has_overlapping_areas():
@@ -83,7 +81,8 @@ func _on_set_unit_state(old: String, new: String) -> void:
 	prints(id, old, new)
 
 func _on_set_direction(old: Vector2, new: Vector2) -> void:
-	prints(id, old, new)
+	attack_collision.position.x = attack_collision.shape.size.x / 2 * direction.x \
+			+ unit_collision.shape.size.x / 2 * direction.x
 
 func _on_WS_new_data_recieved(result: Dictionary) -> void:
 	if !result.has("attacked_units"):
