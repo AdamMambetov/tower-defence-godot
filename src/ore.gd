@@ -15,7 +15,8 @@ enum Types  {
 	yellow_green,
 }
 
-
+var id: int
+@export var price: float
 @export var health: float = 200.0:
 	set(value):
 		health = value
@@ -28,6 +29,12 @@ enum Types  {
 	set(value):
 		type = value
 		animations.play(Types.keys()[type], 0)
+		animations.frame = 2 - size
+@export_range(0, 2) var size: int = 2:
+	set(value):
+		size = value
+		animations.play(Types.keys()[type], 0)
+		animations.frame = 2 - size
 
 @export var _animations_path: NodePath
 @onready var animations: AnimatedSprite2D = get_node(_animations_path)
@@ -39,3 +46,9 @@ func _ready() -> void:
 
 func calc_frame(in_health: float, in_max_health: float) -> int:
 	return clamp(3 - int(in_health / in_max_health / 0.33 + 1), 0, 2)
+
+func update_info(info: Dictionary) -> void:
+	id = info.id
+	type = Types.values()[Types.keys().find(info.name)]
+	health = info.health
+	size = info["size"]

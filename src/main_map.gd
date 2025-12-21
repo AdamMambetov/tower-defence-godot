@@ -75,7 +75,18 @@ func _new_data_handler(data: Dictionary) -> void:
 			money_value.text = str(int(data.money))
 		"spawn_enemy":
 			spawn_unit(false, JSON.parse_string(data.unit_info))
+		"spawn_ore":
+			spawn_ore(JSON.parse_string(data.ore))
 
+
+func spawn_request(unit_name: String) -> void:
+	var info = {
+		type = "spawn",
+		unit_name = unit_name,
+	}
+	var error = WS.socket.send_text(JSON.stringify(info))
+	if error:
+		printerr(error)
 
 func spawn_unit(is_player: bool, data: Dictionary) -> void:
 	var unit = Global.units[data.name].instantiate()
@@ -92,14 +103,16 @@ func spawn_unit(is_player: bool, data: Dictionary) -> void:
 	unit.global_position = pos
 	$"Units".add_child(unit)
 
-func spawn_request(unit_name: String) -> void:
-	var info = {
-		type = "spawn",
-		unit_name = unit_name,
-	}
-	var error = WS.socket.send_text(JSON.stringify(info))
-	if error:
-		printerr(error)
+"""
+    "x": self.x,
+    "y": self.y
+"""
+func spawn_ore(data: Dictionary) -> void:
+	var ore = preload("res://scene/ore.tscn").instantiate()
+	ore.update_info(data)
+	ore.position.x = data.x
+	ore.position.y = data.y
+	$MineLocation/Ores.add_child(ore)
 
 
 func _on_WS_new_data_recieved(result: Dictionary) -> void:

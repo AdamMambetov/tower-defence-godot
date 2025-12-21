@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=4 uid="uid://d1vrkfxgttq3c"]
+[gd_scene load_steps=34 format=4 uid="uid://d1vrkfxgttq3c"]
 
 [ext_resource type="Script" uid="uid://cfltnwoeynwn2" path="res://src/main_map.gd" id="1_xf4q7"]
 [ext_resource type="Texture2D" uid="uid://d3a0835k1w76s" path="res://file/background/background_layer_1.png" id="2_13gc7"]
@@ -3497,6 +3497,9 @@ texture_region_size = Vector2i(96, 96)
 tile_size = Vector2i(96, 96)
 sources/0 = SubResource("TileSetAtlasSource_t2adl")
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vrvtq"]
+size = Vector2(900, 50)
+
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fdj6w"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_q0pbl"]
@@ -3616,6 +3619,15 @@ offset = Vector2(150, 95)
 anchor_mode = 0
 
 [node name="Ores" type="Node2D" parent="MineLocation"]
+
+[node name="OreSpawn" type="Area2D" parent="MineLocation"]
+position = Vector2(334, 685)
+collision_layer = 0
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MineLocation/OreSpawn"]
+position = Vector2(450, 25)
+shape = SubResource("RectangleShape2D_vrvtq")
 
 [node name="Teleports" type="Node2D" parent="."]
 
