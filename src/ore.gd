@@ -15,7 +15,7 @@ enum Types  {
 	yellow_green,
 }
 
-var id: int
+var id: String
 @export var price: float
 @export var health: float = 200.0:
 	set(value):
@@ -28,11 +28,15 @@ var id: int
 @export var type: Types:
 	set(value):
 		type = value
+		if !is_instance_valid(animations):
+			init_animations()
 		animations.play(Types.keys()[type], 0)
 		animations.frame = 2 - size
 @export_range(0, 2) var size: int = 2:
 	set(value):
 		size = value
+		if !is_instance_valid(animations):
+			init_animations()
 		animations.play(Types.keys()[type], 0)
 		animations.frame = 2 - size
 
@@ -52,3 +56,6 @@ func update_info(info: Dictionary) -> void:
 	type = Types.values()[Types.keys().find(info.name)]
 	health = info.health
 	size = info["size"]
+
+func init_animations() -> void:
+	animations = get_node(_animations_path)

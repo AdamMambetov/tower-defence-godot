@@ -3615,6 +3615,7 @@ tile_map_data = PackedByteArray("AAAEABEAAAAAAAUAAAAFABEAAAAAAAUAAAAGABEAAAAAAAU
 tile_set = SubResource("TileSet_ecsw8")
 
 [node name="Camera" type="Camera2D" parent="MineLocation"]
+position = Vector2(1, 1)
 offset = Vector2(150, 95)
 anchor_mode = 0
 

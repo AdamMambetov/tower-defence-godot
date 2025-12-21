@@ -59,6 +59,7 @@ func _update_camera() -> void:
 		)
 
 func _new_data_handler(data: Dictionary) -> void:
+	prints("_new_data_handler", data)
 	match data.type:
 		"start_game":
 			prints("Опонент подключился, игра началась!");
@@ -76,7 +77,7 @@ func _new_data_handler(data: Dictionary) -> void:
 		"spawn_enemy":
 			spawn_unit(false, JSON.parse_string(data.unit_info))
 		"spawn_ore":
-			spawn_ore(JSON.parse_string(data.ore))
+			spawn_ore(data.ore)
 
 
 func spawn_request(unit_name: String) -> void:
@@ -103,11 +104,8 @@ func spawn_unit(is_player: bool, data: Dictionary) -> void:
 	unit.global_position = pos
 	$"Units".add_child(unit)
 
-"""
-    "x": self.x,
-    "y": self.y
-"""
 func spawn_ore(data: Dictionary) -> void:
+	print("spawn_ore")
 	var ore = preload("res://scene/ore.tscn").instantiate()
 	ore.update_info(data)
 	ore.position.x = data.x
