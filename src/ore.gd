@@ -25,6 +25,7 @@ var id: String
 		if value <= 0.0:
 			health = 0.0
 			visible = false
+		$ProgressBar.value = health
 @export var type: Types:
 	set(value):
 		type = value
@@ -45,7 +46,8 @@ var id: String
 
 
 func _ready() -> void:
-	pass
+	WS.new_data_received.connect(_on_WS_new_data_recieved)
+	$ProgressBar.max_value = health
 
 
 func calc_frame(in_health: float, in_max_health: float) -> int:
@@ -59,3 +61,11 @@ func update_info(info: Dictionary) -> void:
 
 func init_animations() -> void:
 	animations = get_node(_animations_path)
+
+
+func _on_WS_new_data_recieved(result: Dictionary) -> void:
+	if result.type != "attack_ore":
+		return
+	if !result.has(id):
+		return
+	health = result[id]

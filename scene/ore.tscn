@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://betk364pg3n65"]
+[gd_scene load_steps=36 format=3 uid="uid://betk364pg3n65"]
 
 [ext_resource type="Script" uid="uid://cp7vcq5g0yjbx" path="res://src/ore.gd" id="1_m0j7s"]
 [ext_resource type="Texture2D" uid="uid://dy228jdwj7hg8" path="res://file/mine/ore/Black_crystal1.png" id="2_axegc"]
@@ -178,6 +178,22 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4xwq7"]
+bg_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_csw1j"]
+bg_color = Color(0.3285419, 0.68161446, 0.51560247, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+anti_aliasing = false
+
 [node name="Ore" type="Node2D"]
 script = ExtResource("1_m0j7s")
 _animations_path = NodePath("AnimatedSprite2D")
@@ -193,3 +209,14 @@ shape = SubResource("RectangleShape2D_3edji")
 sprite_frames = SubResource("SpriteFrames_dr3up")
 animation = &"black"
 speed_scale = 0.0
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+offset_left = -17.5
+offset_top = -30.0
+offset_right = 17.5
+offset_bottom = -26.5
+theme_override_styles/background = SubResource("StyleBoxFlat_4xwq7")
+theme_override_styles/fill = SubResource("StyleBoxFlat_csw1j")
+value = 50.0
+show_percentage = false
+metadata/_edit_use_anchors_ = true

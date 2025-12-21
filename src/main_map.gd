@@ -59,7 +59,6 @@ func _update_camera() -> void:
 		)
 
 func _new_data_handler(data: Dictionary) -> void:
-	prints("_new_data_handler", data)
 	match data.type:
 		"start_game":
 			prints("Опонент подключился, игра началась!");
@@ -78,6 +77,8 @@ func _new_data_handler(data: Dictionary) -> void:
 			spawn_unit(false, JSON.parse_string(data.unit_info))
 		"spawn_ore":
 			spawn_ore(data.ore)
+		"sell_ore":
+			money_value.text = str(int(data.money))
 
 
 func spawn_request(unit_name: String) -> void:

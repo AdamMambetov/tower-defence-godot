@@ -15,6 +15,13 @@ var route: Global.Route = Global.Route.Mine:
 	set(value):
 		route = value
 		update_direction()
+var max_bag_capacity: float = 0
+var bag_capacity: float = 0:
+	set(value):
+		bag_capacity = value
+		$ProgressBar.value = bag_capacity
+		if bag_capacity == max_bag_capacity:
+			route = Global.Route.Tower
 
 @export var _animations_path: NodePath
 @onready var animations: AnimatedSprite2D = get_node(_animations_path)
@@ -36,6 +43,11 @@ func _physics_process(delta: float) -> void:
 							move_unit(delta)
 							unit_state = UnitState.Walk
 							continue
+						WS.socket.send_text(JSON.stringify({
+							type = "sell_ore",
+							miner = id,
+						}))
+						bag_capacity = 0
 						route = Global.Route.Mine
 					# if ore
 					if area.get_collision_layer_value(5):
@@ -63,6 +75,13 @@ func _physics_process(delta: float) -> void:
 			move_unit(delta)
 
 
+func update_info(info: Dictionary) -> void:
+	super.update_info(info)
+	max_bag_capacity = info.max_bag_capacity
+	$ProgressBar.max_value = max_bag_capacity
+	bag_capacity = info.bag_capacity
+	
+
 func update_direction() -> void:
 	match route:
 		Global.Route.Tower:
@@ -81,7 +100,11 @@ func _on_set_unit_state(_old: String, new: String) -> void:
 			if unit_state != UnitState.Attack:
 				return
 			if is_instance_valid(current_ore):
-				WS.attack(self.id, current_ore.id)
+				WS.socket.send_text(JSON.stringify({
+					type = "attack_ore",
+					from = self.id,
+					to = current_ore.id,
+				}))
 			current_ore = null
 			unit_state = UnitState.None
 
@@ -97,3 +120,10 @@ func _on_set_direction(old: Vector2, new: Vector2) -> void:
 
 func _on_set_health(_old: float, _new: float) -> void:
 	return
+
+func _on_WS_new_data_recieved(result: Dictionary) -> void:
+	if result.type != "attack_ore":
+		return
+	if !result.has(id):
+		return
+	bag_capacity = result[id]
