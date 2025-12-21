@@ -14,18 +14,14 @@ var current_ore: Node = null
 var route: Global.Route = Global.Route.Mine:
 	set(value):
 		route = value
-		match route:
-			Global.Route.Tower:
-				direction = Vector2.RIGHT
-			Global.Route.Mine:
-				direction = Vector2.LEFT
+		update_direction()
 
 @export var _animations_path: NodePath
 @onready var animations: AnimatedSprite2D = get_node(_animations_path)
 
 
 func _ready() -> void:
-	route = route
+	update_direction()
 
 func _physics_process(delta: float) -> void:
 	match unit_state:
@@ -33,15 +29,27 @@ func _physics_process(delta: float) -> void:
 			if attack_area.has_overlapping_areas():
 				var areas = attack_area.get_overlapping_areas()
 				for area in areas:
-					var ore = area.get_parent()
-					if !is_instance_valid(ore):
-						continue
-					if ore.health <= 0:
-						continue
-					current_ore = ore
-					break
-				if is_instance_valid(current_ore):
-					unit_state = UnitState.Attack
+					# if tower
+					if area.get_collision_layer_value(4):
+						var tower = area.get_parent()
+						if route != Global.Route.Tower or !tower.is_player:
+							continue
+						route = Global.Route.Mine
+					# if ore
+					if area.get_collision_layer_value(5):
+						var ore = area.get_parent()
+						if route != Global.Route.Mine:
+							continue
+						if !is_instance_valid(ore):
+							continue
+						if ore.health <= 0:
+							continue
+						current_ore = ore
+						unit_state = UnitState.Attack
+						break
+					# if teleport
+					if area.get_collision_layer_value(6):
+						pass
 			else:
 				unit_state = UnitState.Walk
 		UnitState.Walk:
@@ -49,6 +57,14 @@ func _physics_process(delta: float) -> void:
 				unit_state = UnitState.None
 				return
 			move_unit(delta)
+
+
+func update_direction() -> void:
+	match route:
+		Global.Route.Tower:
+			direction = Vector2.RIGHT
+		Global.Route.Mine:
+			direction = Vector2.LEFT
 
 
 func _on_set_unit_state(_old: String, new: String) -> void:
