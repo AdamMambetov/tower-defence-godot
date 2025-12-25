@@ -46,7 +46,8 @@ var id: String
 
 
 func _ready() -> void:
-	WS.new_data_received.connect(_on_WS_new_data_recieved)
+	if is_instance_valid(WS):
+		WS.new_data_received.connect(_on_WS_new_data_recieved)
 	$ProgressBar.max_value = health
 
 

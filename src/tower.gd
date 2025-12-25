@@ -34,14 +34,12 @@ func _ready() -> void:
 
 
 func update_scale() -> void:
-	if !is_instance_valid($TowerArea) or !is_instance_valid($Area2D):
+	if !is_instance_valid($TowerArea):
 		return
 	if is_player:
 		$TowerArea.scale.x = 1
-		$Area2D.scale.x = 1
 	else:
 		$TowerArea.scale.x = -1
-		$Area2D.scale.x = -1
 
 
 func _on_WS_new_data_received(result: Dictionary) -> void:
