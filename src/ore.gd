@@ -17,14 +17,13 @@ enum Types  {
 
 var id: String
 @export var price: float
+@export var max_health: float = 200.0
 @export var health: float = 200.0:
 	set(value):
 		health = value
-		visible = true
-		animations.frame = calc_frame(health, 200.0)
+		animations.frame = calc_frame(health, max_health)
 		if value <= 0.0:
-			health = 0.0
-			visible = false
+			queue_free()
 		$ProgressBar.value = health
 @export var type: Types:
 	set(value):
@@ -46,9 +45,7 @@ var id: String
 
 
 func _ready() -> void:
-	if is_instance_valid(WS):
-		WS.new_data_received.connect(_on_WS_new_data_recieved)
-	$ProgressBar.max_value = health
+	WS.new_data_received.connect(_on_WS_new_data_recieved)
 
 
 func calc_frame(in_health: float, in_max_health: float) -> int:
@@ -57,6 +54,8 @@ func calc_frame(in_health: float, in_max_health: float) -> int:
 func update_info(info: Dictionary) -> void:
 	id = info.id
 	type = Types.values()[Types.keys().find(info.name)]
+	max_health = info.health
+	$ProgressBar.max_value = max_health
 	health = info.health
 	size = info["size"]
 

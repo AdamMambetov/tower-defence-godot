@@ -28,6 +28,7 @@ var bag_capacity: float = 0:
 
 
 func _ready() -> void:
+	WS.new_data_received.connect(_on_WS_new_data_recieved)
 	update_direction()
 
 func _physics_process(delta: float) -> void:
@@ -80,7 +81,6 @@ func update_info(info: Dictionary) -> void:
 	max_bag_capacity = info.max_bag_capacity
 	$ProgressBar.max_value = max_bag_capacity
 	bag_capacity = info.bag_capacity
-	
 
 func update_direction() -> void:
 	match route:
@@ -122,6 +122,7 @@ func _on_set_health(_old: float, _new: float) -> void:
 	return
 
 func _on_WS_new_data_recieved(result: Dictionary) -> void:
+	print(result)
 	if result.type != "attack_ore":
 		return
 	if !result.has(id):
