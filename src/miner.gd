@@ -54,6 +54,8 @@ func _physics_process(delta: float) -> void:
 					if area.get_collision_layer_value(5):
 						var ore = area.get_parent()
 						if route != Global.Route.Mine:
+							move_unit(delta)
+							unit_state = UnitState.Walk
 							continue
 						if !is_instance_valid(ore):
 							continue

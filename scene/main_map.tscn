@@ -138,7 +138,7 @@ tile_size = Vector2i(96, 96)
 sources/0 = SubResource("TileSetAtlasSource_utjqm")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vrvtq"]
-size = Vector2(900, 50)
+size = Vector2(900, 40)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fdj6w"]
 
@@ -206,11 +206,11 @@ tile_map_data = PackedByteArray("AADX/w4AAAAEAAQAAADX/w8AAAAEAAQAAADX/xAAAAAEAAQ
 tile_set = SubResource("TileSet_utjqm")
 
 [node name="EnemyTower" parent="." instance=ExtResource("2_hquly")]
-position = Vector2(1950, 570)
+position = Vector2(1950, 614)
 is_player = false
 
 [node name="PlayerTower" parent="." instance=ExtResource("2_hquly")]
-position = Vector2(150, 570)
+position = Vector2(150, 614)
 
 [node name="Torch" parent="." instance=ExtResource("11_ruj8r")]
 position = Vector2(-203, 561)
@@ -222,6 +222,7 @@ scale = Vector2(1.5, 1.5)
 
 [node name="MineLocation" type="Node2D" parent="."]
 position = Vector2(0, 1000)
+scale = Vector2(0.5, 0.5)
 
 [node name="Background" type="Node2D" parent="MineLocation"]
 scale = Vector2(2.5, 2.5)
@@ -253,18 +254,19 @@ tile_set = SubResource("TileSet_byx81")
 
 [node name="Camera" type="Camera2D" parent="MineLocation"]
 position = Vector2(1, 1)
-offset = Vector2(150, 95)
+offset = Vector2(75, 47.5)
 anchor_mode = 0
+zoom = Vector2(2, 2)
 
 [node name="Ores" type="Node2D" parent="MineLocation"]
 
 [node name="OreSpawn" type="Area2D" parent="MineLocation"]
-position = Vector2(334, 685)
+position = Vector2(334, 737)
 collision_layer = 0
 collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="MineLocation/OreSpawn"]
-position = Vector2(450, 25)
+position = Vector2(450, -20)
 shape = SubResource("RectangleShape2D_vrvtq")
 
 [node name="Teleports" type="Node2D" parent="."]
@@ -275,7 +277,7 @@ scale = Vector2(1, 5.51)
 out_direction = 1
 
 [node name="TeleportMine" parent="Teleports" instance=ExtResource("17_pig8g")]
-position = Vector2(1343, 1710)
+position = Vector2(669, 1350)
 scale = Vector2(1, 4.955)
 route = 1
 
@@ -543,10 +545,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 150.0
-offset_top = 1095.0
-offset_right = 150.0
-offset_bottom = 1095.0
+offset_left = 185.0
+offset_top = 1102.0
+offset_right = 185.0
+offset_bottom = 1102.0
 grow_horizontal = 2
 grow_vertical = 2
 

@@ -36,6 +36,15 @@ var direction: Vector2 = Vector2.RIGHT:
 @export var _attack_collision_path: NodePath
 @onready var attack_collision: CollisionShape2D = get_node(_attack_collision_path)
 
+@export var _agr_area_path: NodePath
+@onready var agr_area: Area2D = get_node(_agr_area_path)
+
+@export var _agr_collision_path: NodePath
+@onready var agr_collision: CollisionShape2D = get_node(_agr_collision_path)
+
+@export var _health_bar_path: NodePath
+@onready var health_bar: ProgressBar = get_node(_health_bar_path)
+
 
 func _ready() -> void:
 	WS.new_data_received.connect(_on_WS_new_data_recieved)
@@ -45,6 +54,8 @@ func _ready() -> void:
 	unit_area.set_collision_mask_value(3, is_player)
 	attack_area.set_collision_mask_value(2, !is_player)
 	attack_area.set_collision_mask_value(3, is_player)
+	agr_area.set_collision_mask_value(2, !is_player)
+	agr_area.set_collision_mask_value(3, is_player)
 	direction = Vector2.RIGHT if is_player else Vector2.LEFT
 
 func _physics_process(delta: float) -> void:
@@ -68,20 +79,42 @@ func update_info(info: Dictionary) -> void:
 	id = info.id
 
 func move_unit(delta: float) -> void:
-	position += speed * delta * direction
+	var to_direction = direction
+	var nearest_enemy: Node2D = null
+	if agr_area.has_overlapping_areas():
+		var enemies = agr_area.get_overlapping_areas()
+		nearest_enemy = enemies[0].get_parent()
+		for el in enemies:
+			var enemy = el.get_parent()
+			var distance = position.distance_to(enemy.position)
+			if distance < position.distance_to(nearest_enemy.position):
+				nearest_enemy = enemy
+		to_direction = position.direction_to(nearest_enemy.position)
+		to_direction.x /= 2
+		to_direction.y *= 2
+		to_direction = to_direction.normalized()
+	position += speed * delta * to_direction
 
 
 func _on_set_health(old: float, new: float) -> void:
-	prints(id, old, new)
-	$UnitArea/Label.text = str(int(new))
-	if new <= 0:
-		queue_free()
+	if !is_instance_valid(health_bar):
+		health_bar = get_node(_health_bar_path)
+	health_bar.value = new
 
 func _on_set_unit_state(old: String, new: String) -> void:
 	prints(id, old, new)
 
 func _on_set_direction(old: Vector2, new: Vector2) -> void:
+	if !is_instance_valid(attack_collision):
+		attack_collision = get_node(_attack_collision_path)
+	if !is_instance_valid(unit_collision):
+		unit_collision = get_node(_unit_collision_path)
+	if !is_instance_valid(agr_collision):
+		agr_collision = get_node(_agr_collision_path)
+	
 	attack_collision.position.x = attack_collision.shape.size.x / 2 * direction.x \
+			+ unit_collision.shape.size.x / 2 * direction.x
+	agr_collision.position.x = agr_collision.shape.size.x / 2 * direction.x \
 			+ unit_collision.shape.size.x / 2 * direction.x
 
 func _on_WS_new_data_recieved(result: Dictionary) -> void:

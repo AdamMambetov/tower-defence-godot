@@ -7,7 +7,10 @@ extends Node2D
 		is_player = value
 		update_scale()
 
-@export var spawn_range_y: Vector2
+@export var spawn_range_y: Vector2:
+	set(value):
+		spawn_range_y = value
+		$SpawnArea/SpawnCollision.shape.size = value
 
 var id: String = "tower"
 

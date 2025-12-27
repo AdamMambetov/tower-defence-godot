@@ -203,18 +203,20 @@ collision_layer = 16
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(0, -25)
 shape = SubResource("RectangleShape2D_3edji")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -25)
 sprite_frames = SubResource("SpriteFrames_dr3up")
 animation = &"black"
 speed_scale = 0.0
 
 [node name="ProgressBar" type="ProgressBar" parent="."]
 offset_left = -17.5
-offset_top = -30.0
+offset_top = -55.0
 offset_right = 17.5
-offset_bottom = -26.5
+offset_bottom = -51.5
 theme_override_styles/background = SubResource("StyleBoxFlat_4xwq7")
 theme_override_styles/fill = SubResource("StyleBoxFlat_csw1j")
 value = 50.0

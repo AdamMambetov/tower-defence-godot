@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://bps3g2ej7nq58"]
+[gd_scene load_steps=34 format=3 uid="uid://bps3g2ej7nq58"]
 
 [ext_resource type="Script" uid="uid://ckv4gl2fhnk67" path="res://src/miner.gd" id="1_v7bnt"]
 [ext_resource type="Texture2D" uid="uid://krfo6p6h6uo1" path="res://file/character/miner/SteamMan_attack.png" id="2_pnxvj"]
@@ -187,7 +187,10 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_d86kl"]
-size = Vector2(14, 37)
+size = Vector2(14, 18.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pnxvj"]
+size = Vector2(90.25, 59.99)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pnxvj"]
 bg_color = Color(0, 0, 0, 1)
@@ -214,34 +217,51 @@ _unit_area_path = NodePath("UnitArea")
 _unit_collision_path = NodePath("UnitArea/CollisionShape2D")
 _attack_area_path = NodePath("AttackArea")
 _attack_collision_path = NodePath("AttackArea/CollisionShape2D")
+_agr_area_path = NodePath("AgrArea")
+_agr_collision_path = NodePath("AgrArea/CollisionShape2D")
+_health_bar_path = NodePath("ProgressBar")
 
 [node name="UnitArea" type="Area2D" parent="."]
+scale = Vector2(1.7, 1.7)
 collision_layer = 2
 collision_mask = 24
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="UnitArea"]
+position = Vector2(0, -18)
 shape = SubResource("RectangleShape2D_6ensq")
 
 [node name="Animations" type="AnimatedSprite2D" parent="UnitArea"]
-position = Vector2(-17, -30)
+position = Vector2(-17, -48)
 sprite_frames = SubResource("SpriteFrames_hhjk5")
-animation = &"attack"
-frame = 4
+animation = &"walk"
+frame_progress = 0.33608228
 centered = false
 
 [node name="AttackArea" type="Area2D" parent="."]
+scale = Vector2(1.7, 1.7)
 collision_layer = 0
 collision_mask = 56
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea"]
-position = Vector2(8, 0)
+position = Vector2(8, -8.75)
 shape = SubResource("RectangleShape2D_d86kl")
+debug_color = Color(1, 0, 0, 0.41960785)
+
+[node name="AgrArea" type="Area2D" parent="."]
+scale = Vector2(1.7, 1.7)
+collision_layer = 0
+collision_mask = 16
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AgrArea"]
+position = Vector2(46, -19)
+shape = SubResource("RectangleShape2D_pnxvj")
+debug_color = Color(1, 0.39215687, 0, 0.41960785)
 
 [node name="ProgressBar" type="ProgressBar" parent="."]
-offset_left = -17.5
-offset_top = -30.0
-offset_right = 17.5
-offset_bottom = -26.5
+offset_left = -17.0
+offset_top = -75.0
+offset_right = 18.0
+offset_bottom = -71.5
 theme_override_styles/background = SubResource("StyleBoxFlat_pnxvj")
 theme_override_styles/fill = SubResource("StyleBoxFlat_8cjr3")
 value = 50.0

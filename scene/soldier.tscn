@@ -1,4 +1,4 @@
-[gd_scene load_steps=53 format=3 uid="uid://c47t04547xgiv"]
+[gd_scene load_steps=54 format=3 uid="uid://c47t04547xgiv"]
 
 [ext_resource type="Script" uid="uid://gsgp707rx6fo" path="res://src/soldier.gd" id="1_u8ado"]
 [ext_resource type="Texture2D" uid="uid://qge66yf17jud" path="res://file/character/soldier/Soldier Attack 1.png" id="2_ptrgl"]
@@ -323,6 +323,12 @@ animations = [{
 "speed": 6.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_t5i3t"]
+size = Vector2(53, 60)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3f3g7"]
+size = Vector2(200, 120)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0i558"]
 bg_color = Color(0, 0, 0, 1)
 corner_radius_top_left = 5
@@ -339,54 +345,63 @@ corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 anti_aliasing = false
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_t5i3t"]
-size = Vector2(53, 60)
-
 [node name="Soldier" type="Node2D"]
 script = ExtResource("1_u8ado")
 _animations_path = NodePath("UnitArea/Animations")
-wait_attack_timer_path = NodePath("UnitArea/WaitAttackTimer")
+_wait_attack_timer_path = NodePath("WaitAttackTimer")
 _unit_area_path = NodePath("UnitArea")
 _unit_collision_path = NodePath("UnitArea/CollisionShape2D")
 _attack_area_path = NodePath("AttackArea")
 _attack_collision_path = NodePath("AttackArea/CollisionShape2D")
+_agr_area_path = NodePath("AgrArea")
+_agr_collision_path = NodePath("AgrArea/CollisionShape2D")
+_health_bar_path = NodePath("ProgressBar")
 
 [node name="UnitArea" type="Area2D" parent="."]
 collision_layer = 0
 collision_mask = 8
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="UnitArea"]
-position = Vector2(0, -2)
+position = Vector2(0, -30)
 shape = SubResource("RectangleShape2D_s1ucn")
 
 [node name="Animations" type="AnimatedSprite2D" parent="UnitArea"]
-position = Vector2(-35, -100)
+position = Vector2(-35, -128)
 sprite_frames = SubResource("SpriteFrames_map1f")
-animation = &"walk"
-frame_progress = 0.8568919
+animation = &"idle"
 centered = false
-
-[node name="WaitAttackTimer" type="Timer" parent="UnitArea"]
-one_shot = true
-
-[node name="ProgressBar" type="ProgressBar" parent="UnitArea"]
-offset_left = -22.0
-offset_top = -45.0
-offset_right = 23.0
-offset_bottom = -40.0
-theme_override_styles/background = SubResource("StyleBoxFlat_0i558")
-theme_override_styles/fill = SubResource("StyleBoxFlat_3f3g7")
-value = 50.0
-show_percentage = false
-metadata/_edit_use_anchors_ = true
 
 [node name="AttackArea" type="Area2D" parent="."]
 collision_layer = 0
 collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea"]
-position = Vector2(26.5, -2)
+position = Vector2(46.5, -30)
 shape = SubResource("RectangleShape2D_t5i3t")
+debug_color = Color(1, 0, 0, 0.41960785)
+
+[node name="AgrArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AgrArea"]
+position = Vector2(120, -30)
+shape = SubResource("RectangleShape2D_3f3g7")
+debug_color = Color(1, 0.39215687, 0, 0.41960785)
+
+[node name="WaitAttackTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+offset_left = -22.0
+offset_top = -73.0
+offset_right = 23.0
+offset_bottom = -68.0
+theme_override_styles/background = SubResource("StyleBoxFlat_0i558")
+theme_override_styles/fill = SubResource("StyleBoxFlat_3f3g7")
+value = 50.0
+show_percentage = false
+metadata/_edit_use_anchors_ = true
 
 [connection signal="animation_changed" from="UnitArea/Animations" to="UnitArea" method="_on_animations_animation_changed"]
 [connection signal="animation_finished" from="UnitArea/Animations" to="UnitArea" method="_on_animations_animation_finished"]

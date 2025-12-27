@@ -9,14 +9,14 @@ class UnitState:
 	const Death = "death"
 
 
-const ANIMATIONS_POS_RIGHT = Vector2(-35, -100)
-const ANIMATIONS_POS_LEFT = Vector2(-100, -100)
+const ANIMATIONS_POS_RIGHT = Vector2(-55, -128)
+const ANIMATIONS_POS_LEFT = Vector2(-74, -128)
 
 @export var _animations_path: NodePath
 @onready var animations: AnimatedSprite2D = get_node(_animations_path)
 
-@export var wait_attack_timer_path: NodePath
-@onready var wait_attack_timer: Timer = get_node(wait_attack_timer_path)
+@export var _wait_attack_timer_path: NodePath
+@onready var wait_attack_timer: Timer = get_node(_wait_attack_timer_path)
 
 var current_enemy: Node
 
@@ -25,8 +25,8 @@ func _ready() -> void:
 	super._ready()
 	
 	wait_attack_timer.wait_time = attack_speed
-	$UnitArea/ProgressBar.max_value = health
-	$UnitArea/ProgressBar.value = health
+	health_bar.max_value = health
+	health_bar.value = health
 
 func _physics_process(delta: float) -> void:
 	match unit_state:
@@ -52,8 +52,8 @@ func _physics_process(delta: float) -> void:
 			move_unit(delta)
 
 
-func _on_set_health(_old: float, new: float) -> void:
-	$UnitArea/ProgressBar.value = new
+func _on_set_health(old: float, new: float) -> void:
+	super._on_set_health(old, new)
 	if new <= 0:
 		var current_frame = animations \
 				.sprite_frames \

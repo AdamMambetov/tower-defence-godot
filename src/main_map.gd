@@ -82,6 +82,8 @@ func _new_data_handler(data: Dictionary) -> void:
 
 
 func spawn_request(unit_name: String) -> void:
+	if !is_instance_valid(WS.socket):
+		return
 	var info = {
 		type = "spawn",
 		unit_name = unit_name,
