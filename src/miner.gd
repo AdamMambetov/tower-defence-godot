@@ -7,8 +7,8 @@ class UnitState:
 	const Attack = "attack"
 
 
-const ANIMATIONS_POS_RIGHT = Vector2(-17, -30)
-const ANIMATIONS_POS_LEFT = Vector2(-34, -30)
+const ANIMATIONS_POS_RIGHT = Vector2(-17, -48)
+const ANIMATIONS_POS_LEFT = Vector2(-34, -48)
 
 var current_ore: Node = null
 var route: Global.Route = Global.Route.Mine:
@@ -124,7 +124,6 @@ func _on_set_health(_old: float, _new: float) -> void:
 	return
 
 func _on_WS_new_data_recieved(result: Dictionary) -> void:
-	print(result)
 	if result.type != "attack_ore":
 		return
 	if !result.has(id):

@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://dj5hqb604ukgc" path="res://file/character/miner/SteamMan_walk.png" id="5_2envy"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6ensq"]
-size = Vector2(1, 37)
+size = Vector2(1.6764706, 3.4411755)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8l213"]
 atlas = ExtResource("2_pnxvj")
@@ -190,7 +190,7 @@ animations = [{
 size = Vector2(14, 18.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pnxvj"]
-size = Vector2(90.25, 59.99)
+size = Vector2(235.5956, 158.23529)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pnxvj"]
 bg_color = Color(0, 0, 0, 1)
@@ -227,7 +227,8 @@ collision_layer = 2
 collision_mask = 24
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="UnitArea"]
-position = Vector2(0, -18)
+position = Vector2(-0.33823544, -1.2205887)
+scale = Vector2(1.0000002, 1.0000002)
 shape = SubResource("RectangleShape2D_6ensq")
 
 [node name="Animations" type="AnimatedSprite2D" parent="UnitArea"]
@@ -253,7 +254,8 @@ collision_layer = 0
 collision_mask = 16
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AgrArea"]
-position = Vector2(46, -19)
+position = Vector2(118.672844, -12.647054)
+scale = Vector2(1.0000002, 1.0000002)
 shape = SubResource("RectangleShape2D_pnxvj")
 debug_color = Color(1, 0.39215687, 0, 0.41960785)
 

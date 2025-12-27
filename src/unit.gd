@@ -86,10 +86,10 @@ func move_unit(delta: float) -> void:
 		nearest_enemy = enemies[0].get_parent()
 		for el in enemies:
 			var enemy = el.get_parent()
-			var distance = position.distance_to(enemy.position)
-			if distance < position.distance_to(nearest_enemy.position):
+			var distance = global_position.distance_to(enemy.global_position)
+			if distance < global_position.distance_to(nearest_enemy.global_position):
 				nearest_enemy = enemy
-		to_direction = position.direction_to(nearest_enemy.position)
+		to_direction = global_position.direction_to(nearest_enemy.global_position)
 		to_direction.x /= 2
 		to_direction.y *= 2
 		to_direction = to_direction.normalized()
