@@ -194,7 +194,7 @@ corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 anti_aliasing = false
 
-[node name="Ore" type="Node2D"]
+[node name="Ore" type="Node2D" groups=["ore"]]
 script = ExtResource("1_m0j7s")
 _animations_path = NodePath("AnimatedSprite2D")
 

@@ -3,6 +3,7 @@ extends Unit
 
 class UnitState:
 	const None = ""
+	const Idle = "idle"
 	const Walk = "walk"
 	const Attack = "attack"
 
@@ -22,6 +23,7 @@ var bag_capacity: float = 0:
 		$ProgressBar.value = bag_capacity
 		if bag_capacity == max_bag_capacity:
 			route = Global.Route.Tower
+			unit_state = UnitState.Walk
 
 @export var _animations_path: NodePath
 @onready var animations: AnimatedSprite2D = get_node(_animations_path)
@@ -41,7 +43,6 @@ func _physics_process(delta: float) -> void:
 					if area.get_collision_layer_value(4):
 						var tower = area.get_parent()
 						if route != Global.Route.Tower or !tower.is_player:
-							move_unit(delta)
 							unit_state = UnitState.Walk
 							continue
 						WS.socket.send_text(JSON.stringify({
@@ -54,7 +55,6 @@ func _physics_process(delta: float) -> void:
 					if area.get_collision_layer_value(5):
 						var ore = area.get_parent()
 						if route != Global.Route.Mine:
-							move_unit(delta)
 							unit_state = UnitState.Walk
 							continue
 						if !is_instance_valid(ore):
@@ -66,16 +66,36 @@ func _physics_process(delta: float) -> void:
 						break
 					# if teleport
 					if area.get_collision_layer_value(6):
-						move_unit(delta)
 						unit_state = UnitState.Walk
 						continue
+			elif route == Global.Route.Mine:
+				var ores = get_tree().get_nodes_in_group(&"ore")
+				if ores.is_empty():
+					route = Global.Route.Tower
+					unit_state = UnitState.Walk
+					return
+				
+				var nearest_ore: Node2D = ores.front()
+				for ore in ores:
+					var ore_distance = global_position.distance_to(ore.global_position)
+					var nearest_distance = global_position.distance_to(nearest_ore.global_position)
+					if ore_distance < nearest_distance:
+						nearest_ore = ore
+				var to_direction = global_position.direction_to(nearest_ore.global_position)
+				if to_direction.x < 0:
+					direction = Vector2.LEFT
+				else:
+					direction = Vector2.RIGHT
 			else:
 				unit_state = UnitState.Walk
+		UnitState.Idle:
+			if !get_tree().get_nodes_in_group(&"ore").is_empty():
+				unit_state = UnitState.Walk
 		UnitState.Walk:
+			move_unit(delta)
 			if attack_area.has_overlapping_areas():
 				unit_state = UnitState.None
 				return
-			move_unit(delta)
 
 
 func update_info(info: Dictionary) -> void:
@@ -88,12 +108,16 @@ func update_direction() -> void:
 	match route:
 		Global.Route.Tower:
 			direction = Vector2.RIGHT
+			agr_area.monitoring = Area2D.DisableMode.DISABLE_MODE_KEEP_ACTIVE
 		Global.Route.Mine:
 			direction = Vector2.LEFT
+			agr_area.monitoring = Area2D.DisableMode.DISABLE_MODE_REMOVE
 
 
 func _on_set_unit_state(_old: String, new: String) -> void:
 	match new:
+		UnitState.Idle:
+			animations.play(&"idle")
 		UnitState.Walk:
 			animations.play(&"walk")
 		UnitState.Attack:
@@ -112,6 +136,7 @@ func _on_set_unit_state(_old: String, new: String) -> void:
 
 func _on_set_direction(old: Vector2, new: Vector2) -> void:
 	super._on_set_direction(old, new)
+	agr_collision.position = Vector2.ZERO
 	match new:
 		Vector2.RIGHT:
 			animations.flip_h = false
