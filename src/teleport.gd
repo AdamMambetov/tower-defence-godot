@@ -13,6 +13,7 @@ enum Direction {
 func teleport(unit: Node) -> void:
 	unit.direction = _get_out_direction()
 	unit.global_position = global_position
+	unit.in_mine = route == Global.Route.Mine
 
 func _get_out_direction() -> Vector2:
 	match out_direction:

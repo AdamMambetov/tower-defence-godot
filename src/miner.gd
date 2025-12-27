@@ -24,12 +24,14 @@ var bag_capacity: float = 0:
 		if bag_capacity == max_bag_capacity:
 			route = Global.Route.Tower
 			unit_state = UnitState.Walk
+var in_mine: bool =false
 
 @export var _animations_path: NodePath
 @onready var animations: AnimatedSprite2D = get_node(_animations_path)
 
 
 func _ready() -> void:
+	unit_state = UnitState.Idle
 	WS.new_data_received.connect(_on_WS_new_data_recieved)
 	update_direction()
 
@@ -64,11 +66,10 @@ func _physics_process(delta: float) -> void:
 						current_ore = ore
 						unit_state = UnitState.Attack
 						break
-					# if teleport
-					if area.get_collision_layer_value(6):
-						unit_state = UnitState.Walk
-						continue
 			elif route == Global.Route.Mine:
+				if !in_mine:
+					unit_state = UnitState.Walk
+					return
 				var ores = get_tree().get_nodes_in_group(&"ore")
 				if ores.is_empty():
 					route = Global.Route.Tower
@@ -86,10 +87,12 @@ func _physics_process(delta: float) -> void:
 					direction = Vector2.LEFT
 				else:
 					direction = Vector2.RIGHT
+				unit_state = UnitState.Walk
 			else:
 				unit_state = UnitState.Walk
 		UnitState.Idle:
 			if !get_tree().get_nodes_in_group(&"ore").is_empty():
+				route = Global.Route.Mine
 				unit_state = UnitState.Walk
 		UnitState.Walk:
 			move_unit(delta)
@@ -108,10 +111,10 @@ func update_direction() -> void:
 	match route:
 		Global.Route.Tower:
 			direction = Vector2.RIGHT
-			agr_area.monitoring = Area2D.DisableMode.DISABLE_MODE_KEEP_ACTIVE
+			agr_collision.disabled = true
 		Global.Route.Mine:
 			direction = Vector2.LEFT
-			agr_area.monitoring = Area2D.DisableMode.DISABLE_MODE_REMOVE
+			agr_collision.disabled = false
 
 
 func _on_set_unit_state(_old: String, new: String) -> void:

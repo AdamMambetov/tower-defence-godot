@@ -196,6 +196,7 @@ anti_aliasing = false
 
 [node name="Ore" type="Node2D" groups=["ore"]]
 script = ExtResource("1_m0j7s")
+type = 4
 _animations_path = NodePath("AnimatedSprite2D")
 
 [node name="Area2D" type="Area2D" parent="."]
@@ -209,7 +210,7 @@ shape = SubResource("RectangleShape2D_3edji")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -25)
 sprite_frames = SubResource("SpriteFrames_dr3up")
-animation = &"black"
+animation = &"pink"
 speed_scale = 0.0
 
 [node name="ProgressBar" type="ProgressBar" parent="."]

@@ -73,6 +73,8 @@ func _new_data_handler(data: Dictionary) -> void:
 		"spawn":
 			spawn_unit(true, JSON.parse_string(data.unit_info))
 			money_value.text = str(int(data.money))
+			if data.has("new_miner_price"):
+				get_node(_price_nodes.miner).text = str(int(data.new_miner_price))
 		"spawn_enemy":
 			spawn_unit(false, JSON.parse_string(data.unit_info))
 		"spawn_ore":
