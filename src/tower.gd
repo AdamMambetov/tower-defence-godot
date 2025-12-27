@@ -10,7 +10,8 @@ extends Node2D
 @export var spawn_range_y: Vector2:
 	set(value):
 		spawn_range_y = value
-		$SpawnArea/SpawnCollision.shape.size = value
+		if is_instance_valid($SpawnArea/SpawnCollision):
+			$SpawnArea/SpawnCollision.shape.size = value
 
 var id: String = "tower"
 
