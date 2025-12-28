@@ -28,6 +28,7 @@ var map_state: MapState = MapState.Battle:
 @export var _camera_path: NodePath
 @onready var camera: Camera2D = get_node(_camera_path)
 @export var _price_nodes: Dictionary[String, NodePath]
+@export var _circular_progress_bar_nodes: Dictionary[String, NodePath]
 
 
 func _ready() -> void:
@@ -38,6 +39,9 @@ func _ready() -> void:
 	$"UI Layer/UI/Town".position = Vector2.ZERO
 	$"UI Layer/UI/Mine".position = Vector2.ZERO
 	spawn_request("miner")
+	for path in _circular_progress_bar_nodes.values():
+		var circular_progress_bar: CircularProgressBar = get_node(path)
+		circular_progress_bar.visible = false
 
 func _process(_delta: float) -> void:
 	if move_by_mouse:
@@ -108,6 +112,12 @@ func spawn_unit(is_player: bool, data: Dictionary) -> void:
 		pos.x = $"EnemyTower".global_position.x
 	unit.global_position = pos
 	$"Units".add_child(unit)
+	if is_player:
+		var circular_progress_bar: CircularProgressBar = get_node(_circular_progress_bar_nodes[data.name])
+		circular_progress_bar.visible = true
+		circular_progress_bar.start(data.cooldown)
+		await circular_progress_bar.animation_finished
+		circular_progress_bar.visible = false
 
 func spawn_ore(data: Dictionary) -> void:
 	print("spawn_ore")

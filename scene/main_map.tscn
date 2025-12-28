@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=4 uid="uid://d1vrkfxgttq3c"]
+[gd_scene load_steps=35 format=4 uid="uid://d1vrkfxgttq3c"]
 
 [ext_resource type="Script" uid="uid://cfltnwoeynwn2" path="res://src/main_map.gd" id="1_xf4q7"]
 [ext_resource type="Texture2D" uid="uid://d3a0835k1w76s" path="res://file/background/background_layer_1.png" id="2_13gc7"]
@@ -21,6 +21,7 @@
 [ext_resource type="Texture2D" uid="uid://cgr62eyayb85a" path="res://file/icon/SoldierPreview.png" id="20_vrvtq"]
 [ext_resource type="Texture2D" uid="uid://43h3swf8yjog" path="res://file/icon/SamuraiPreview.png" id="21_esod0"]
 [ext_resource type="Texture2D" uid="uid://cashwb0j287jg" path="res://file/icon/money.png" id="21_oafc4"]
+[ext_resource type="PackedScene" uid="uid://bfgnyo2ieqstc" path="res://scene/circular_progress_bar.tscn" id="21_utjqm"]
 [ext_resource type="Texture2D" uid="uid://bu87dp4eekawj" path="res://file/icon/MinotaurPreview.png" id="22_utjqm"]
 [ext_resource type="Texture2D" uid="uid://b14vjvk7aec8y" path="res://file/icon/MinerPreview.png" id="23_byx81"]
 [ext_resource type="Texture2D" uid="uid://clgt2ok7ey150" path="res://file/icon/WitchPreview.png" id="28_t3s1h"]
@@ -159,6 +160,13 @@ _price_nodes = Dictionary[String, NodePath]({
 "samurai": NodePath("UI Layer/UI/Battle/HBoxContainer/Samurai/SamuraiPrice"),
 "soldier": NodePath("UI Layer/UI/Battle/HBoxContainer/Soldier/SoldierPrice"),
 "witch": NodePath("UI Layer/UI/Battle/HBoxContainer/Witch/MinotaurPrice")
+})
+_circular_progress_bar_nodes = Dictionary[String, NodePath]({
+"miner": NodePath("UI Layer/UI/Battle/HBoxContainer/Miner/Control/CircularProgressBar"),
+"minotaur": NodePath("UI Layer/UI/Battle/HBoxContainer/Minotaur/Control/CircularProgressBar"),
+"samurai": NodePath("UI Layer/UI/Battle/HBoxContainer/Samurai/Control/CircularProgressBar"),
+"soldier": NodePath("UI Layer/UI/Battle/HBoxContainer/Soldier/Control/CircularProgressBar"),
+"witch": NodePath("UI Layer/UI/Battle/HBoxContainer/Witch/Control/CircularProgressBar")
 })
 
 [node name="Camera2D" type="Camera2D" parent="."]
@@ -407,14 +415,34 @@ offset_bottom = 96.0
 theme_override_constants/separation = 20
 
 [node name="Miner" type="VBoxContainer" parent="UI Layer/UI/Battle/HBoxContainer"]
+custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 
-[node name="MinerButton" type="TextureButton" parent="UI Layer/UI/Battle/HBoxContainer/Miner"]
-custom_minimum_size = Vector2(60, 60)
+[node name="Control" type="Control" parent="UI Layer/UI/Battle/HBoxContainer/Miner"]
 layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MinerButton" type="TextureButton" parent="UI Layer/UI/Battle/HBoxContainer/Miner/Control"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 0
+offset_right = 60.0
+offset_bottom = 60.0
 texture_normal = ExtResource("23_byx81")
 ignore_texture_size = true
 stretch_mode = 4
+
+[node name="CircularProgressBar" parent="UI Layer/UI/Battle/HBoxContainer/Miner/Control" instance=ExtResource("21_utjqm")]
+layout_mode = 0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = -4.0
+offset_top = -4.0
+offset_right = 64.0
+offset_bottom = 64.0
+grow_horizontal = 1
+grow_vertical = 1
+color = Color(0, 0, 0, 0.5019608)
 
 [node name="MinerPrice" type="Label" parent="UI Layer/UI/Battle/HBoxContainer/Miner"]
 layout_mode = 2
@@ -422,14 +450,35 @@ text = "999999"
 horizontal_alignment = 1
 
 [node name="Soldier" type="VBoxContainer" parent="UI Layer/UI/Battle/HBoxContainer"]
+custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 
-[node name="SoldierButton" type="TextureButton" parent="UI Layer/UI/Battle/HBoxContainer/Soldier"]
-custom_minimum_size = Vector2(60, 60)
+[node name="Control" type="Control" parent="UI Layer/UI/Battle/HBoxContainer/Soldier"]
 layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SoldierButton" type="TextureButton" parent="UI Layer/UI/Battle/HBoxContainer/Soldier/Control"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 0
+offset_right = 60.0
+offset_bottom = 60.0
 texture_normal = ExtResource("20_vrvtq")
 ignore_texture_size = true
 stretch_mode = 4
+
+[node name="CircularProgressBar" parent="UI Layer/UI/Battle/HBoxContainer/Soldier/Control" instance=ExtResource("21_utjqm")]
+layout_mode = 0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = -4.0
+offset_top = -4.0
+offset_right = 64.0
+offset_bottom = 64.0
+grow_horizontal = 1
+grow_vertical = 1
+value = 1.0
+color = Color(0, 0, 0, 0.5019608)
 
 [node name="SoldierPrice" type="Label" parent="UI Layer/UI/Battle/HBoxContainer/Soldier"]
 layout_mode = 2
@@ -437,14 +486,34 @@ text = "999999"
 horizontal_alignment = 1
 
 [node name="Samurai" type="VBoxContainer" parent="UI Layer/UI/Battle/HBoxContainer"]
+custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 
-[node name="SamuraiButton" type="TextureButton" parent="UI Layer/UI/Battle/HBoxContainer/Samurai"]
-custom_minimum_size = Vector2(60, 60)
+[node name="Control" type="Control" parent="UI Layer/UI/Battle/HBoxContainer/Samurai"]
 layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SamuraiButton" type="TextureButton" parent="UI Layer/UI/Battle/HBoxContainer/Samurai/Control"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 0
+offset_right = 60.0
+offset_bottom = 60.0
 texture_normal = ExtResource("21_esod0")
 ignore_texture_size = true
 stretch_mode = 4
+
+[node name="CircularProgressBar" parent="UI Layer/UI/Battle/HBoxContainer/Samurai/Control" instance=ExtResource("21_utjqm")]
+layout_mode = 0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = -4.0
+offset_top = -4.0
+offset_right = 64.0
+offset_bottom = 64.0
+grow_horizontal = 1
+grow_vertical = 1
+color = Color(0, 0, 0, 0.5019608)
 
 [node name="SamuraiPrice" type="Label" parent="UI Layer/UI/Battle/HBoxContainer/Samurai"]
 layout_mode = 2
@@ -452,14 +521,34 @@ text = "999999"
 horizontal_alignment = 1
 
 [node name="Minotaur" type="VBoxContainer" parent="UI Layer/UI/Battle/HBoxContainer"]
+custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 
-[node name="MinotaurButton" type="TextureButton" parent="UI Layer/UI/Battle/HBoxContainer/Minotaur"]
-custom_minimum_size = Vector2(60, 60)
+[node name="Control" type="Control" parent="UI Layer/UI/Battle/HBoxContainer/Minotaur"]
 layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MinotaurButton" type="TextureButton" parent="UI Layer/UI/Battle/HBoxContainer/Minotaur/Control"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 0
+offset_right = 60.0
+offset_bottom = 60.0
 texture_normal = ExtResource("22_utjqm")
 ignore_texture_size = true
 stretch_mode = 4
+
+[node name="CircularProgressBar" parent="UI Layer/UI/Battle/HBoxContainer/Minotaur/Control" instance=ExtResource("21_utjqm")]
+layout_mode = 0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = -4.0
+offset_top = -4.0
+offset_right = 64.0
+offset_bottom = 64.0
+grow_horizontal = 1
+grow_vertical = 1
+color = Color(0, 0, 0, 0.5019608)
 
 [node name="MinotaurPrice" type="Label" parent="UI Layer/UI/Battle/HBoxContainer/Minotaur"]
 layout_mode = 2
@@ -467,14 +556,34 @@ text = "999999"
 horizontal_alignment = 1
 
 [node name="Witch" type="VBoxContainer" parent="UI Layer/UI/Battle/HBoxContainer"]
+custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 
-[node name="WitchButton" type="TextureButton" parent="UI Layer/UI/Battle/HBoxContainer/Witch"]
-custom_minimum_size = Vector2(60, 60)
+[node name="Control" type="Control" parent="UI Layer/UI/Battle/HBoxContainer/Witch"]
 layout_mode = 2
+size_flags_vertical = 3
+
+[node name="WitchButton" type="TextureButton" parent="UI Layer/UI/Battle/HBoxContainer/Witch/Control"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 0
+offset_right = 60.0
+offset_bottom = 60.0
 texture_normal = ExtResource("28_t3s1h")
 ignore_texture_size = true
 stretch_mode = 4
+
+[node name="CircularProgressBar" parent="UI Layer/UI/Battle/HBoxContainer/Witch/Control" instance=ExtResource("21_utjqm")]
+layout_mode = 0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = -4.0
+offset_top = -4.0
+offset_right = 64.0
+offset_bottom = 64.0
+grow_horizontal = 1
+grow_vertical = 1
+color = Color(0, 0, 0, 0.5019608)
 
 [node name="MinotaurPrice" type="Label" parent="UI Layer/UI/Battle/HBoxContainer/Witch"]
 layout_mode = 2
@@ -567,10 +676,10 @@ texture_normal = ExtResource("12_vvnmp")
 [connection signal="pressed" from="UI Layer/UI/Town/GoBattleButton" to="." method="_on_go_battle_button_pressed"]
 [connection signal="pressed" from="UI Layer/UI/Town/GoMineButton" to="." method="_on_go_mine_button_pressed"]
 [connection signal="pressed" from="UI Layer/UI/Battle/GoTownButton" to="." method="_on_go_town_button_pressed"]
-[connection signal="pressed" from="UI Layer/UI/Battle/HBoxContainer/Miner/MinerButton" to="." method="_on_miner_button_pressed"]
-[connection signal="pressed" from="UI Layer/UI/Battle/HBoxContainer/Soldier/SoldierButton" to="." method="_on_soldier_button_pressed"]
-[connection signal="pressed" from="UI Layer/UI/Battle/HBoxContainer/Samurai/SamuraiButton" to="." method="_on_archer_button_pressed"]
-[connection signal="pressed" from="UI Layer/UI/Battle/HBoxContainer/Minotaur/MinotaurButton" to="." method="_on_minotaur_button_pressed"]
-[connection signal="pressed" from="UI Layer/UI/Battle/HBoxContainer/Witch/WitchButton" to="." method="_on_witch_button_pressed"]
+[connection signal="pressed" from="UI Layer/UI/Battle/HBoxContainer/Miner/Control/MinerButton" to="." method="_on_miner_button_pressed"]
+[connection signal="pressed" from="UI Layer/UI/Battle/HBoxContainer/Soldier/Control/SoldierButton" to="." method="_on_soldier_button_pressed"]
+[connection signal="pressed" from="UI Layer/UI/Battle/HBoxContainer/Samurai/Control/SamuraiButton" to="." method="_on_archer_button_pressed"]
+[connection signal="pressed" from="UI Layer/UI/Battle/HBoxContainer/Minotaur/Control/MinotaurButton" to="." method="_on_minotaur_button_pressed"]
+[connection signal="pressed" from="UI Layer/UI/Battle/HBoxContainer/Witch/Control/WitchButton" to="." method="_on_witch_button_pressed"]
 [connection signal="pressed" from="UI Layer/UI/EndGame/ColorRect/VerticalBox/exit_btn" to="." method="_on_exit_btn_pressed"]
 [connection signal="pressed" from="UI Layer/UI/Mine/GoTownButton" to="." method="_on_go_town_button_pressed"]
