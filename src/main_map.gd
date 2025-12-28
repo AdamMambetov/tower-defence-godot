@@ -64,7 +64,7 @@ func _new_data_handler(data: Dictionary) -> void:
 			prints("Опонент подключился, игра началась!");
 			var prices = JSON.parse_string(data.hero_prices)
 			for el in prices:
-				get_node(_price_nodes.get(el[0])).text = str(el[1])
+				get_node(_price_nodes.get(el[0])).text = str(int(el[1]))
 		"end_game":
 			UserInfo.set_room_id("")
 			get_tree().paused = true

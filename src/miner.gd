@@ -47,6 +47,8 @@ func _physics_process(delta: float) -> void:
 						if route != Global.Route.Tower or !tower.is_player:
 							unit_state = UnitState.Walk
 							continue
+						elif get_tree().get_nodes_in_group(&"ore").is_empty():
+							unit_state = UnitState.Idle
 						WS.socket.send_text(JSON.stringify({
 							type = "sell_ore",
 							miner = id,
@@ -97,6 +99,9 @@ func _physics_process(delta: float) -> void:
 		UnitState.Walk:
 			move_unit(delta)
 			if attack_area.has_overlapping_areas():
+				unit_state = UnitState.None
+				return
+			if get_tree().get_nodes_in_group(&"ore").is_empty():
 				unit_state = UnitState.None
 				return
 
