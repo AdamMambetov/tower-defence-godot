@@ -152,14 +152,13 @@ size = Vector2(900, 40)
 [node name="MainMap" type="Node2D"]
 script = ExtResource("1_xf4q7")
 _end_game_label_path = NodePath("UI Layer/UI/EndGame/ColorRect/VerticalBox/Label")
-_money_value_path = NodePath("UI Layer/UI/Battle/MoneyBackground/VBoxContainer/MoneyValue")
 _camera_path = NodePath("Camera2D")
 _price_nodes = Dictionary[String, NodePath]({
 "miner": NodePath("UI Layer/UI/Battle/HBoxContainer/Miner/MinerPrice"),
 "minotaur": NodePath("UI Layer/UI/Battle/HBoxContainer/Minotaur/MinotaurPrice"),
 "samurai": NodePath("UI Layer/UI/Battle/HBoxContainer/Samurai/SamuraiPrice"),
 "soldier": NodePath("UI Layer/UI/Battle/HBoxContainer/Soldier/SoldierPrice"),
-"witch": NodePath("UI Layer/UI/Battle/HBoxContainer/Witch/MinotaurPrice")
+"witch": NodePath("UI Layer/UI/Battle/HBoxContainer/Witch/WitchPrice")
 })
 _circular_progress_bar_nodes = Dictionary[String, NodePath]({
 "miner": NodePath("UI Layer/UI/Battle/HBoxContainer/Miner/Control/CircularProgressBar"),
@@ -168,6 +167,7 @@ _circular_progress_bar_nodes = Dictionary[String, NodePath]({
 "soldier": NodePath("UI Layer/UI/Battle/HBoxContainer/Soldier/Control/CircularProgressBar"),
 "witch": NodePath("UI Layer/UI/Battle/HBoxContainer/Witch/Control/CircularProgressBar")
 })
+_money_nodes = Array[NodePath]([NodePath("UI Layer/UI/Town/MoneyBackground/VBoxContainer/MoneyValue"), NodePath("UI Layer/UI/Battle/MoneyBackground/VBoxContainer/MoneyValue"), NodePath("UI Layer/UI/Mine/MoneyBackground/VBoxContainer/MoneyValue")])
 
 [node name="Camera2D" type="Camera2D" parent="."]
 anchor_mode = 0
@@ -183,7 +183,7 @@ position = Vector2(850, 128.15)
 scale = Vector2(2, 2)
 
 [node name="Parallax2D" type="Parallax2D" parent="Background"]
-scroll_scale = Vector2(0.5, 0.5)
+scroll_scale = Vector2(0.6, 0.6)
 repeat_size = Vector2(960, 0)
 repeat_times = 4
 
@@ -311,6 +311,34 @@ offset_right = -1152.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="MoneyBackground" type="TextureRect" parent="UI Layer/UI/Town"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 0
+offset_left = 110.0
+offset_top = 9.0
+offset_right = 190.0
+offset_bottom = 89.0
+texture = ExtResource("20_byx81")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI Layer/UI/Town/MoneyBackground"]
+layout_mode = 0
+offset_right = 72.0
+offset_bottom = 77.0
+
+[node name="MoneyIcon" type="TextureRect" parent="UI Layer/UI/Town/MoneyBackground/VBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+texture = ExtResource("21_oafc4")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="MoneyValue" type="Label" parent="UI Layer/UI/Town/MoneyBackground/VBoxContainer"]
+layout_mode = 2
+text = "200"
+horizontal_alignment = 2
+
 [node name="GoBattleButton" type="TextureButton" parent="UI Layer/UI/Town"]
 layout_mode = 1
 anchors_preset = 6
@@ -433,16 +461,10 @@ stretch_mode = 4
 
 [node name="CircularProgressBar" parent="UI Layer/UI/Battle/HBoxContainer/Miner/Control" instance=ExtResource("21_utjqm")]
 layout_mode = 0
-anchors_preset = 0
-anchor_right = 0.0
-anchor_bottom = 0.0
 offset_left = -4.0
 offset_top = -4.0
 offset_right = 64.0
 offset_bottom = 64.0
-grow_horizontal = 1
-grow_vertical = 1
-color = Color(0, 0, 0, 0.5019608)
 
 [node name="MinerPrice" type="Label" parent="UI Layer/UI/Battle/HBoxContainer/Miner"]
 layout_mode = 2
@@ -467,18 +489,11 @@ ignore_texture_size = true
 stretch_mode = 4
 
 [node name="CircularProgressBar" parent="UI Layer/UI/Battle/HBoxContainer/Soldier/Control" instance=ExtResource("21_utjqm")]
-layout_mode = 0
-anchors_preset = 0
-anchor_right = 0.0
-anchor_bottom = 0.0
+layout_mode = 1
 offset_left = -4.0
 offset_top = -4.0
 offset_right = 64.0
 offset_bottom = 64.0
-grow_horizontal = 1
-grow_vertical = 1
-value = 1.0
-color = Color(0, 0, 0, 0.5019608)
 
 [node name="SoldierPrice" type="Label" parent="UI Layer/UI/Battle/HBoxContainer/Soldier"]
 layout_mode = 2
@@ -504,16 +519,10 @@ stretch_mode = 4
 
 [node name="CircularProgressBar" parent="UI Layer/UI/Battle/HBoxContainer/Samurai/Control" instance=ExtResource("21_utjqm")]
 layout_mode = 0
-anchors_preset = 0
-anchor_right = 0.0
-anchor_bottom = 0.0
 offset_left = -4.0
 offset_top = -4.0
 offset_right = 64.0
 offset_bottom = 64.0
-grow_horizontal = 1
-grow_vertical = 1
-color = Color(0, 0, 0, 0.5019608)
 
 [node name="SamuraiPrice" type="Label" parent="UI Layer/UI/Battle/HBoxContainer/Samurai"]
 layout_mode = 2
@@ -539,16 +548,10 @@ stretch_mode = 4
 
 [node name="CircularProgressBar" parent="UI Layer/UI/Battle/HBoxContainer/Minotaur/Control" instance=ExtResource("21_utjqm")]
 layout_mode = 0
-anchors_preset = 0
-anchor_right = 0.0
-anchor_bottom = 0.0
 offset_left = -4.0
 offset_top = -4.0
 offset_right = 64.0
 offset_bottom = 64.0
-grow_horizontal = 1
-grow_vertical = 1
-color = Color(0, 0, 0, 0.5019608)
 
 [node name="MinotaurPrice" type="Label" parent="UI Layer/UI/Battle/HBoxContainer/Minotaur"]
 layout_mode = 2
@@ -574,18 +577,12 @@ stretch_mode = 4
 
 [node name="CircularProgressBar" parent="UI Layer/UI/Battle/HBoxContainer/Witch/Control" instance=ExtResource("21_utjqm")]
 layout_mode = 0
-anchors_preset = 0
-anchor_right = 0.0
-anchor_bottom = 0.0
 offset_left = -4.0
 offset_top = -4.0
 offset_right = 64.0
 offset_bottom = 64.0
-grow_horizontal = 1
-grow_vertical = 1
-color = Color(0, 0, 0, 0.5019608)
 
-[node name="MinotaurPrice" type="Label" parent="UI Layer/UI/Battle/HBoxContainer/Witch"]
+[node name="WitchPrice" type="Label" parent="UI Layer/UI/Battle/HBoxContainer/Witch"]
 layout_mode = 2
 text = "999999"
 horizontal_alignment = 1
@@ -672,6 +669,34 @@ offset_bottom = 24.0
 grow_horizontal = 0
 grow_vertical = 2
 texture_normal = ExtResource("12_vvnmp")
+
+[node name="MoneyBackground" type="TextureRect" parent="UI Layer/UI/Mine"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 0
+offset_left = 110.0
+offset_top = 9.0
+offset_right = 190.0
+offset_bottom = 89.0
+texture = ExtResource("20_byx81")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI Layer/UI/Mine/MoneyBackground"]
+layout_mode = 0
+offset_right = 72.0
+offset_bottom = 77.0
+
+[node name="MoneyIcon" type="TextureRect" parent="UI Layer/UI/Mine/MoneyBackground/VBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+texture = ExtResource("21_oafc4")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="MoneyValue" type="Label" parent="UI Layer/UI/Mine/MoneyBackground/VBoxContainer"]
+layout_mode = 2
+text = "200"
+horizontal_alignment = 2
 
 [connection signal="pressed" from="UI Layer/UI/Town/GoBattleButton" to="." method="_on_go_battle_button_pressed"]
 [connection signal="pressed" from="UI Layer/UI/Town/GoMineButton" to="." method="_on_go_mine_button_pressed"]

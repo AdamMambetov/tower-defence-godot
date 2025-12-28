@@ -23,12 +23,11 @@ var map_state: MapState = MapState.Battle:
 
 @export var _end_game_label_path: NodePath
 @onready var end_game_label: Label = get_node(_end_game_label_path)
-@export var _money_value_path: NodePath
-@onready var money_value: Label = get_node(_money_value_path)
 @export var _camera_path: NodePath
 @onready var camera: Camera2D = get_node(_camera_path)
 @export var _price_nodes: Dictionary[String, NodePath]
 @export var _circular_progress_bar_nodes: Dictionary[String, NodePath]
+@export var _money_nodes: Array[NodePath]
 
 
 func _ready() -> void:
@@ -76,7 +75,7 @@ func _new_data_handler(data: Dictionary) -> void:
 			map_state = MapState.EndGame
 		"spawn":
 			spawn_unit(true, JSON.parse_string(data.unit_info))
-			money_value.text = str(int(data.money))
+			update_money_text(data.money)
 			if data.has("new_miner_price"):
 				get_node(_price_nodes.miner).text = str(int(data.new_miner_price))
 		"spawn_enemy":
@@ -84,7 +83,7 @@ func _new_data_handler(data: Dictionary) -> void:
 		"spawn_ore":
 			spawn_ore(data.ore)
 		"sell_ore":
-			money_value.text = str(int(data.money))
+			update_money_text(data.money)
 
 
 func spawn_request(unit_name: String) -> void:
@@ -126,6 +125,10 @@ func spawn_ore(data: Dictionary) -> void:
 	ore.position.x = data.x
 	ore.position.y = data.y
 	$MineLocation/Ores.add_child(ore)
+
+func update_money_text(new_money: int) -> void:
+	for path in _money_nodes:
+		get_node(path).text = str(new_money)
 
 
 func _on_WS_new_data_recieved(result: Dictionary) -> void:

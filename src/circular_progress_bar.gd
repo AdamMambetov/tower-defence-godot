@@ -18,7 +18,7 @@ signal animation_finished()
 		thickness = clampf(new_thickness, 0.01, 0.2)
 		_get_material().set_shader_parameter(&"thickness", thickness)
 
-@export var color: Color = Color.BLACK:
+@export var color: Color = Color(0.0, 0.0, 0.0, 0.5):
 	set(new_color):
 		color = new_color
 		_get_material().set_shader_parameter(&"color", color)
@@ -28,6 +28,14 @@ signal animation_finished()
 		test_start_anim = new
 		if test_start_anim:
 			start(3)
+
+
+func _ready() -> void:
+	$ColorRect.material = ShaderMaterial.new()
+	$ColorRect.material.shader = preload("res://src/circular_progress_bar.gdshader")
+	value = value
+	thickness = thickness
+	color = color
 
 
 func _get_material() -> ShaderMaterial:
