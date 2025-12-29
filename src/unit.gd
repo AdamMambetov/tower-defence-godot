@@ -45,6 +45,9 @@ var direction: Vector2 = Vector2.RIGHT:
 @export var _health_bar_path: NodePath
 @onready var health_bar: ProgressBar = get_node(_health_bar_path)
 
+@export var _animations_path: NodePath
+@onready var animations: AnimatedSprite2D = get_node(_animations_path)
+
 
 func _ready() -> void:
 	WS.new_data_received.connect(_on_WS_new_data_recieved)
@@ -100,6 +103,14 @@ func _on_set_health(old: float, new: float) -> void:
 	if !is_instance_valid(health_bar):
 		health_bar = get_node(_health_bar_path)
 	health_bar.value = new
+	if new <= 0:
+		var last_frame = animations \
+				.sprite_frames \
+				.get_frame_count(animations.animation) - 1
+		if animations.frame == last_frame and animations.is_playing():
+			await animations.animation_finished
+			await get_tree().physics_frame
+		unit_state = "death"
 
 func _on_set_unit_state(old: String, new: String) -> void:
 	prints(id, old, new)

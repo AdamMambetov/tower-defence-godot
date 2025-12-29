@@ -12,9 +12,6 @@ class UnitState:
 const ANIMATIONS_POS_RIGHT = Vector2(-55, -128)
 const ANIMATIONS_POS_LEFT = Vector2(-74, -128)
 
-@export var _animations_path: NodePath
-@onready var animations: AnimatedSprite2D = get_node(_animations_path)
-
 @export var _wait_attack_timer_path: NodePath
 @onready var wait_attack_timer: Timer = get_node(_wait_attack_timer_path)
 
@@ -51,17 +48,6 @@ func _physics_process(delta: float) -> void:
 				return
 			move_unit(delta)
 
-
-func _on_set_health(old: float, new: float) -> void:
-	super._on_set_health(old, new)
-	if new <= 0:
-		var current_frame = animations \
-				.sprite_frames \
-				.get_frame_count(animations.animation) - 1
-		if animations.frame == current_frame:
-			await animations.animation_finished
-			await get_tree().physics_frame
-		unit_state = UnitState.Death
 
 func _on_set_unit_state(_old: String, new: String) -> void:
 	match new:

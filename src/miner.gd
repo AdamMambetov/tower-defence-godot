@@ -26,9 +26,6 @@ var bag_capacity: float = 0:
 			unit_state = UnitState.Walk
 var in_mine: bool =false
 
-@export var _animations_path: NodePath
-@onready var animations: AnimatedSprite2D = get_node(_animations_path)
-
 
 func _ready() -> void:
 	unit_state = UnitState.Idle
