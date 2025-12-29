@@ -1,5 +1,5 @@
 @tool
-extends Node2D
+class_name Tower extends Node2D
 
 
 @export var is_player: bool:
@@ -25,6 +25,9 @@ var health: float = 1000:
 
 @export var _tower_area_path: NodePath
 @onready var tower_area: Area2D = get_node(_tower_area_path)
+
+@export var _tower_collition_path: NodePath
+@onready var tower_collition: CollisionShape2D = get_node(_tower_collition_path)
 
 
 func _ready() -> void:

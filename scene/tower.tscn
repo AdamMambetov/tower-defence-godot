@@ -8266,6 +8266,7 @@ script = ExtResource("1_tfrn6")
 is_player = true
 spawn_range_y = Vector2(5, 60)
 _tower_area_path = NodePath("TowerArea")
+_tower_collition_path = NodePath("TowerArea/CollisionShape2D")
 
 [node name="TowerArea" type="Area2D" parent="."]
 collision_layer = 8

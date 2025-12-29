@@ -111,6 +111,7 @@ func _on_set_health(old: float, new: float) -> void:
 			await animations.animation_finished
 			await get_tree().physics_frame
 		unit_state = "death"
+		unit_collision.disabled = true
 
 func _on_set_unit_state(old: String, new: String) -> void:
 	prints(id, old, new)

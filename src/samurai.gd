@@ -47,6 +47,23 @@ func _physics_process(delta: float) -> void:
 			move_unit(delta)
 
 
+func find_nearest_enemy() -> Node2D:
+	if !agr_area.has_overlapping_areas():
+		return null
+	var enemies = agr_area.get_overlapping_areas()
+	var nearest = enemies[0].get_parent()
+	var nearest_distance = global_position.distance_to(nearest.global_position)
+	for area in enemies:
+		var enemy: Node2D = area.get_parent()
+		var enemy_distance = global_position.distance_to(enemy.global_position)
+		if enemy_distance > attack_collision.shape.size.x:
+			continue
+		if enemy_distance < nearest_distance:
+			nearest = enemy
+			nearest_distance = enemy_distance
+	return nearest
+
+
 func _on_set_unit_state(_old: String, new: String) -> void:
 	match new:
 		UnitState.Run:
@@ -59,7 +76,21 @@ func _on_set_unit_state(_old: String, new: String) -> void:
 			var arrow = ARROW_SCENE.instantiate()
 			arrow.global_position = $ArrowSpawn.global_position
 			var distance = attack_collision.shape.size.x
-			arrow.update_info({id = id, distance = distance, damage = damage})
+			var enemy = find_nearest_enemy()
+			var to_point: Vector2
+			if enemy is Unit:
+				to_point = enemy.unit_collision.global_position
+			elif enemy is Tower:
+				to_point = enemy.tower_collition.global_position
+			else:
+				to_point = attack_collision.global_position
+				to_point.x += distance / 2
+			arrow.update_info({
+				id = id,
+				distance = distance,
+				damage = damage,
+				to_point = to_point,
+			})
 			arrow.is_player = is_player
 			get_parent().add_child(arrow)
 			unit_state = UnitState.WaitAttack
