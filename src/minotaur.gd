@@ -15,42 +15,27 @@ const ANIMATIONS_POS_LEFT = Vector2(-74, -128)
 @export var _wait_attack_timer_path: NodePath
 @onready var wait_attack_timer: Timer = get_node(_wait_attack_timer_path)
 
-var current_enemy: Node
-
 
 func _ready() -> void:
 	super._ready()
-	
 	wait_attack_timer.wait_time = attack_speed
-	health_bar.max_value = health
-	health_bar.value = health
 
-func _physics_process(delta: float) -> void:
-	match unit_state:
-		UnitState.None:
-			if attack_area.has_overlapping_areas():
-				var areas = attack_area.get_overlapping_areas()
-				for area in areas:
-					var enemy = area.get_parent()
-					if !is_instance_valid(enemy):
-						continue
-					if enemy.health <= 0:
-						continue
-					current_enemy = enemy
-					break
-				if is_instance_valid(current_enemy):
-					unit_state = UnitState.Attack
-			else:
-				unit_state = UnitState.Walk
-		UnitState.Walk:
-			if attack_area.has_overlapping_areas():
-				unit_state = UnitState.None
-				return
-			move_unit(delta)
+
+func is_move_state() -> bool:
+	return unit_state == UnitState.Walk
+
+func action_attack() -> void:
+	unit_state = UnitState.Attack
+
+func action_move() -> void:
+	unit_state = UnitState.Walk
 
 
 func _on_set_unit_state(_old: String, new: String) -> void:
 	match new:
+		UnitState.None:
+			if tower_node.tower_state == Tower.TowerState.Defence:
+				animations.play(&"idle")
 		UnitState.Walk:
 			animations.play(&"walk")
 		UnitState.Attack:
@@ -58,9 +43,12 @@ func _on_set_unit_state(_old: String, new: String) -> void:
 			await animations.animation_finished
 			if unit_state != UnitState.Attack:
 				return
-			if is_instance_valid(current_enemy) and is_player:
-				WS.attack(self.id, current_enemy.id)
-			current_enemy = null
+			if attack_area.has_overlapping_areas():
+				find_nearest_enemy()
+			else:
+				nearest_enemy = null
+			if is_instance_valid(nearest_enemy) and is_player:
+				WS.attack(self.id, nearest_enemy.id)
 			unit_state = UnitState.WaitAttack
 		UnitState.WaitAttack:
 			animations.play(&"idle")
@@ -68,7 +56,7 @@ func _on_set_unit_state(_old: String, new: String) -> void:
 			await wait_attack_timer.timeout
 			if unit_state != UnitState.WaitAttack:
 				return
-			unit_state = UnitState.None
+			action_none()
 		UnitState.Death:
 			animations.play(&"death")
 			await animations.animation_finished
@@ -76,10 +64,7 @@ func _on_set_unit_state(_old: String, new: String) -> void:
 
 func _on_set_direction(old: Vector2, new: Vector2) -> void:
 	super._on_set_direction(old, new)
-	match new:
-		Vector2.RIGHT:
-			animations.flip_h = false
-			animations.position = ANIMATIONS_POS_RIGHT
-		Vector2.LEFT:
-			animations.flip_h = true
-			animations.position = ANIMATIONS_POS_LEFT
+	if new.x > 0:
+		animations.position = ANIMATIONS_POS_RIGHT
+	else:
+		animations.position = ANIMATIONS_POS_LEFT

@@ -40,6 +40,8 @@ _attack_area_path = NodePath("AttackArea")
 _attack_collision_path = NodePath("AttackArea/CollisionShape2D")
 _agr_area_path = NodePath("AgrArea")
 _agr_collision_path = NodePath("AgrArea/CollisionShape2D")
+_health_bar_path = NodePath("ProgressBar")
+_animations_path = NodePath("UnitArea/Animations")
 
 [node name="UnitArea" type="Area2D" parent="."]
 collision_layer = 0

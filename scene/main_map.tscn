@@ -216,9 +216,11 @@ tile_set = SubResource("TileSet_utjqm")
 [node name="EnemyTower" parent="." instance=ExtResource("2_hquly")]
 position = Vector2(1950, 614)
 is_player = false
+defence_position = Vector2(-485, -17)
 
 [node name="PlayerTower" parent="." instance=ExtResource("2_hquly")]
 position = Vector2(150, 614)
+defence_position = Vector2(485, -17)
 
 [node name="Torch" parent="." instance=ExtResource("11_ruj8r")]
 position = Vector2(-203, 561)
@@ -336,7 +338,7 @@ stretch_mode = 4
 
 [node name="MoneyValue" type="Label" parent="UI Layer/UI/Town/MoneyBackground/VBoxContainer"]
 layout_mode = 2
-text = "200"
+text = "500"
 horizontal_alignment = 2
 
 [node name="GoBattleButton" type="TextureButton" parent="UI Layer/UI/Town"]
@@ -420,7 +422,7 @@ stretch_mode = 4
 
 [node name="MoneyValue" type="Label" parent="UI Layer/UI/Battle/MoneyBackground/VBoxContainer"]
 layout_mode = 2
-text = "200"
+text = "500"
 horizontal_alignment = 2
 
 [node name="GoTownButton" type="TextureButton" parent="UI Layer/UI/Battle"]
@@ -468,7 +470,7 @@ offset_bottom = 64.0
 
 [node name="MinerPrice" type="Label" parent="UI Layer/UI/Battle/HBoxContainer/Miner"]
 layout_mode = 2
-text = "999999"
+text = "750"
 horizontal_alignment = 1
 
 [node name="Soldier" type="VBoxContainer" parent="UI Layer/UI/Battle/HBoxContainer"]
@@ -497,7 +499,7 @@ offset_bottom = 64.0
 
 [node name="SoldierPrice" type="Label" parent="UI Layer/UI/Battle/HBoxContainer/Soldier"]
 layout_mode = 2
-text = "999999"
+text = "100"
 horizontal_alignment = 1
 
 [node name="Samurai" type="VBoxContainer" parent="UI Layer/UI/Battle/HBoxContainer"]
@@ -526,36 +528,7 @@ offset_bottom = 64.0
 
 [node name="SamuraiPrice" type="Label" parent="UI Layer/UI/Battle/HBoxContainer/Samurai"]
 layout_mode = 2
-text = "999999"
-horizontal_alignment = 1
-
-[node name="Minotaur" type="VBoxContainer" parent="UI Layer/UI/Battle/HBoxContainer"]
-custom_minimum_size = Vector2(60, 0)
-layout_mode = 2
-
-[node name="Control" type="Control" parent="UI Layer/UI/Battle/HBoxContainer/Minotaur"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="MinotaurButton" type="TextureButton" parent="UI Layer/UI/Battle/HBoxContainer/Minotaur/Control"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 0
-offset_right = 60.0
-offset_bottom = 60.0
-texture_normal = ExtResource("22_utjqm")
-ignore_texture_size = true
-stretch_mode = 4
-
-[node name="CircularProgressBar" parent="UI Layer/UI/Battle/HBoxContainer/Minotaur/Control" instance=ExtResource("21_utjqm")]
-layout_mode = 0
-offset_left = -4.0
-offset_top = -4.0
-offset_right = 64.0
-offset_bottom = 64.0
-
-[node name="MinotaurPrice" type="Label" parent="UI Layer/UI/Battle/HBoxContainer/Minotaur"]
-layout_mode = 2
-text = "999999"
+text = "175"
 horizontal_alignment = 1
 
 [node name="Witch" type="VBoxContainer" parent="UI Layer/UI/Battle/HBoxContainer"]
@@ -584,8 +557,45 @@ offset_bottom = 64.0
 
 [node name="WitchPrice" type="Label" parent="UI Layer/UI/Battle/HBoxContainer/Witch"]
 layout_mode = 2
-text = "999999"
+text = "450"
 horizontal_alignment = 1
+
+[node name="Minotaur" type="VBoxContainer" parent="UI Layer/UI/Battle/HBoxContainer"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+
+[node name="Control" type="Control" parent="UI Layer/UI/Battle/HBoxContainer/Minotaur"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MinotaurButton" type="TextureButton" parent="UI Layer/UI/Battle/HBoxContainer/Minotaur/Control"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 0
+offset_right = 60.0
+offset_bottom = 60.0
+texture_normal = ExtResource("22_utjqm")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="CircularProgressBar" parent="UI Layer/UI/Battle/HBoxContainer/Minotaur/Control" instance=ExtResource("21_utjqm")]
+layout_mode = 0
+offset_left = -4.0
+offset_top = -4.0
+offset_right = 64.0
+offset_bottom = 64.0
+
+[node name="MinotaurPrice" type="Label" parent="UI Layer/UI/Battle/HBoxContainer/Minotaur"]
+layout_mode = 2
+text = "1250"
+horizontal_alignment = 1
+
+[node name="Button" type="Button" parent="UI Layer/UI/Battle"]
+layout_mode = 0
+offset_left = 852.0
+offset_top = 55.0
+offset_right = 1114.0
+offset_bottom = 86.0
+text = "lskdjflsjflksjdflkjslkfjslkfjlsjdklsfjs"
 
 [node name="EndGame" type="Control" parent="UI Layer/UI"]
 process_mode = 2
@@ -695,7 +705,7 @@ stretch_mode = 4
 
 [node name="MoneyValue" type="Label" parent="UI Layer/UI/Mine/MoneyBackground/VBoxContainer"]
 layout_mode = 2
-text = "200"
+text = "500"
 horizontal_alignment = 2
 
 [connection signal="pressed" from="UI Layer/UI/Town/GoBattleButton" to="." method="_on_go_battle_button_pressed"]
@@ -704,7 +714,8 @@ horizontal_alignment = 2
 [connection signal="pressed" from="UI Layer/UI/Battle/HBoxContainer/Miner/Control/MinerButton" to="." method="_on_miner_button_pressed"]
 [connection signal="pressed" from="UI Layer/UI/Battle/HBoxContainer/Soldier/Control/SoldierButton" to="." method="_on_soldier_button_pressed"]
 [connection signal="pressed" from="UI Layer/UI/Battle/HBoxContainer/Samurai/Control/SamuraiButton" to="." method="_on_archer_button_pressed"]
-[connection signal="pressed" from="UI Layer/UI/Battle/HBoxContainer/Minotaur/Control/MinotaurButton" to="." method="_on_minotaur_button_pressed"]
 [connection signal="pressed" from="UI Layer/UI/Battle/HBoxContainer/Witch/Control/WitchButton" to="." method="_on_witch_button_pressed"]
+[connection signal="pressed" from="UI Layer/UI/Battle/HBoxContainer/Minotaur/Control/MinotaurButton" to="." method="_on_minotaur_button_pressed"]
+[connection signal="pressed" from="UI Layer/UI/Battle/Button" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="UI Layer/UI/EndGame/ColorRect/VerticalBox/exit_btn" to="." method="_on_exit_btn_pressed"]
 [connection signal="pressed" from="UI Layer/UI/Mine/GoTownButton" to="." method="_on_go_town_button_pressed"]

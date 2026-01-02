@@ -8362,3 +8362,10 @@ collision_mask = 0
 
 [node name="SpawnCollision" type="CollisionShape2D" parent="SpawnArea"]
 shape = SubResource("RectangleShape2D_jlhg4")
+
+[node name="DefencePosition" type="RayCast2D" parent="."]
+self_modulate = Color(0, 0, 1, 1)
+enabled = false
+target_position = Vector2(20, 0)
+collision_mask = 0
+collide_with_bodies = false

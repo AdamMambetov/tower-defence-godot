@@ -1,4 +1,4 @@
-extends Unit
+class_name Miner extends Unit
 
 
 class UnitState:
@@ -94,7 +94,7 @@ func _physics_process(delta: float) -> void:
 				route = Global.Route.Mine
 				unit_state = UnitState.Walk
 		UnitState.Walk:
-			move_unit(delta)
+			move_attack(delta)
 			if attack_area.has_overlapping_areas():
 				unit_state = UnitState.None
 				return
@@ -108,6 +108,11 @@ func update_info(info: Dictionary) -> void:
 	max_bag_capacity = info.max_bag_capacity
 	$ProgressBar.max_value = max_bag_capacity
 	bag_capacity = info.bag_capacity
+
+func get_default_direction() -> Vector2:
+	update_direction()
+	return direction
+
 
 func update_direction() -> void:
 	match route:

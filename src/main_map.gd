@@ -1,5 +1,7 @@
 extends Node2D
 
+signal unit_added(is_player: bool, unit_id: String, unit_priority: int)
+signal unit_removed(is_player: bool, unit_id: String)
 
 enum MapState {
 	Battle,
@@ -16,6 +18,7 @@ var move_by_mouse: bool = true
 var map_state: MapState = MapState.Battle:
 	set(value):
 		map_state = value
+		$"UI Layer".visible = true
 		$"UI Layer/UI/EndGame".visible = map_state == MapState.EndGame
 		$"UI Layer/UI/Town".visible = map_state == MapState.Town
 		$"UI Layer/UI/Battle".visible = map_state == MapState.Battle
@@ -33,6 +36,11 @@ var map_state: MapState = MapState.Battle:
 func _ready() -> void:
 	WS.new_data_received.connect(_on_WS_new_data_recieved)
 	WS.socket_closed.connect(_on_WS_socket_closed)
+	
+	unit_added.connect($PlayerTower._on_unit_added)
+	unit_removed.connect($PlayerTower._on_unit_removed)
+	unit_added.connect($EnemyTower._on_unit_added)
+	unit_removed.connect($EnemyTower._on_unit_removed)
 	
 	map_state = map_state
 	$"UI Layer/UI/Town".position = Vector2.ZERO
@@ -98,19 +106,24 @@ func spawn_request(unit_name: String) -> void:
 		printerr(error)
 
 func spawn_unit(is_player: bool, data: Dictionary) -> void:
-	var unit = Global.units[data.name].instantiate()
+	var unit: Unit = Global.units[data.name].instantiate()
 	var pos = Vector2(0, data.y)
 	unit.is_player = is_player
 	unit.update_info(data)
 	if is_player:
+		unit.tower_node = $PlayerTower
 		if data.unit_type == "miner":
 			pos = $"PlayerTower".global_position
 		else:
 			pos.x = $"PlayerTower".global_position.x
 	else:
+		unit.tower_node = $"EnemyTower"
 		pos.x = $"EnemyTower".global_position.x
 	unit.global_position = pos
+	unit.destroyed.connect(_on_unit_destroyed)
 	$"Units".add_child(unit)
+	if data.has("priority"):
+		unit_added.emit(is_player, data.id, data.priority)
 	if is_player:
 		var circular_progress_bar: CircularProgressBar = get_node(_circular_progress_bar_nodes[data.name])
 		circular_progress_bar.visible = true
@@ -185,3 +198,12 @@ func _on_go_mine_button_pressed() -> void:
 	map_state = MapState.Mine
 	$MineLocation/Camera.make_current()
 	pass
+
+func _on_unit_destroyed(is_player: bool, unit_id: String) -> void:
+	unit_removed.emit(is_player, unit_id)
+
+func _on_button_pressed() -> void:
+	if $PlayerTower.tower_state == Tower.TowerState.Attack:
+		$PlayerTower.tower_state = Tower.TowerState.Defence
+	else:
+		$PlayerTower.tower_state = Tower.TowerState.Attack
