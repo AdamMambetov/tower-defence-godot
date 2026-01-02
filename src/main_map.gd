@@ -26,6 +26,8 @@ var map_state: MapState = MapState.Battle:
 
 @export var _end_game_label_path: NodePath
 @onready var end_game_label: Label = get_node(_end_game_label_path)
+@export var _units_capacity_label_path: NodePath
+@onready var units_capacity_label: Label = get_node(_units_capacity_label_path)
 @export var _select_texture_path: NodePath
 @onready var select_texture: TextureRect = get_node(_select_texture_path)
 @export var _camera_path: NodePath
@@ -78,6 +80,9 @@ func _new_data_handler(data: Dictionary) -> void:
 			var prices = JSON.parse_string(data.hero_prices)
 			for el in prices:
 				get_node(_price_nodes.get(el[0])).text = str(int(el[1]))
+			$PlayerTower.init_matrix(data.units_capacity)
+			$EnemyTower.init_matrix(data.units_capacity)
+			units_capacity_label.text = "0/{0}".format([int(data.units_capacity)])
 		"end_game":
 			UserInfo.set_room_id("")
 			get_tree().paused = true
@@ -126,6 +131,10 @@ func spawn_unit(is_player: bool, data: Dictionary) -> void:
 	$"Units".add_child(unit)
 	if data.priority != null:
 		unit_added.emit(is_player, data.id, data.priority)
+		units_capacity_label.text = "{0}/{1}".format([
+			$PlayerTower.get_unit_count(),
+			$PlayerTower.defence_matrix.size()
+		])
 	if is_player:
 		var circular_progress_bar: CircularProgressBar = get_node(_circular_progress_bar_nodes[data.name])
 		circular_progress_bar.visible = true
@@ -199,10 +208,13 @@ func _on_go_mine_button_pressed() -> void:
 	move_by_mouse = false
 	map_state = MapState.Mine
 	$MineLocation/Camera.make_current()
-	pass
 
 func _on_unit_destroyed(is_player: bool, unit_id: String) -> void:
 	unit_removed.emit(is_player, unit_id)
+	units_capacity_label.text = "{0}/{1}".format([
+		$PlayerTower.get_unit_count(),
+		$PlayerTower.defence_matrix.size()
+	])
 
 func _on_attack_button_pressed() -> void:
 	var button = $"UI Layer/UI/Battle/VBoxContainer/AttackButton"

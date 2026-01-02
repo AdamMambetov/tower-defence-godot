@@ -30,7 +30,8 @@ class DefenceItem:
 		if is_instance_valid($DefencePosition):
 			$DefencePosition.position = Vector2(0, defence_position.y)
 			$DefencePosition.target_position = Vector2(defence_position.x, 0)
-var defence_range: Array = [-38.4, 0.0, 38.4]
+var defence_range_x: Array = [-55.0, 0.0, 55.0]
+var defence_range_y: Array = [-38.4, 0.0, 38.4]
 var defence_matrix: Array[DefenceItem] = []
 
 var id: String = "tower"
@@ -64,9 +65,12 @@ func _ready() -> void:
 	tower_area.set_collision_mask_value(2, !is_player)
 	tower_area.set_collision_mask_value(3, is_player)
 	update_scale()
-	for _i in range(15):
-		defence_matrix.push_back(DefenceItem.new())
 
+
+func init_matrix(size: int) -> void:
+	defence_matrix.clear()
+	for _i in range(size):
+		defence_matrix.push_back(DefenceItem.new())
 
 func update_scale() -> void:
 	if !is_instance_valid($TowerArea):
@@ -84,9 +88,16 @@ func get_defence_position(unit_id: String) -> Vector2:
 	var row = idx % 3
 	var result = $DefencePosition.global_position
 	result.x += defence_position.x
-	result.y += defence_range[row]
-	result.x += defence_range[0 if is_player else 2] * column
+	result.y += defence_range_y[row]
+	result.x += defence_range_x[0 if is_player else 2] * column
 	return result
+
+func get_unit_count() -> int:
+	var res = 0
+	for el in defence_matrix:
+		if !el.id.is_empty():
+			res += 1
+	return res
 
 
 func _on_WS_new_data_received(result: Dictionary) -> void:

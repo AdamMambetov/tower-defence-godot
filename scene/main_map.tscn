@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=4 uid="uid://d1vrkfxgttq3c"]
+[gd_scene load_steps=40 format=4 uid="uid://d1vrkfxgttq3c"]
 
 [ext_resource type="Script" uid="uid://cfltnwoeynwn2" path="res://src/main_map.gd" id="1_xf4q7"]
 [ext_resource type="Texture2D" uid="uid://d3a0835k1w76s" path="res://file/background/background_layer_1.png" id="2_13gc7"]
@@ -28,6 +28,8 @@
 [ext_resource type="Texture2D" uid="uid://de2yrbhey0f3d" path="res://file/icon/defence_icon.png" id="27_oafc4"]
 [ext_resource type="Texture2D" uid="uid://d4l7pg8rtcfi5" path="res://file/icon/UI_Flat_Select01a_1.png" id="27_t3s1h"]
 [ext_resource type="Texture2D" uid="uid://clgt2ok7ey150" path="res://file/icon/WitchPreview.png" id="28_t3s1h"]
+[ext_resource type="Texture2D" uid="uid://c8hew7gsu7p7d" path="res://file/icon/UI_Flat_Button01a_1.png" id="29_t2adl"]
+[ext_resource type="Texture2D" uid="uid://5sqqcja6ej0g" path="res://file/icon/units_count_icon.png" id="30_ecsw8"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vrvtq"]
 texture = ExtResource("9_vvnmp")
@@ -155,6 +157,7 @@ size = Vector2(900, 40)
 [node name="MainMap" type="Node2D"]
 script = ExtResource("1_xf4q7")
 _end_game_label_path = NodePath("UI Layer/UI/EndGame/ColorRect/VerticalBox/Label")
+_units_capacity_label_path = NodePath("UI Layer/UI/Battle/UnitsCapacity/UnitsCapacityLabel")
 _select_texture_path = NodePath("UI Layer/UI/Battle/VBoxContainer/AttackButton/SelectTexture")
 _camera_path = NodePath("Camera2D")
 _price_nodes = Dictionary[String, NodePath]({
@@ -629,6 +632,38 @@ layout_mode = 2
 texture_normal = ExtResource("27_oafc4")
 ignore_texture_size = true
 stretch_mode = 5
+
+[node name="UnitsCapacity" type="TextureRect" parent="UI Layer/UI/Battle"]
+self_modulate = Color(0.60784316, 0.5058824, 0.45882353, 1)
+custom_minimum_size = Vector2(118, 118)
+layout_mode = 0
+offset_left = 737.0
+offset_top = 16.0
+offset_right = 817.0
+offset_bottom = 96.0
+texture = ExtResource("29_t2adl")
+
+[node name="TextureRect" type="TextureRect" parent="UI Layer/UI/Battle/UnitsCapacity"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("30_ecsw8")
+stretch_mode = 4
+
+[node name="UnitsCapacityLabel" type="Label" parent="UI Layer/UI/Battle/UnitsCapacity"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 40
+text = "0/15"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="EndGame" type="Control" parent="UI Layer/UI"]
 process_mode = 2
