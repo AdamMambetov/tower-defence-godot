@@ -90,14 +90,20 @@ func get_defence_position(unit_id: String) -> Vector2:
 
 
 func _on_WS_new_data_received(result: Dictionary) -> void:
-	if result.type != "attack":
-		return
-	if result.has("me_tower") and is_player:
-		health = result.me_tower
-		prints("me_tower", result.me_tower)
-	elif result.has("enemy_tower") and !is_player:
-		health = result.enemy_tower
-		prints("enemy_tower", result.enemy_tower)
+	match result.type:
+		"attack":
+			if result.has("me_tower") and is_player:
+				health = result.me_tower
+				prints("me_tower", result.me_tower)
+			elif result.has("enemy_tower") and !is_player:
+				health = result.enemy_tower
+				prints("enemy_tower", result.enemy_tower)
+		"go_attack":
+			if !is_player:
+				tower_state = TowerState.Attack
+		"go_defence":
+			if !is_player:
+				tower_state = TowerState.Defence
 
 func _on_unit_added(unit_is_player: bool, unit_id: String, unit_priority: int) -> void:
 	if unit_is_player != is_player:

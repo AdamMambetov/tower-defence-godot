@@ -26,6 +26,8 @@ var map_state: MapState = MapState.Battle:
 
 @export var _end_game_label_path: NodePath
 @onready var end_game_label: Label = get_node(_end_game_label_path)
+@export var _select_texture_path: NodePath
+@onready var select_texture: TextureRect = get_node(_select_texture_path)
 @export var _camera_path: NodePath
 @onready var camera: Camera2D = get_node(_camera_path)
 @export var _price_nodes: Dictionary[String, NodePath]
@@ -122,7 +124,7 @@ func spawn_unit(is_player: bool, data: Dictionary) -> void:
 	unit.global_position = pos
 	unit.destroyed.connect(_on_unit_destroyed)
 	$"Units".add_child(unit)
-	if data.has("priority"):
+	if data.priority != null:
 		unit_added.emit(is_player, data.id, data.priority)
 	if is_player:
 		var circular_progress_bar: CircularProgressBar = get_node(_circular_progress_bar_nodes[data.name])
@@ -202,8 +204,14 @@ func _on_go_mine_button_pressed() -> void:
 func _on_unit_destroyed(is_player: bool, unit_id: String) -> void:
 	unit_removed.emit(is_player, unit_id)
 
-func _on_button_pressed() -> void:
-	if $PlayerTower.tower_state == Tower.TowerState.Attack:
-		$PlayerTower.tower_state = Tower.TowerState.Defence
-	else:
-		$PlayerTower.tower_state = Tower.TowerState.Attack
+func _on_attack_button_pressed() -> void:
+	var button = $"UI Layer/UI/Battle/VBoxContainer/AttackButton"
+	select_texture.reparent(button, false)
+	$PlayerTower.tower_state = Tower.TowerState.Attack
+	WS.socket.send_text(JSON.stringify({type = "go_attack"}))
+
+func _on_defence_button_pressed() -> void:
+	var button = $"UI Layer/UI/Battle/VBoxContainer/DefenceButton"
+	select_texture.reparent(button, false)
+	$PlayerTower.tower_state = Tower.TowerState.Defence
+	WS.socket.send_text(JSON.stringify({type = "go_defence"}))
