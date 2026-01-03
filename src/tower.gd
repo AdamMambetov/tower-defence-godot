@@ -27,9 +27,9 @@ class DefenceItem:
 @export var defence_position: Vector2:
 	set(value):
 		defence_position = value
-		if is_instance_valid($DefencePosition):
-			$DefencePosition.position = Vector2(0, defence_position.y)
-			$DefencePosition.target_position = Vector2(defence_position.x, 0)
+		if is_instance_valid($DefenceShapeCast):
+			$DefenceShapeCast.position = Vector2(0, defence_position.y)
+			$DefenceShapeCast.target_position = Vector2(defence_position.x, 0)
 var defence_range_x: Array = [-55.0, 0.0, 55.0]
 var defence_range_y: Array = [-38.4, 0.0, 38.4]
 var defence_matrix: Array[DefenceItem] = []
@@ -44,17 +44,23 @@ var health: float = 1000:
 		$PlayerHealthBar.value = health
 		$PlayerHealthBar/HealthValue.text = str(int(health))
 
-var tower_state: String = TowerState.Attack:
+var tower_state: String = TowerState.Defence:
 	set(value):
+		if tower_state == value:
+			return
 		var old = tower_state
 		tower_state = value
 		tower_state_changed.emit(old, tower_state)
+		_send_tower_state()
 
 @export var _tower_area_path: NodePath
 @onready var tower_area: Area2D = get_node(_tower_area_path)
 
 @export var _tower_collition_path: NodePath
 @onready var tower_collition: CollisionShape2D = get_node(_tower_collition_path)
+
+@export var _defence_shape_cast_path: NodePath
+@onready var defence_shape_cast: ShapeCast2D = get_node(_defence_shape_cast_path)
 
 
 func _ready() -> void:
@@ -64,6 +70,8 @@ func _ready() -> void:
 	tower_area.set_collision_layer_value(3, !is_player)
 	tower_area.set_collision_mask_value(2, !is_player)
 	tower_area.set_collision_mask_value(3, is_player)
+	defence_shape_cast.set_collision_mask_value(2, !is_player)
+	defence_shape_cast.set_collision_mask_value(3, is_player)
 	update_scale()
 
 
@@ -86,7 +94,7 @@ func get_defence_position(unit_id: String) -> Vector2:
 		return Vector2.ZERO
 	var column = idx / 3
 	var row = idx % 3
-	var result = $DefencePosition.global_position
+	var result = defence_shape_cast.global_position
 	result.x += defence_position.x
 	result.y += defence_range_y[row]
 	result.x += defence_range_x[0 if is_player else 2] * column
@@ -98,6 +106,19 @@ func get_unit_count() -> int:
 		if !el.id.is_empty():
 			res += 1
 	return res
+
+func has_enemies() -> bool:
+	return defence_shape_cast.is_colliding()
+
+
+func _send_tower_state() -> void:
+	if !is_player:
+		return
+	var type = "go_attack"
+	match tower_state:
+		TowerState.Defence:
+			type = "go_defence"
+	WS.socket.send_text(JSON.stringify({ type = type }))
 
 
 func _on_WS_new_data_received(result: Dictionary) -> void:

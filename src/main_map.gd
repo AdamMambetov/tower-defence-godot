@@ -220,10 +220,8 @@ func _on_attack_button_pressed() -> void:
 	var button = $"UI Layer/UI/Battle/VBoxContainer/AttackButton"
 	select_texture.reparent(button, false)
 	$PlayerTower.tower_state = Tower.TowerState.Attack
-	WS.socket.send_text(JSON.stringify({type = "go_attack"}))
 
 func _on_defence_button_pressed() -> void:
 	var button = $"UI Layer/UI/Battle/VBoxContainer/DefenceButton"
 	select_texture.reparent(button, false)
 	$PlayerTower.tower_state = Tower.TowerState.Defence
-	WS.socket.send_text(JSON.stringify({type = "go_defence"}))

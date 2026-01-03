@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=4 uid="uid://bgqto2ho3d3ol"]
+[gd_scene load_steps=28 format=4 uid="uid://bgqto2ho3d3ol"]
 
 [ext_resource type="Texture2D" uid="uid://dnhk6e8h8p3f0" path="res://file/castle/tile_castle.png" id="1_t5t8u"]
 [ext_resource type="Script" uid="uid://2sxhxqae7k0" path="res://src/tower.gd" id="1_tfrn6"]
@@ -8261,12 +8261,17 @@ bg_color = Color(1, 0, 0, 1)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jlhg4"]
 size = Vector2(5, 60)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tawd1"]
+size = Vector2(200, 150)
+
 [node name="Tower" type="Node2D"]
 script = ExtResource("1_tfrn6")
 is_player = true
 spawn_range_y = Vector2(5, 60)
+defence_position = Vector2(200, 0)
 _tower_area_path = NodePath("TowerArea")
 _tower_collition_path = NodePath("TowerArea/CollisionShape2D")
+_defence_shape_cast_path = NodePath("DefenceShapeCast")
 
 [node name="TowerArea" type="Area2D" parent="."]
 collision_layer = 8
@@ -8362,10 +8367,12 @@ collision_mask = 0
 
 [node name="SpawnCollision" type="CollisionShape2D" parent="SpawnArea"]
 shape = SubResource("RectangleShape2D_jlhg4")
+debug_color = Color(2.7434528e-06, 0.64751875, 0.21727288, 0.41960785)
 
-[node name="DefencePosition" type="RayCast2D" parent="."]
+[node name="DefenceShapeCast" type="ShapeCast2D" parent="."]
 self_modulate = Color(0, 0, 1, 1)
-enabled = false
-target_position = Vector2(20, 0)
+shape = SubResource("RectangleShape2D_tawd1")
+target_position = Vector2(193.285, 0)
 collision_mask = 0
+collide_with_areas = true
 collide_with_bodies = false

@@ -79,16 +79,22 @@ func _ready() -> void:
 		health_bar.add_theme_stylebox_override("fill", fill_box)
 
 func _physics_process(delta: float) -> void:
-	if unit_state.is_empty() and tower_node.tower_state == Tower.TowerState.Defence:
-		if !is_on_defence_position():
-			action_move()
-	if !is_move_state():
-		return
 	match tower_node.tower_state:
 		Tower.TowerState.Attack:
+			if !is_move_state():
+				return
 			move_attack(delta)
 		Tower.TowerState.Defence:
-			move_defence(delta)
+			if (!is_on_defence_position() or tower_node.has_enemies()) \
+					and unit_state.is_empty():
+				action_move()
+			if !is_move_state():
+				return
+			
+			if tower_node.has_enemies():
+				move_attack(delta)
+			else:
+				move_defence(delta)
 
 func _exit_tree() -> void:
 	destroyed.emit(is_player, id)
@@ -108,6 +114,7 @@ func update_info(info: Dictionary) -> void:
 
 func move_attack(delta: float) -> void:
 	direction = get_default_direction()
+	find_nearest_enemy()
 	if is_instance_valid(nearest_enemy):
 		direction = global_position.direction_to(nearest_enemy.global_position)
 		direction.x /= 2
@@ -122,6 +129,11 @@ func move_defence(delta: float) -> void:
 		return
 	var to_position = tower_node.get_defence_position(id)
 	direction = global_position.direction_to(to_position)
+	if (direction.x > 0 and is_player) \
+			or (direction.x < 0 and !is_player):
+		if is_instance_valid(nearest_enemy):
+			action_attack()
+			return
 	position += speed * delta * direction
 
 func action_none() -> void:
@@ -133,10 +145,10 @@ func action_none() -> void:
 			else:
 				action_move()
 		Tower.TowerState.Defence:
-			if !is_on_defence_position():
-				action_move()
-			elif attack_area.has_overlapping_areas():
+			if tower_node.has_enemies() and attack_area.has_overlapping_areas():
 				action_attack()
+			elif !is_on_defence_position():
+				action_move()
 
 func action_attack() -> void:
 	pass
@@ -217,7 +229,9 @@ func _on_tower_state_changed(_old: String, _new: String) -> void:
 		action_move()
 
 func _on_attack_area_area_entered(_area: Area2D) -> void:
-	if is_move_state() and tower_node.tower_state == Tower.TowerState.Attack:
+	var is_tower_state_attack = tower_node.tower_state == Tower.TowerState.Attack
+	if (is_tower_state_attack or tower_node.has_enemies()) \
+			and is_move_state():
 		action_none()
 	if unit_state.is_empty():
 		action_attack()

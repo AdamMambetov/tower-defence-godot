@@ -32,10 +32,11 @@ func action_move() -> void:
 	unit_state = UnitState.Run
 
 
-func _on_set_unit_state(_old: String, new: String) -> void:
+func _on_set_unit_state(old: String, new: String) -> void:
 	match new:
 		UnitState.None:
-			if tower_node.tower_state == Tower.TowerState.Defence:
+			if old != UnitState.Attack \
+					and tower_node.tower_state == Tower.TowerState.Defence:
 				animations.play(&"idle")
 		UnitState.Run:
 			animations.play(&"run")
