@@ -18,10 +18,14 @@ const ARROW_SCENE = preload("res://scene/arrow.tscn")
 func _ready() -> void:
 	super._ready()
 	wait_attack_timer.wait_time = attack_speed
+	_on_tower_state_changed("", tower_node.tower_state)
 
 
 func is_move_state() -> bool:
 	return unit_state == UnitState.Run
+
+func is_attack_state() -> bool:
+	return unit_state == UnitState.Shot
 
 func action_attack() -> void:
 	unit_state = UnitState.Shot

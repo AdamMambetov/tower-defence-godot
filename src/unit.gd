@@ -131,13 +131,13 @@ func move_defence(delta: float) -> void:
 	direction = global_position.direction_to(to_position)
 	if (direction.x > 0 and is_player) \
 			or (direction.x < 0 and !is_player):
-		if is_instance_valid(nearest_enemy):
+		if has_enemy_on_attack_distance():
 			action_attack()
 			return
 	position += speed * delta * direction
 
 func action_none() -> void:
-	unit_state = ""
+	find_nearest_enemy()
 	match tower_node.tower_state:
 		Tower.TowerState.Attack:
 			if attack_area.has_overlapping_areas():
@@ -145,10 +145,12 @@ func action_none() -> void:
 			else:
 				action_move()
 		Tower.TowerState.Defence:
-			if tower_node.has_enemies() and attack_area.has_overlapping_areas():
+			if has_enemy_on_attack_distance():
 				action_attack()
 			elif !is_on_defence_position():
 				action_move()
+			else:
+				unit_state = ""
 
 func action_attack() -> void:
 	pass
@@ -157,6 +159,9 @@ func action_move() -> void:
 	pass
 
 func is_move_state() -> bool:
+	return false
+ 
+func is_attack_state() -> bool:
 	return false
 
 func get_default_direction() -> Vector2:
@@ -181,8 +186,23 @@ func is_on_defence_position() -> bool:
 	var to_position = tower_node.get_defence_position(id)
 	return global_position.distance_to(to_position) <= 1
 
+func horizontal_distance(pos1: Vector2, pos2: Vector2) -> float:
+	return abs(pos1.x - pos2.x)
 
-func _on_set_health(_old: float, new: float) -> void:
+func has_enemy_on_attack_distance() -> bool:
+	find_nearest_enemy()
+	if !is_instance_valid(nearest_enemy):
+		return false
+	var my_pos = global_position
+	my_pos.x += unit_collision.shape.size.x / 2
+	var enemy_pos = nearest_enemy.global_position
+	enemy_pos.x -= nearest_enemy.unit_collision.shape.size.x / 2
+	var enemy_distance = horizontal_distance(my_pos, enemy_pos)
+	var attack_distance = attack_collision.shape.size.x
+	return enemy_distance <= attack_distance
+
+
+func _on_set_health(old: float, new: float) -> void:
 	if !is_instance_valid(health_bar):
 		health_bar = get_node(_health_bar_path)
 	health_bar.value = new
@@ -190,7 +210,9 @@ func _on_set_health(_old: float, new: float) -> void:
 		var last_frame = animations \
 				.sprite_frames \
 				.get_frame_count(animations.animation) - 1
-		if animations.frame == last_frame and animations.is_playing():
+		if animations.frame == last_frame \
+				and animations.is_playing() \
+				and is_attack_state():
 			await animations.animation_finished
 			await get_tree().physics_frame
 		unit_state = "death"
@@ -199,7 +221,7 @@ func _on_set_health(_old: float, new: float) -> void:
 func _on_set_unit_state(old: String, new: String) -> void:
 	prints(id, old, new)
 
-func _on_set_direction(_old: Vector2, new: Vector2) -> void:
+func _on_set_direction(old: Vector2, new: Vector2) -> void:
 	if !is_instance_valid(attack_collision):
 		attack_collision = get_node(_attack_collision_path)
 	if !is_instance_valid(unit_collision):
@@ -224,11 +246,12 @@ func _on_WS_new_data_recieved(result: Dictionary) -> void:
 	if result.type == "attack":
 		health = result.attacked_units.get(id)
 
-func _on_tower_state_changed(_old: String, _new: String) -> void:
+func _on_tower_state_changed(old: String, new: String) -> void:
 	if unit_state.is_empty():
 		action_move()
 
-func _on_attack_area_area_entered(_area: Area2D) -> void:
+func _on_attack_area_area_entered(area: Area2D) -> void:
+	find_nearest_enemy()
 	var is_tower_state_attack = tower_node.tower_state == Tower.TowerState.Attack
 	if (is_tower_state_attack or tower_node.has_enemies()) \
 			and is_move_state():
@@ -236,11 +259,11 @@ func _on_attack_area_area_entered(_area: Area2D) -> void:
 	if unit_state.is_empty():
 		action_attack()
 
-func _on_attack_area_area_exited(_area: Area2D) -> void:
+func _on_attack_area_area_exited(area: Area2D) -> void:
 	find_nearest_enemy()
 
-func _on_agr_area_area_entered(_area: Area2D) -> void:
+func _on_agr_area_area_entered(area: Area2D) -> void:
 	find_nearest_enemy()
 
-func _on_agr_area_area_exited(_area: Area2D) -> void:
+func _on_agr_area_area_exited(area: Area2D) -> void:
 	find_nearest_enemy()

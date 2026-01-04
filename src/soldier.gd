@@ -25,6 +25,9 @@ func _ready() -> void:
 func is_move_state() -> bool:
 	return unit_state == UnitState.Run
 
+func is_attack_state() -> bool:
+	return unit_state == UnitState.Attack
+
 func action_attack() -> void:
 	unit_state = UnitState.Attack
 

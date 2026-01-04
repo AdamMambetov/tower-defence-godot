@@ -11,7 +11,7 @@ class TowerState:
 
 class DefenceItem:
 	var id: String
-	var priority: int
+	var priority: int = int(-INF)
 
 
 @export var is_player: bool:
@@ -155,3 +155,5 @@ func _on_unit_removed(unit_is_player: bool, unit_id: String) -> void:
 	if idx == -1:
 		return
 	defence_matrix[idx].id = ""
+	defence_matrix[idx].priority = int(-INF)
+	defence_matrix.sort_custom(func(a, b): return a.priority > b.priority)

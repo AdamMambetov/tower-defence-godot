@@ -24,7 +24,7 @@ var bag_capacity: float = 0:
 		if bag_capacity == max_bag_capacity:
 			route = Global.Route.Tower
 			unit_state = UnitState.Walk
-var in_mine: bool =false
+var in_mine: bool = false
 
 
 func _ready() -> void:
@@ -113,6 +113,8 @@ func get_default_direction() -> Vector2:
 	update_direction()
 	return direction
 
+func action_none() -> void:
+	unit_state = UnitState.None
 
 func update_direction() -> void:
 	match route:
