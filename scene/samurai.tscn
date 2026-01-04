@@ -271,10 +271,10 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2xip1"]
-size = Vector2(530, 60)
+size = Vector2(400, 60)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_uwns0"]
-size = Vector2(1000, 153.985)
+size = Vector2(700, 200)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ggppv"]
 bg_color = Color(0, 0, 0, 1)
@@ -328,7 +328,7 @@ collision_layer = 0
 collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea"]
-position = Vector2(285, -30)
+position = Vector2(220, -30)
 shape = SubResource("RectangleShape2D_2xip1")
 debug_color = Color(1, 0, 0, 0.41960785)
 
@@ -337,7 +337,7 @@ collision_layer = 0
 collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AgrArea"]
-position = Vector2(520, -30)
+position = Vector2(370, -30)
 shape = SubResource("RectangleShape2D_uwns0")
 debug_color = Color(1, 0.39215687, 0, 0.41960785)
 

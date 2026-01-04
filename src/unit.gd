@@ -193,10 +193,18 @@ func has_enemy_on_attack_distance() -> bool:
 	find_nearest_enemy()
 	if !is_instance_valid(nearest_enemy):
 		return false
+	
 	var my_pos = global_position
-	my_pos.x += unit_collision.shape.size.x / 2
+	var x_sign = 1 if is_player else -1
+	my_pos.x += unit_collision.shape.size.x / 2 * x_sign
+	
 	var enemy_pos = nearest_enemy.global_position
-	enemy_pos.x -= nearest_enemy.unit_collision.shape.size.x / 2
+	var enemy_x_sign = 1 if nearest_enemy.is_player else -1
+	if nearest_enemy is Unit:
+		enemy_pos.x += nearest_enemy.unit_collision.shape.size.x / 2 * enemy_x_sign
+	elif nearest_enemy is Tower:
+		enemy_pos.x += nearest_enemy.tower_collition.shape.size.x / 2 * enemy_x_sign
+	
 	var enemy_distance = horizontal_distance(my_pos, enemy_pos)
 	var attack_distance = attack_collision.shape.size.x
 	return enemy_distance <= attack_distance
