@@ -53,6 +53,7 @@ func _ready() -> void:
 	for path in _circular_progress_bar_nodes.values():
 		var circular_progress_bar: CircularProgressBar = get_node(path)
 		circular_progress_bar.visible = false
+	AudioPlayer.play_battle()
 
 func _process(_delta: float) -> void:
 	if move_by_mouse:

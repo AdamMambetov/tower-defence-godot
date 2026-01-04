@@ -31,6 +31,7 @@ var accounts_state: AccountsState:
 
 
 func _ready() -> void:
+	AudioPlayer.play_main_menu()
 	if UserInfo.get_user_info().is_empty():
 		accounts_state = AccountsState.SignIn
 	else:
