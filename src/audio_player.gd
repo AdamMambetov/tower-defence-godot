@@ -11,6 +11,7 @@ var in_battle = false
 
 func _ready() -> void:
 	finished.connect(_on_finished)
+	volume_linear = 0.1
 
 
 func play_main_menu() -> void:

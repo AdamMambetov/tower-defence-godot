@@ -1,8 +1,11 @@
-[gd_scene load_steps=12 format=3 uid="uid://clbg1eyvs7ak8"]
+[gd_scene load_steps=14 format=3 uid="uid://clbg1eyvs7ak8"]
 
 [ext_resource type="Script" uid="uid://c155d6c6f3lr3" path="res://src/main_menu.gd" id="1_3er1b"]
+[ext_resource type="PackedScene" uid="uid://dxfvbrgnu75ji" path="res://scene/background.tscn" id="2_0iwki"]
 [ext_resource type="Texture2D" uid="uid://7oqbbmoglxqu" path="res://file/icon/icons8--66.png" id="2_2fwvj"]
 [ext_resource type="PackedScene" uid="uid://binsf0lskx6jt" path="res://scene/LoadingScreen.tscn" id="2_hxu56"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dclss"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3er1b"]
 
@@ -29,42 +32,65 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_3er1b")
 
-[node name="Label" type="Label" parent="."]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.071
-anchor_top = 0.31300002
-anchor_right = 0.071
-anchor_bottom = 0.31300002
-offset_left = -82.792
-offset_top = -11.82402
-offset_right = 85.208
-offset_bottom = 11.17598
-grow_vertical = 2
-text = "Tower Defence Godot"
+[node name="Background" parent="." instance=ExtResource("2_0iwki")]
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="Label" type="Label" parent="."]
 layout_mode = 0
-offset_right = 203.0
-offset_bottom = 648.0
-size_flags_horizontal = 3
+offset_left = 400.0
+offset_top = 230.0
+offset_right = 744.0
+offset_bottom = 276.0
+theme_override_colors/font_color = Color(1, 1, 1, 0.5176471)
+theme_override_font_sizes/font_size = 33
+text = "Tower Defence Legacy"
+
+[node name="MarginContainer" type="VFlowContainer" parent="."]
+custom_minimum_size = Vector2(10, 0)
+layout_direction = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -55.0
+offset_top = -24.0
+offset_right = 55.0
+offset_bottom = 136.0
+grow_horizontal = 2
+grow_vertical = 2
 alignment = 1
 
-[node name="start_btn" type="Button" parent="VBoxContainer"]
+[node name="start_btn" type="Button" parent="MarginContainer"]
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxEmpty_dclss")
 text = "Начать"
 
-[node name="settings_btn" type="Button" parent="VBoxContainer"]
-visible = false
+[node name="settings_btn" type="Button" parent="MarginContainer"]
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxEmpty_dclss")
 text = "Настройки"
 
-[node name="account_btn" type="Button" parent="VBoxContainer"]
+[node name="account_btn" type="Button" parent="MarginContainer"]
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxEmpty_dclss")
 text = "Аккаунт"
 
-[node name="exit_btn" type="Button" parent="VBoxContainer"]
+[node name="exit_btn" type="Button" parent="MarginContainer"]
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxEmpty_dclss")
 text = "Выход"
 
 [node name="GameMenu" type="ColorRect" parent="."]
@@ -280,10 +306,10 @@ layout_mode = 1
 oversampling_override = 1.0
 initial_position = 2
 
-[connection signal="pressed" from="VBoxContainer/start_btn" to="." method="_on_start_btn_pressed"]
-[connection signal="pressed" from="VBoxContainer/settings_btn" to="." method="_on_settings_btn_pressed"]
-[connection signal="pressed" from="VBoxContainer/account_btn" to="." method="_on_account_btn_pressed"]
-[connection signal="pressed" from="VBoxContainer/exit_btn" to="." method="_on_exit_btn_pressed"]
+[connection signal="pressed" from="MarginContainer/start_btn" to="." method="_on_start_btn_pressed"]
+[connection signal="pressed" from="MarginContainer/settings_btn" to="." method="_on_settings_btn_pressed"]
+[connection signal="pressed" from="MarginContainer/account_btn" to="." method="_on_account_btn_pressed"]
+[connection signal="pressed" from="MarginContainer/exit_btn" to="." method="_on_exit_btn_pressed"]
 [connection signal="pressed" from="GameMenu/VBoxContainer/play_random_btn" to="." method="_on_play_random_btn_pressed"]
 [connection signal="pressed" from="GameMenu/VBoxContainer/play_friend_btn" to="." method="_on_play_friend_btn_pressed"]
 [connection signal="text_changed" from="AccountsMenu/SignUp/username_le" to="." method="_on_username_le_text_changed"]
