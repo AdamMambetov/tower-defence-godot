@@ -5,6 +5,7 @@ enum MenuState {
 	None,
 	Game,
 	Accounts,
+	Settings,
 }
 
 enum AccountsState {
@@ -21,6 +22,7 @@ var menu_state: MenuState:
 		menu_state = value
 		$GameMenu.visible = menu_state == MenuState.Game
 		$AccountsMenu.visible = menu_state == MenuState.Accounts
+		$SettingsMenu.visible = menu_state == MenuState.Settings
 
 var accounts_state: AccountsState:
 	set(value):
@@ -32,19 +34,16 @@ var accounts_state: AccountsState:
 
 func _ready() -> void:
 	AudioPlayer.play_main_menu()
-	if UserInfo.get_user_info().is_empty():
-		accounts_state = AccountsState.SignIn
-	else:
+	accounts_state = AccountsState.SignIn
+	if !UserInfo.get_user_info().is_empty():
 		$LoadingScreen.visible = true
 		var success = await Api.update_access_token()
 		if !success:
-			accounts_state = AccountsState.SignIn
 			$LoadingScreen.visible = false
 			return
 		
 		var user_info = await Api.get_user_info()
 		if user_info.has("detail"):
-			accounts_state = AccountsState.SignIn
 			$LoadingScreen.visible = false
 			return
 		update_profile(user_info)
@@ -67,7 +66,7 @@ func _on_start_btn_pressed() -> void:
 	menu_state = MenuState.Game
 
 func _on_settings_btn_pressed() -> void:
-	pass # Replace with function body.
+	menu_state = MenuState.Settings
 
 func _on_account_btn_pressed() -> void:
 	menu_state = MenuState.Accounts
@@ -158,3 +157,10 @@ func _on_logout_btn_pressed() -> void:
 	UserInfo.set_user_info({})
 	Api.authorized = false
 	Api.access_token_timer.stop()
+
+func _on_music_slider_value_changed(value: float) -> void:
+	$SettingsMenu/VBoxContainer/Music/ValueLabel.text = "{0}%".format([int(value)])
+	AudioPlayer.set_music_volume(value)
+
+func _on_exit_button_pressed() -> void:
+	menu_state = MenuState.None

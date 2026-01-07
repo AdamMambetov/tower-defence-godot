@@ -1,25 +1,158 @@
-[gd_scene load_steps=14 format=3 uid="uid://clbg1eyvs7ak8"]
+[gd_scene load_steps=25 format=3 uid="uid://clbg1eyvs7ak8"]
 
 [ext_resource type="Script" uid="uid://c155d6c6f3lr3" path="res://src/main_menu.gd" id="1_3er1b"]
 [ext_resource type="PackedScene" uid="uid://dxfvbrgnu75ji" path="res://scene/background.tscn" id="2_0iwki"]
-[ext_resource type="Texture2D" uid="uid://7oqbbmoglxqu" path="res://file/icon/icons8--66.png" id="2_2fwvj"]
 [ext_resource type="PackedScene" uid="uid://binsf0lskx6jt" path="res://scene/LoadingScreen.tscn" id="2_hxu56"]
+[ext_resource type="Shader" uid="uid://digctqwu0sib2" path="res://scene/glass.gdshader" id="5_sepwh"]
+[ext_resource type="Texture2D" uid="uid://bcphp1anvu5gw" path="res://file/OneMint.png" id="6_2atga"]
+[ext_resource type="Texture2D" uid="uid://bwr4ca43vfjvg" path="res://file/Tick2.png" id="7_2atga"]
+[ext_resource type="Texture2D" uid="uid://7pgq4bgqka0i" path="res://file/icon/icons8--100.png" id="8_by01r"]
+[ext_resource type="Texture2D" uid="uid://b8sk5nfxhs1tf" path="res://file/icon/icons8--28.png" id="9_dclss"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dclss"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2atga"]
+bg_color = Color(0, 0, 0, 0.6)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_14wem"]
+bg_color = Color(0.225, 0.225, 0.225, 0.6)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dclss"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(1, 1, 1, 0.75)
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+expand_margin_left = 2.0
+expand_margin_top = 2.0
+expand_margin_right = 2.0
+expand_margin_bottom = 2.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sepwh"]
+shader = ExtResource("5_sepwh")
+shader_parameter/shape_type = 1
+shader_parameter/rect_size = Vector2(396, 196)
+shader_parameter/corner_radius_top_left = 20.0
+shader_parameter/corner_radius_top_right = 20.0
+shader_parameter/corner_radius_bottom_left = 20.0
+shader_parameter/corner_radius_bottom_right = 20.0
+shader_parameter/circle_radius = 100.0
+shader_parameter/outline_enabled = true
+shader_parameter/outline_width = 2.0
+shader_parameter/outline_color = Color(1, 1, 1, 0.8)
+shader_parameter/shadow_enabled = true
+shader_parameter/shadow_color = Color(0, 0, 0, 0.5)
+shader_parameter/shadow_offset = Vector2(10, 10)
+shader_parameter/shadow_blur = 15.0
+shader_parameter/edge_softness = 1.0
+shader_parameter/shape_color = Color(0.82959175, 0.8851425, 0.9882358, 1)
+shader_parameter/color_gradient_y = 1.5
+shader_parameter/color_gradient_x = -0.8
+shader_parameter/color_multiplier = 0.9
+shader_parameter/enable_screen_blur = true
+shader_parameter/blur_amount = 3.0
+shader_parameter/blur_samples = 4
+shader_parameter/glass_opacity = 0.2
+shader_parameter/node_size = Vector2(400, 200)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_by01r"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0, 1, 0, 0.4)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+corner_detail = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hmxu4"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0, 1, 0, 0.7490196)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+corner_detail = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ictww"]
+content_margin_left = 13.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(1, 1, 1, 0.61960787)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hmxu4"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1o50l"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0, 0.89411765, 0.8039216, 0.68235296)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cht4j"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0, 0.89411765, 0.8039216, 0.68235296)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ictww"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3er1b"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hxu56"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2fwvj"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0iwki"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_sepwh"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_14wem"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2atga"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_by01r"]
 
@@ -40,7 +173,7 @@ offset_left = 400.0
 offset_top = 230.0
 offset_right = 744.0
 offset_bottom = 276.0
-theme_override_colors/font_color = Color(1, 1, 1, 0.5176471)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 33
 text = "Tower Defence Legacy"
 
@@ -62,36 +195,442 @@ grow_vertical = 2
 alignment = 1
 
 [node name="start_btn" type="Button" parent="MarginContainer"]
+custom_minimum_size = Vector2(76, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 6
 theme_override_font_sizes/font_size = 18
 theme_override_styles/normal = SubResource("StyleBoxEmpty_dclss")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_2atga")
+theme_override_styles/hover = SubResource("StyleBoxFlat_14wem")
+theme_override_styles/focus = SubResource("StyleBoxFlat_dclss")
 text = "Начать"
 
 [node name="settings_btn" type="Button" parent="MarginContainer"]
+custom_minimum_size = Vector2(109, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 6
 theme_override_font_sizes/font_size = 18
 theme_override_styles/normal = SubResource("StyleBoxEmpty_dclss")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_2atga")
+theme_override_styles/hover = SubResource("StyleBoxFlat_14wem")
+theme_override_styles/focus = SubResource("StyleBoxFlat_dclss")
 text = "Настройки"
 
 [node name="account_btn" type="Button" parent="MarginContainer"]
+custom_minimum_size = Vector2(84, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 6
 theme_override_font_sizes/font_size = 18
 theme_override_styles/normal = SubResource("StyleBoxEmpty_dclss")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_2atga")
+theme_override_styles/hover = SubResource("StyleBoxFlat_14wem")
+theme_override_styles/focus = SubResource("StyleBoxFlat_dclss")
 text = "Аккаунт"
 
 [node name="exit_btn" type="Button" parent="MarginContainer"]
+custom_minimum_size = Vector2(69, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 6
 theme_override_font_sizes/font_size = 18
 theme_override_styles/normal = SubResource("StyleBoxEmpty_dclss")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_2atga")
+theme_override_styles/hover = SubResource("StyleBoxFlat_14wem")
+theme_override_styles/focus = SubResource("StyleBoxFlat_dclss")
 text = "Выход"
+
+[node name="SettingsMenu" type="Panel" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_sepwh")
+custom_minimum_size = Vector2(400, 200)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -100.0
+offset_right = 200.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SettingsMenu"]
+layout_mode = 0
+offset_left = 5.0
+offset_right = 395.0
+offset_bottom = 200.0
+
+[node name="Control" type="Control" parent="SettingsMenu/VBoxContainer"]
+custom_minimum_size = Vector2(0, 45.26)
+layout_mode = 2
+
+[node name="Title" type="Label" parent="SettingsMenu/VBoxContainer/Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -195.0
+offset_top = -15.499999
+offset_right = 195.0
+offset_bottom = 15.499999
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 20
+text = "Настройки"
+horizontal_alignment = 1
+
+[node name="ExitButton" type="TextureButton" parent="SettingsMenu/VBoxContainer/Control"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.97
+anchor_top = 0.082
+anchor_right = 0.97
+anchor_bottom = 0.082
+offset_left = -40.0
+offset_bottom = 40.0
+grow_horizontal = 0
+texture_normal = ExtResource("8_by01r")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="Music" type="HBoxContainer" parent="SettingsMenu/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="SettingsMenu/VBoxContainer/Music"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Громкость музыки"
+vertical_alignment = 1
+
+[node name="MusicSlider" type="HSlider" parent="SettingsMenu/VBoxContainer/Music"]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_icons/grabber = ExtResource("6_2atga")
+theme_override_icons/grabber_highlight = ExtResource("6_2atga")
+theme_override_icons/tick = ExtResource("7_2atga")
+theme_override_styles/grabber_area = SubResource("StyleBoxFlat_by01r")
+theme_override_styles/grabber_area_highlight = SubResource("StyleBoxFlat_hmxu4")
+step = 10.0
+value = 50.0
+tick_count = 11
+ticks_on_borders = true
+ticks_position = 3
+
+[node name="ValueLabel" type="Label" parent="SettingsMenu/VBoxContainer/Music"]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+text = "50%"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="AccountsMenu" type="Panel" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_sepwh")
+custom_minimum_size = Vector2(400, 275)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -137.5
+offset_right = 200.0
+offset_bottom = 137.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SignUp" type="VBoxContainer" parent="AccountsMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 6
+
+[node name="Control" type="Control" parent="AccountsMenu/SignUp"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Title" type="Label" parent="AccountsMenu/SignUp/Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -14.0
+offset_right = 200.0
+offset_bottom = 14.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 2
+theme_override_font_sizes/font_size = 20
+text = "Регистрация"
+horizontal_alignment = 1
+
+[node name="ExitButton" type="TextureButton" parent="AccountsMenu/SignUp/Control"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.97
+anchor_top = 0.082
+anchor_right = 0.97
+anchor_bottom = 0.082
+offset_left = -40.0
+offset_bottom = 40.0
+grow_horizontal = 0
+texture_normal = ExtResource("8_by01r")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="username_le" type="LineEdit" parent="AccountsMenu/SignUp"]
+custom_minimum_size = Vector2(260, 36)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.06469658, 0.06469651, 0.06469653, 1)
+theme_override_colors/font_placeholder_color = Color(0.47397572, 0.47397572, 0.47397572, 1)
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_ictww")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hmxu4")
+placeholder_text = "Имя пользователя"
+
+[node name="email_le" type="LineEdit" parent="AccountsMenu/SignUp"]
+custom_minimum_size = Vector2(260, 36)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.06469658, 0.06469651, 0.06469653, 1)
+theme_override_colors/font_placeholder_color = Color(0.47397572, 0.47397572, 0.47397572, 1)
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_ictww")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hmxu4")
+placeholder_text = "Почта"
+
+[node name="password_le" type="LineEdit" parent="AccountsMenu/SignUp"]
+custom_minimum_size = Vector2(260, 36)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.06469658, 0.06469651, 0.06469653, 1)
+theme_override_colors/font_placeholder_color = Color(0.47397572, 0.47397572, 0.47397572, 1)
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_ictww")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hmxu4")
+placeholder_text = "Пароль"
+secret = true
+
+[node name="sign_up_btn" type="Button" parent="AccountsMenu/SignUp"]
+custom_minimum_size = Vector2(260, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/normal = SubResource("StyleBoxFlat_1o50l")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_cht4j")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cht4j")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ictww")
+text = "Зарегистрироваться"
+
+[node name="go_sign_in_btn" type="Button" parent="AccountsMenu/SignUp"]
+custom_minimum_size = Vector2(260, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+theme_override_colors/font_color = Color(0.99015874, 0, 0.49002457, 1)
+theme_override_colors/font_focus_color = Color(0.99015874, 0, 0.49002457, 1)
+theme_override_colors/font_pressed_color = Color(0.76862746, 0.003921569, 0.78431374, 1)
+theme_override_colors/font_hover_color = Color(0.76862746, 0.003921569, 0.78431374, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.76862746, 0.003921569, 0.78431374, 1)
+theme_override_styles/normal = SubResource("StyleBoxEmpty_3er1b")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_hxu56")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_2fwvj")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ictww")
+text = "Уже есть учётная запись? Вход"
+
+[node name="SignIn" type="VBoxContainer" parent="AccountsMenu"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 6
+
+[node name="Control" type="Control" parent="AccountsMenu/SignIn"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Title" type="Label" parent="AccountsMenu/SignIn/Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -14.0
+offset_right = 200.0
+offset_bottom = 14.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 6
+theme_override_font_sizes/font_size = 20
+text = "Авторизация"
+horizontal_alignment = 1
+
+[node name="ExitButton" type="TextureButton" parent="AccountsMenu/SignIn/Control"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.97
+anchor_top = 0.082
+anchor_right = 0.97
+anchor_bottom = 0.082
+offset_left = -40.0
+offset_bottom = 40.0
+grow_horizontal = 0
+texture_normal = ExtResource("8_by01r")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="username_le" type="LineEdit" parent="AccountsMenu/SignIn"]
+custom_minimum_size = Vector2(260, 36)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.06469658, 0.06469651, 0.06469653, 1)
+theme_override_colors/font_placeholder_color = Color(0.47397572, 0.47397572, 0.47397572, 1)
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_ictww")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hmxu4")
+placeholder_text = "Имя пользователя"
+
+[node name="password_le" type="LineEdit" parent="AccountsMenu/SignIn"]
+custom_minimum_size = Vector2(260, 36)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.06469658, 0.06469651, 0.06469653, 1)
+theme_override_colors/font_placeholder_color = Color(0.47397572, 0.47397572, 0.47397572, 1)
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_ictww")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hmxu4")
+placeholder_text = "Пароль"
+context_menu_enabled = false
+secret = true
+
+[node name="sign_in_btn" type="Button" parent="AccountsMenu/SignIn"]
+custom_minimum_size = Vector2(260, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/normal = SubResource("StyleBoxFlat_1o50l")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_cht4j")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cht4j")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ictww")
+text = "Войти"
+
+[node name="go_sign_up_btn" type="Button" parent="AccountsMenu/SignIn"]
+custom_minimum_size = Vector2(260, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+theme_override_colors/font_color = Color(0.99015874, 0, 0.49002457, 1)
+theme_override_colors/font_focus_color = Color(0.99015874, 0, 0.49002457, 1)
+theme_override_colors/font_pressed_color = Color(0.76862746, 0.003921569, 0.78431374, 1)
+theme_override_colors/font_hover_color = Color(0.76862746, 0.003921569, 0.78431374, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.76862746, 0.003921569, 0.78431374, 1)
+theme_override_styles/normal = SubResource("StyleBoxEmpty_3er1b")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_hxu56")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_2fwvj")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ictww")
+text = "У вас нет аккаунта? Зарегистрироваться"
+
+[node name="Profile" type="VBoxContainer" parent="AccountsMenu"]
+visible = false
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_right = 5.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="Control" type="Control" parent="AccountsMenu/Profile"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Title" type="Label" parent="AccountsMenu/Profile/Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -14.0
+offset_right = 200.0
+offset_bottom = 14.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 6
+theme_override_font_sizes/font_size = 20
+text = "Аккаунт"
+horizontal_alignment = 1
+
+[node name="ExitButton" type="TextureButton" parent="AccountsMenu/Profile/Control"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.97
+anchor_top = 0.082
+anchor_right = 0.97
+anchor_bottom = 0.082
+offset_left = -40.0
+offset_bottom = 40.0
+grow_horizontal = 0
+texture_normal = ExtResource("8_by01r")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="id_label" type="Label" parent="AccountsMenu/Profile"]
+layout_mode = 2
+size_flags_vertical = 10
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "ID: 1231"
+horizontal_alignment = 1
+
+[node name="username_label" type="Label" parent="AccountsMenu/Profile"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Имя пользователя: фжывдлаофжвыао"
+horizontal_alignment = 1
+
+[node name="email_label" type="Label" parent="AccountsMenu/Profile"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Почта: фвфвфвфв@gmail.com"
+horizontal_alignment = 1
+
+[node name="logout_btn" type="Button" parent="AccountsMenu/Profile"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 10
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/icon_normal_color = Color(0.4182377, 0.6019757, 1, 1)
+theme_override_icons/icon = ExtResource("9_dclss")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_by01r")
+text = "Выйти из аккаунта"
+flat = true
 
 [node name="GameMenu" type="ColorRect" parent="."]
 visible = false
@@ -130,174 +669,6 @@ layout_mode = 2
 disabled = true
 text = "С другом"
 
-[node name="AccountsMenu" type="ColorRect" parent="."]
-visible = false
-custom_minimum_size = Vector2(600, 600)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -300.0
-offset_top = -300.0
-offset_right = 300.0
-offset_bottom = 300.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="SignUp" type="VBoxContainer" parent="AccountsMenu"]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-alignment = 1
-
-[node name="Label" type="Label" parent="AccountsMenu/SignUp"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Аккаунт"
-horizontal_alignment = 1
-
-[node name="username_le" type="LineEdit" parent="AccountsMenu/SignUp"]
-layout_mode = 2
-placeholder_text = "Имя пользователя"
-
-[node name="email_le" type="LineEdit" parent="AccountsMenu/SignUp"]
-layout_mode = 2
-placeholder_text = "Почта"
-
-[node name="password_le" type="LineEdit" parent="AccountsMenu/SignUp"]
-layout_mode = 2
-placeholder_text = "Пароль"
-secret = true
-
-[node name="sign_up_btn" type="Button" parent="AccountsMenu/SignUp"]
-custom_minimum_size = Vector2(0, 50)
-layout_mode = 2
-text = "Зарегистрироваться"
-
-[node name="go_sign_in_btn" type="Button" parent="AccountsMenu/SignUp"]
-custom_minimum_size = Vector2(0, 50)
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
-theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
-theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
-theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
-theme_override_colors/font_disabled_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_colors/icon_normal_color = Color(0, 0, 0, 1)
-theme_override_colors/icon_focus_color = Color(0, 0, 0, 1)
-theme_override_colors/icon_pressed_color = Color(0, 0, 0, 1)
-theme_override_colors/icon_hover_color = Color(0, 0, 0, 1)
-theme_override_colors/icon_hover_pressed_color = Color(0, 0, 0, 1)
-theme_override_colors/icon_disabled_color = Color(0, 0, 0, 1)
-theme_override_styles/normal = SubResource("StyleBoxEmpty_3er1b")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_hxu56")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_2fwvj")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_0iwki")
-text = "Уже есть учётная запись? Вход
-"
-
-[node name="SignIn" type="VBoxContainer" parent="AccountsMenu"]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-alignment = 1
-
-[node name="Label" type="Label" parent="AccountsMenu/SignIn"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Аккаунт"
-horizontal_alignment = 1
-
-[node name="username_le" type="LineEdit" parent="AccountsMenu/SignIn"]
-layout_mode = 2
-placeholder_text = "Имя пользователя или почта"
-
-[node name="password_le" type="LineEdit" parent="AccountsMenu/SignIn"]
-layout_mode = 2
-placeholder_text = "Пароль"
-secret = true
-
-[node name="sign_in_btn" type="Button" parent="AccountsMenu/SignIn"]
-custom_minimum_size = Vector2(0, 50)
-layout_mode = 2
-text = "Войти"
-
-[node name="go_sign_up_btn" type="Button" parent="AccountsMenu/SignIn"]
-custom_minimum_size = Vector2(0, 50)
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
-theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
-theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
-theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
-theme_override_colors/font_disabled_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_colors/icon_normal_color = Color(0, 0, 0, 1)
-theme_override_colors/icon_focus_color = Color(0, 0, 0, 1)
-theme_override_colors/icon_pressed_color = Color(0, 0, 0, 1)
-theme_override_colors/icon_hover_color = Color(0, 0, 0, 1)
-theme_override_colors/icon_hover_pressed_color = Color(0, 0, 0, 1)
-theme_override_colors/icon_disabled_color = Color(0, 0, 0, 1)
-theme_override_styles/normal = SubResource("StyleBoxEmpty_3er1b")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_sepwh")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_14wem")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_2atga")
-text = "У вас нет аккаунта? Зарегистрироваться"
-
-[node name="Profile" type="VBoxContainer" parent="AccountsMenu"]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-alignment = 1
-
-[node name="id_label" type="Label" parent="AccountsMenu/Profile"]
-layout_mode = 2
-size_flags_vertical = 10
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "ID: 1231"
-horizontal_alignment = 1
-
-[node name="username_label" type="Label" parent="AccountsMenu/Profile"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Имя пользователя: фжывдлаофжвыао"
-horizontal_alignment = 1
-
-[node name="email_label" type="Label" parent="AccountsMenu/Profile"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Почта: фвфвфвфв@gmail.com"
-horizontal_alignment = 1
-
-[node name="logout_btn" type="Button" parent="AccountsMenu/Profile"]
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 10
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
-theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
-theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
-theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
-theme_override_styles/focus = SubResource("StyleBoxEmpty_by01r")
-text = "Выйти из аккаунта"
-icon = ExtResource("2_2fwvj")
-flat = true
-
 [node name="LoadingScreen" parent="." instance=ExtResource("2_hxu56")]
 visible = false
 layout_mode = 1
@@ -310,15 +681,20 @@ initial_position = 2
 [connection signal="pressed" from="MarginContainer/settings_btn" to="." method="_on_settings_btn_pressed"]
 [connection signal="pressed" from="MarginContainer/account_btn" to="." method="_on_account_btn_pressed"]
 [connection signal="pressed" from="MarginContainer/exit_btn" to="." method="_on_exit_btn_pressed"]
-[connection signal="pressed" from="GameMenu/VBoxContainer/play_random_btn" to="." method="_on_play_random_btn_pressed"]
-[connection signal="pressed" from="GameMenu/VBoxContainer/play_friend_btn" to="." method="_on_play_friend_btn_pressed"]
+[connection signal="pressed" from="SettingsMenu/VBoxContainer/Control/ExitButton" to="." method="_on_exit_button_pressed"]
+[connection signal="value_changed" from="SettingsMenu/VBoxContainer/Music/MusicSlider" to="." method="_on_music_slider_value_changed"]
+[connection signal="pressed" from="AccountsMenu/SignUp/Control/ExitButton" to="." method="_on_exit_button_pressed"]
 [connection signal="text_changed" from="AccountsMenu/SignUp/username_le" to="." method="_on_username_le_text_changed"]
 [connection signal="text_changed" from="AccountsMenu/SignUp/email_le" to="." method="_on_email_le_text_changed"]
 [connection signal="text_changed" from="AccountsMenu/SignUp/password_le" to="." method="_on_password_le_text_changed"]
 [connection signal="pressed" from="AccountsMenu/SignUp/sign_up_btn" to="." method="_on_sign_up_btn_pressed"]
 [connection signal="pressed" from="AccountsMenu/SignUp/go_sign_in_btn" to="." method="_on_go_sign_in_btn_pressed"]
+[connection signal="pressed" from="AccountsMenu/SignIn/Control/ExitButton" to="." method="_on_exit_button_pressed"]
 [connection signal="text_changed" from="AccountsMenu/SignIn/username_le" to="." method="_on_username_le_text_changed"]
 [connection signal="text_changed" from="AccountsMenu/SignIn/password_le" to="." method="_on_password_le_text_changed"]
 [connection signal="pressed" from="AccountsMenu/SignIn/sign_in_btn" to="." method="_on_sign_in_btn_pressed"]
 [connection signal="pressed" from="AccountsMenu/SignIn/go_sign_up_btn" to="." method="_on_go_sign_up_btn_pressed"]
+[connection signal="pressed" from="AccountsMenu/Profile/Control/ExitButton" to="." method="_on_exit_button_pressed"]
 [connection signal="pressed" from="AccountsMenu/Profile/logout_btn" to="." method="_on_logout_btn_pressed"]
+[connection signal="pressed" from="GameMenu/VBoxContainer/play_random_btn" to="." method="_on_play_random_btn_pressed"]
+[connection signal="pressed" from="GameMenu/VBoxContainer/play_friend_btn" to="." method="_on_play_friend_btn_pressed"]
