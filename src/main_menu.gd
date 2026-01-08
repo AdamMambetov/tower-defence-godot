@@ -33,9 +33,9 @@ var accounts_state: AccountsState:
 
 
 func _ready() -> void:
-	AudioPlayer.play_main_menu()
+	init_audio_player()
 	accounts_state = AccountsState.SignIn
-	if !UserInfo.get_user_info().is_empty():
+	if !Cache.get_user_info().is_empty():
 		$LoadingScreen.visible = true
 		var success = await Api.update_access_token()
 		if !success:
@@ -51,15 +51,25 @@ func _ready() -> void:
 		$LoadingScreen.visible = false
 
 
-func _show_accept_dialog(dialog_text: String) -> void:
-	$AcceptDialog.dialog_text = dialog_text
-	$AcceptDialog.reset_size()
-	$AcceptDialog.show()
+func _show_warning_menu(text: String) -> void:
+	$WarningMenu/VBoxContainer/Text.text = text
+	$WarningMenu.visible = true
+	$WarningMenu.grab_focus()
 
 func update_profile(user_info: Dictionary) -> void:
 	$AccountsMenu/Profile/id_label.text = "ID: %s" % str(user_info.id)
 	$AccountsMenu/Profile/username_label.text = "Имя пользователя: %s" % user_info.username
 	$AccountsMenu/Profile/email_label.text = "Почта: %s" % user_info.email
+
+func init_audio_player() -> void:
+	var settings = Cache.get_settings()
+	if !settings.is_empty():
+		AudioPlayer.set_music_volume(settings.music_volume)
+	else:
+		settings.music_volume = AudioPlayer.get_music_volume()
+		Cache.append_settings(settings)
+	AudioPlayer.play_main_menu()
+	$SettingsMenu/VBoxContainer/Music/MusicSlider.value = settings.music_volume
 
 
 func _on_start_btn_pressed() -> void:
@@ -88,23 +98,22 @@ func _on_sign_up_btn_pressed() -> void:
 	Api.sign_up(username, email, password)
 	$LoadingScreen.visible = true
 	var res = await Api.sign_result
-	var dialog_text = res[1]
+	var message = res[1]
 	if !res[0]:
 		$LoadingScreen.visible = false
-		_show_accept_dialog(dialog_text)
+		_show_warning_menu(message)
 		return
 	
 	Api.sign_in(username, password)
 	res = await Api.sign_result
 	if !res[0]:
-		dialog_text = res[1]
+		message = res[1]
 		$LoadingScreen.visible = false
-		_show_accept_dialog(dialog_text)
+		_show_warning_menu(message)
 		return
 	
 	$LoadingScreen.visible = false
-	_show_accept_dialog(dialog_text)
-	await $AcceptDialog.confirmed
+	_show_warning_menu(message)
 	accounts_state = AccountsState.Profile
 
 func _on_sign_in_btn_pressed() -> void:
@@ -113,17 +122,16 @@ func _on_sign_in_btn_pressed() -> void:
 	var res = await Api.sign_result
 	$LoadingScreen.visible = false
 	if res[0]:
-		_show_accept_dialog("Вы успешно вошли!")
-		await $AcceptDialog.confirmed
+		_show_warning_menu(res[1])
 		var user_info = await Api.get_user_info()
 		if user_info.has("detail"):
-			_show_accept_dialog(user_info.detail)
+			_show_warning_menu(user_info.detail)
 			menu_state = MenuState.None
 			return
 		accounts_state = AccountsState.Profile
 		update_profile(user_info)
 	else:
-		_show_accept_dialog(res[1])
+		_show_warning_menu(res[1])
 
 func _on_password_le_text_changed(new_text: String) -> void:
 	password = new_text
@@ -140,27 +148,29 @@ func _on_play_random_btn_pressed() -> void:
 		#return
 	Api.join()
 	$LoadingScreen.visible = true
-	var result = await Api.join_result
+	var res = await Api.join_result
 	$LoadingScreen.visible = false
-	if result[0]:
+	if res[0]:
 		get_tree().change_scene_to_file("res://scene/main_map.tscn")
 	else:
-		$AcceptDialog.dialog_text = result[1]
-		$AcceptDialog.reset_size()
-		$AcceptDialog.show()
+		_show_warning_menu(res[1])
 
 func _on_play_friend_btn_pressed() -> void:
 	pass # Replace with function body.
 
 func _on_logout_btn_pressed() -> void:
 	accounts_state = AccountsState.SignIn
-	UserInfo.set_user_info({})
+	Cache.set_user_info({})
 	Api.authorized = false
 	Api.access_token_timer.stop()
 
 func _on_music_slider_value_changed(value: float) -> void:
 	$SettingsMenu/VBoxContainer/Music/ValueLabel.text = "{0}%".format([int(value)])
 	AudioPlayer.set_music_volume(value)
+	Cache.append_settings({ music_volume = value })
 
 func _on_exit_button_pressed() -> void:
 	menu_state = MenuState.None
+
+func _on_warning_menu_focus_exited() -> void:
+	$WarningMenu.visible = false

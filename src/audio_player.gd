@@ -32,6 +32,10 @@ func play_battle() -> void:
 	stream = battle_tracks[current_battle_track]
 	play()
 
+# return  0..100
+func get_music_volume() -> float:
+	return convert_volume_to_percent(volume_linear)
+
 # value = 0..100
 func set_music_volume(value: float) -> void:
 	var res = convert_volume_from_percent(value)

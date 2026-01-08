@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://clbg1eyvs7ak8"]
+[gd_scene load_steps=33 format=3 uid="uid://clbg1eyvs7ak8"]
 
 [ext_resource type="Script" uid="uid://c155d6c6f3lr3" path="res://src/main_menu.gd" id="1_3er1b"]
 [ext_resource type="PackedScene" uid="uid://dxfvbrgnu75ji" path="res://scene/background.tscn" id="2_0iwki"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://bwr4ca43vfjvg" path="res://file/Tick2.png" id="7_2atga"]
 [ext_resource type="Texture2D" uid="uid://7pgq4bgqka0i" path="res://file/icon/icons8--100.png" id="8_by01r"]
 [ext_resource type="Texture2D" uid="uid://b8sk5nfxhs1tf" path="res://file/icon/icons8--28.png" id="9_dclss"]
+[ext_resource type="Texture2D" uid="uid://c1uvd5in4pi34" path="res://file/20250420manaSoul9SlicesA-Sheet.png" id="9_hmxu4"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dclss"]
 
@@ -99,6 +100,70 @@ corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 corner_detail = 6
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_os2d6"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0, 0.89411765, 0.8039216, 0.68235296)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_unisd"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0, 0.89411765, 0.8039216, 0.68235296)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sra1m"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(6.016344e-07, 0.2634288, 0.2331681, 0.68235296)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2nbnt"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v0h3m"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0, 0.89411765, 0.8039216, 0.68235296)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ceq6q"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ictww"]
 content_margin_left = 13.0
 content_margin_top = 4.0
@@ -156,6 +221,9 @@ corner_radius_bottom_left = 15
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_by01r"]
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ceq6q"]
+texture = ExtResource("9_hmxu4")
+
 [node name="MainMenu" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -163,6 +231,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+focus_mode = 1
 script = ExtResource("1_3er1b")
 
 [node name="Background" parent="." instance=ExtResource("2_0iwki")]
@@ -258,6 +327,7 @@ offset_right = 200.0
 offset_bottom = 100.0
 grow_horizontal = 2
 grow_vertical = 2
+focus_mode = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="SettingsMenu"]
 layout_mode = 0
@@ -332,6 +402,91 @@ text = "50%"
 horizontal_alignment = 2
 vertical_alignment = 1
 
+[node name="GameMenu" type="Panel" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_sepwh")
+custom_minimum_size = Vector2(400, 200)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -100.0
+offset_right = 200.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GameMenu"]
+layout_mode = 0
+offset_left = 5.0
+offset_right = 395.0
+offset_bottom = 200.0
+alignment = 1
+
+[node name="Control" type="Control" parent="GameMenu/VBoxContainer"]
+custom_minimum_size = Vector2(0, 45.26)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Title" type="Label" parent="GameMenu/VBoxContainer/Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -195.0
+offset_top = -15.499999
+offset_right = 195.0
+offset_bottom = 15.499999
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 20
+text = "Выберите режим игры"
+horizontal_alignment = 1
+
+[node name="ExitButton" type="TextureButton" parent="GameMenu/VBoxContainer/Control"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.97
+anchor_top = 0.082
+anchor_right = 0.97
+anchor_bottom = 0.082
+offset_left = -40.0
+offset_bottom = 40.0
+grow_horizontal = 0
+texture_normal = ExtResource("8_by01r")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="play_random_btn" type="Button" parent="GameMenu/VBoxContainer"]
+custom_minimum_size = Vector2(270, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/normal = SubResource("StyleBoxFlat_os2d6")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_unisd")
+theme_override_styles/hover = SubResource("StyleBoxFlat_unisd")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_sra1m")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_2nbnt")
+text = "Найти противника"
+
+[node name="play_friend_btn" type="Button" parent="GameMenu/VBoxContainer"]
+custom_minimum_size = Vector2(270, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_v0h3m")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_unisd")
+theme_override_styles/hover = SubResource("StyleBoxFlat_unisd")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_sra1m")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ceq6q")
+disabled = true
+text = "Игра с другом"
+
 [node name="AccountsMenu" type="Panel" parent="."]
 visible = false
 material = SubResource("ShaderMaterial_sepwh")
@@ -348,8 +503,10 @@ offset_right = 200.0
 offset_bottom = 137.5
 grow_horizontal = 2
 grow_vertical = 2
+focus_mode = 1
 
 [node name="SignUp" type="VBoxContainer" parent="AccountsMenu"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -361,6 +518,7 @@ theme_override_constants/separation = 6
 [node name="Control" type="Control" parent="AccountsMenu/SignUp"]
 layout_mode = 2
 size_flags_vertical = 3
+focus_mode = 2
 
 [node name="Title" type="Label" parent="AccountsMenu/SignUp/Control"]
 layout_mode = 1
@@ -467,6 +625,7 @@ theme_override_constants/separation = 6
 [node name="Control" type="Control" parent="AccountsMenu/SignIn"]
 layout_mode = 2
 size_flags_vertical = 3
+focus_mode = 2
 
 [node name="Title" type="Label" parent="AccountsMenu/SignIn/Control"]
 layout_mode = 1
@@ -565,6 +724,7 @@ alignment = 1
 [node name="Control" type="Control" parent="AccountsMenu/Profile"]
 layout_mode = 2
 size_flags_vertical = 3
+focus_mode = 2
 
 [node name="Title" type="Label" parent="AccountsMenu/Profile/Control"]
 layout_mode = 1
@@ -602,19 +762,19 @@ stretch_mode = 4
 layout_mode = 2
 size_flags_vertical = 10
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "ID: 1231"
+text = "ID: "
 horizontal_alignment = 1
 
 [node name="username_label" type="Label" parent="AccountsMenu/Profile"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Имя пользователя: фжывдлаофжвыао"
+text = "Имя пользователя: "
 horizontal_alignment = 1
 
 [node name="email_label" type="Label" parent="AccountsMenu/Profile"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Почта: фвфвфвфв@gmail.com"
+text = "Почта: "
 horizontal_alignment = 1
 
 [node name="logout_btn" type="Button" parent="AccountsMenu/Profile"]
@@ -632,50 +792,49 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_by01r")
 text = "Выйти из аккаунта"
 flat = true
 
-[node name="GameMenu" type="ColorRect" parent="."]
+[node name="LoadingScreen" parent="." instance=ExtResource("2_hxu56")]
 visible = false
-custom_minimum_size = Vector2(600, 600)
+layout_mode = 1
+
+[node name="WarningMenu" type="Panel" parent="."]
+visible = false
+custom_minimum_size = Vector2(192, 192)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
-size_flags_horizontal = 3
+focus_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_ceq6q")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="GameMenu"]
+[node name="VBoxContainer" type="VBoxContainer" parent="WarningMenu"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-alignment = 1
+anchors_preset = -1
+anchor_left = 0.065
+anchor_top = 0.123
+anchor_right = 0.941
+anchor_bottom = 0.895
 
-[node name="Label" type="Label" parent="GameMenu/VBoxContainer"]
+[node name="Title" type="Label" parent="WarningMenu/VBoxContainer"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Выберите режим игры"
+text = "Внимание"
 horizontal_alignment = 1
+uppercase = true
 
-[node name="play_random_btn" type="Button" parent="GameMenu/VBoxContainer"]
+[node name="Text" type="Label" parent="WarningMenu/VBoxContainer"]
+custom_minimum_size = Vector2(8.375, 0)
 layout_mode = 2
-text = "Рандом"
-
-[node name="play_friend_btn" type="Button" parent="GameMenu/VBoxContainer"]
-layout_mode = 2
-disabled = true
-text = "С другом"
-
-[node name="LoadingScreen" parent="." instance=ExtResource("2_hxu56")]
-visible = false
-layout_mode = 1
-
-[node name="AcceptDialog" type="AcceptDialog" parent="."]
-oversampling_override = 1.0
-initial_position = 2
+size_flags_vertical = 3
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
 
 [connection signal="pressed" from="MarginContainer/start_btn" to="." method="_on_start_btn_pressed"]
 [connection signal="pressed" from="MarginContainer/settings_btn" to="." method="_on_settings_btn_pressed"]
@@ -683,6 +842,9 @@ initial_position = 2
 [connection signal="pressed" from="MarginContainer/exit_btn" to="." method="_on_exit_btn_pressed"]
 [connection signal="pressed" from="SettingsMenu/VBoxContainer/Control/ExitButton" to="." method="_on_exit_button_pressed"]
 [connection signal="value_changed" from="SettingsMenu/VBoxContainer/Music/MusicSlider" to="." method="_on_music_slider_value_changed"]
+[connection signal="pressed" from="GameMenu/VBoxContainer/Control/ExitButton" to="." method="_on_exit_button_pressed"]
+[connection signal="pressed" from="GameMenu/VBoxContainer/play_random_btn" to="." method="_on_play_random_btn_pressed"]
+[connection signal="pressed" from="GameMenu/VBoxContainer/play_friend_btn" to="." method="_on_play_friend_btn_pressed"]
 [connection signal="pressed" from="AccountsMenu/SignUp/Control/ExitButton" to="." method="_on_exit_button_pressed"]
 [connection signal="text_changed" from="AccountsMenu/SignUp/username_le" to="." method="_on_username_le_text_changed"]
 [connection signal="text_changed" from="AccountsMenu/SignUp/email_le" to="." method="_on_email_le_text_changed"]
@@ -696,5 +858,4 @@ initial_position = 2
 [connection signal="pressed" from="AccountsMenu/SignIn/go_sign_up_btn" to="." method="_on_go_sign_up_btn_pressed"]
 [connection signal="pressed" from="AccountsMenu/Profile/Control/ExitButton" to="." method="_on_exit_button_pressed"]
 [connection signal="pressed" from="AccountsMenu/Profile/logout_btn" to="." method="_on_logout_btn_pressed"]
-[connection signal="pressed" from="GameMenu/VBoxContainer/play_random_btn" to="." method="_on_play_random_btn_pressed"]
-[connection signal="pressed" from="GameMenu/VBoxContainer/play_friend_btn" to="." method="_on_play_friend_btn_pressed"]
+[connection signal="focus_exited" from="WarningMenu" to="." method="_on_warning_menu_focus_exited"]

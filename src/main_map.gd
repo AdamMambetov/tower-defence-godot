@@ -85,7 +85,7 @@ func _new_data_handler(data: Dictionary) -> void:
 			$EnemyTower.init_matrix(data.units_capacity)
 			units_capacity_label.text = "0/{0}".format([int(data.units_capacity)])
 		"end_game":
-			UserInfo.set_room_id("")
+			Cache.set_room_id("")
 			get_tree().paused = true
 			end_game_label.text = "Победитель " + data.winner
 			map_state = MapState.EndGame
@@ -166,7 +166,7 @@ func _on_WS_socket_closed() -> void:
 	if get_tree() != null:
 		get_tree().paused = true
 	end_game_label.text = CONNECTION_CLOSED_TEXT % [
-		UserInfo.get_user_info().username,
+		Cache.get_user_info().username,
 	]
 	map_state = MapState.EndGame
 
