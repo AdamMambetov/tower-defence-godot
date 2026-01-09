@@ -27,7 +27,7 @@ func sign_in(username: String, password: String) -> void:
 	_add_field(body, "username", username)
 	_add_field(body, "password", password)
 	_end_body(body)
-	
+
 	request_raw(
 		API_BASE_URL + "auth/login",
 		[headers.form_data],
@@ -60,7 +60,7 @@ func sign_up(username: String, email: String, password: String) -> void:
 		HTTPClient.METHOD_POST,
 		data,
 	)
-	
+
 	var res = await request_completed
 	if res[0] == HTTPRequest.RESULT_SUCCESS and res[1] == 200:
 		sign_result.emit(true, "Вы успешно зарегистрированы!")
@@ -75,14 +75,14 @@ func join() -> void:
 		await get_tree().process_frame
 		join_result.emit(false, "Вы не авторизованы!")
 		return
-	
+
 	var access_token = Global.get_password("access")
 	request(
 		API_BASE_URL + "queue/join",
 		[headers.json, headers.jwt_token + access_token],
 		HTTPClient.METHOD_POST,
 	)
-	
+
 	var res = await request_completed
 	if res[0] == HTTPRequest.RESULT_SUCCESS and res[1] == 200:
 		var body_json = JSON.parse_string(res[3].get_string_from_utf8())
@@ -101,7 +101,7 @@ func join() -> void:
 				WS.construct_url(WS.PLAY_ROOM_URL, body_json.room_id)
 			)
 			join_result.emit(true, "")
-		
+
 	else:
 		var body_json = JSON.parse_string(res[3].get_string_from_utf8())
 		printerr("Request Error: ", body_json)

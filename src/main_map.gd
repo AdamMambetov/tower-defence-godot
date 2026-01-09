@@ -23,6 +23,8 @@ var map_state: MapState = MapState.Battle:
 		$"UI Layer/UI/Town".visible = map_state == MapState.Town
 		$"UI Layer/UI/Battle".visible = map_state == MapState.Battle
 		$"UI Layer/UI/Mine".visible = map_state == MapState.Mine
+		if map_state == MapState.EndGame:
+			$"UI Layer/UI/SettingsMenu".visible = false
 
 @export var _end_game_label_path: NodePath
 @onready var end_game_label: Label = get_node(_end_game_label_path)
@@ -53,6 +55,8 @@ func _ready() -> void:
 	for path in _circular_progress_bar_nodes.values():
 		var circular_progress_bar: CircularProgressBar = get_node(path)
 		circular_progress_bar.visible = false
+	$"UI Layer/UI/SettingsMenu/VBoxContainer/Music/MusicSlider".value = AudioPlayer.get_music_volume()
+	$"UI Layer/UI/SettingsMenu".visible = false
 	AudioPlayer.play_battle()
 
 func _process(_delta: float) -> void:
@@ -185,12 +189,6 @@ func _on_miner_button_pressed() -> void:
 func _on_witch_button_pressed() -> void:
 	spawn_request("witch")
 
-func _on_exit_btn_pressed() -> void:
-	if WS.socket != null:
-		WS.socket.close()
-	get_tree().paused = false
-	get_tree().change_scene_to_file("res://scene/main_menu.tscn")
-
 func _on_go_battle_button_pressed() -> void:
 	map_state = MapState.Battle
 	camera.position.x = 0
@@ -226,3 +224,21 @@ func _on_defence_button_pressed() -> void:
 	var button = $"UI Layer/UI/Battle/VBoxContainer/DefenceButton"
 	select_texture.reparent(button, false)
 	$PlayerTower.tower_state = Tower.TowerState.Defence
+
+func _on_settings_button_pressed() -> void:
+	var current_visibility = $"UI Layer/UI/SettingsMenu".visible
+	$"UI Layer/UI/SettingsMenu".visible = !current_visibility
+
+func _on_settings_close_button_pressed() -> void:
+	$"UI Layer/UI/SettingsMenu".visible = false
+
+func _on_music_slider_value_changed(value: float) -> void:
+	$"UI Layer/UI/SettingsMenu/VBoxContainer/Music/ValueLabel".text = "{0}%".format([int(value)])
+	AudioPlayer.set_music_volume(value)
+	Cache.append_settings({ music_volume = value })
+
+func _on_exit_button_pressed() -> void:
+	if WS.socket != null:
+		WS.socket.close()
+	get_tree().paused = false
+	get_tree().change_scene_to_file("res://scene/main_menu.tscn")
