@@ -4,14 +4,12 @@ extends Unit
 class UnitState:
 	const None = ""
 	const Run = "run"
-	const Attack = "attack"
+	const Shot = "shot"
 	const WaitAttack = "wait_attack"
 	const Death = "death"
 
-const ARROW_SCENE = preload("res://scene/arrow.tscn")
 
-@export var _animations_path: NodePath
-@onready var animations: AnimatedSprite2D = get_node(_animations_path)
+const ARROW_SCENE = preload("res://scene/arrow.tscn")
 
 @export var _wait_attack_timer_path: NodePath
 @onready var wait_attack_timer: Timer = get_node(_wait_attack_timer_path)
@@ -19,60 +17,56 @@ const ARROW_SCENE = preload("res://scene/arrow.tscn")
 
 func _ready() -> void:
 	super._ready()
-	
 	wait_attack_timer.wait_time = attack_speed
-	health_bar.max_value = health
-	health_bar.value = health
-
-func _physics_process(delta: float) -> void:
-	match unit_state:
-		UnitState.None:
-			if attack_area.has_overlapping_areas():
-				var find_enemy = false
-				var areas = attack_area.get_overlapping_areas()
-				for area in areas:
-					var enemy = area.get_parent()
-					if !is_instance_valid(enemy):
-						continue
-					if enemy.health <= 0:
-						continue
-					find_enemy = true
-					break
-				if find_enemy:
-					unit_state = UnitState.Attack
-			else:
-				unit_state = UnitState.Run
-		UnitState.Run:
-			if attack_area.has_overlapping_areas():
-				unit_state = UnitState.None
-				return
-			move_unit(delta)
+	_on_tower_state_changed("", tower_node.tower_state)
 
 
-func _on_set_health(old: float, new: float) -> void:
-	super._on_set_health(old, new)
-	if new <= 0:
-		var current_frame = animations \
-				.sprite_frames \
-				.get_frame_count(animations.animation) - 1
-		if animations.frame == current_frame:
-			await animations.animation_finished
-			await get_tree().physics_frame
-		unit_state = UnitState.Death
+func is_move_state() -> bool:
+	return unit_state == UnitState.Run
+
+func is_attack_state() -> bool:
+	return unit_state == UnitState.Shot
+
+func action_attack() -> void:
+	unit_state = UnitState.Shot
+
+func action_move() -> void:
+	unit_state = UnitState.Run
+
 
 func _on_set_unit_state(_old: String, new: String) -> void:
 	match new:
+		UnitState.None:
+			if tower_node.tower_state == Tower.TowerState.Defence:
+				animations.play(&"idle")
 		UnitState.Run:
 			animations.play(&"run")
-		UnitState.Attack:
+		UnitState.Shot:
 			animations.play(&"shot")
 			await animations.animation_finished
-			if unit_state != UnitState.Attack:
+			if unit_state != UnitState.Shot:
 				return
 			var arrow = ARROW_SCENE.instantiate()
 			arrow.global_position = $ArrowSpawn.global_position
 			var distance = attack_collision.shape.size.x
-			arrow.update_info({id = id, distance = distance, damage = damage})
+			if attack_area.has_overlapping_areas():
+				find_nearest_enemy()
+			else:
+				nearest_enemy = null
+			var to_point: Vector2
+			if nearest_enemy is Unit:
+				to_point = nearest_enemy.unit_collision.global_position
+			elif nearest_enemy is Tower:
+				to_point = nearest_enemy.tower_collition.global_position
+			else:
+				to_point = attack_collision.global_position
+				to_point.x += distance / 2
+			arrow.update_info({
+				id = id,
+				distance = distance,
+				damage = damage,
+				to_point = to_point,
+			})
 			arrow.is_player = is_player
 			get_parent().add_child(arrow)
 			unit_state = UnitState.WaitAttack
@@ -81,16 +75,8 @@ func _on_set_unit_state(_old: String, new: String) -> void:
 			await wait_attack_timer.timeout
 			if unit_state != UnitState.WaitAttack:
 				return
-			unit_state = UnitState.None
+			action_none()
 		UnitState.Death:
 			animations.play(&"death")
 			await animations.animation_finished
 			queue_free()
-
-func _on_set_direction(old: Vector2, new: Vector2) -> void:
-	super._on_set_direction(old, new)
-	match new:
-		Vector2.RIGHT:
-			animations.flip_h = false
-		Vector2.LEFT:
-			animations.flip_h = true

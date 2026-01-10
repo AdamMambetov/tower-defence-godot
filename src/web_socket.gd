@@ -82,8 +82,9 @@ func attack(from_id: String, to_id) -> void:
 
 func connect_to_url(join_url: String) -> bool:
 	socket = WebSocketPeer.new()
+	var access_token = Global.get_password("access")
 	socket.handshake_headers = PackedStringArray([
-		"access: " + UserInfo.get_user_info().access,
+		"access: " + access_token,
 	])
 	var err = socket.connect_to_url(join_url)
 	if err != OK:
@@ -107,13 +108,13 @@ func construct_url(...args) -> String:
 	return res
 
 func reconnect() -> void:
-	await connect_to_url(construct_url("splay_room", UserInfo.get_room_id()))
+	await connect_to_url(construct_url("splay_room", Cache.get_room_id()))
 
 
 func _waiting_game_process(json: Dictionary) -> void:
 	if waiting_opponent and json.has("room_id"):
 		waiting_opponent = false
-		UserInfo.set_room_id(json.room_id)
+		Cache.set_room_id(json.room_id)
 		for i in 3:
 			if await connect_to_url(construct_url(WS.PLAY_ROOM_URL, json.room_id)):
 				Global.game_state = Global.GameState.PlayingGame

@@ -263,7 +263,7 @@ animations = [{
 size = Vector2(50, 76)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ue3cg"]
-size = Vector2(200, 150)
+size = Vector2(200, 200)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ggppv"]
 bg_color = Color(0, 0, 0, 1)
@@ -283,7 +283,6 @@ anti_aliasing = false
 
 [node name="Minotaur" type="Node2D"]
 script = ExtResource("1_ifjwm")
-_animations_path = NodePath("UnitArea/Animations")
 _wait_attack_timer_path = NodePath("WaitAttackTimer")
 _unit_area_path = NodePath("UnitArea")
 _unit_collision_path = NodePath("UnitArea/CollisionShape2D")
@@ -292,6 +291,7 @@ _attack_collision_path = NodePath("AttackArea/CollisionShape2D")
 _agr_area_path = NodePath("AgrArea")
 _agr_collision_path = NodePath("AgrArea/CollisionShape2D")
 _health_bar_path = NodePath("ProgressBar")
+_animations_path = NodePath("UnitArea/Animations")
 metadata/_custom_type_script = "uid://b1aemje2io0qa"
 
 [node name="UnitArea" type="Area2D" parent="."]

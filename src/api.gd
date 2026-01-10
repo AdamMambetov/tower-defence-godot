@@ -27,7 +27,7 @@ func sign_in(username: String, password: String) -> void:
 	_add_field(body, "username", username)
 	_add_field(body, "password", password)
 	_end_body(body)
-	
+
 	request_raw(
 		API_BASE_URL + "auth/login",
 		[headers.form_data],
@@ -37,14 +37,18 @@ func sign_in(username: String, password: String) -> void:
 	var res = await request_completed
 	if res[0] == HTTPRequest.RESULT_SUCCESS and res[1] == 200:
 		var body_json = JSON.parse_string(res[3].get_string_from_utf8())
-		UserInfo.append_user_info(body_json)
-		sign_result.emit(true, res[3].get_string_from_utf8())
+		Global.set_password("access", body_json.access)
+		Global.set_password("refresh", body_json.refresh)
+		sign_result.emit(true, "Вы успешно вошли!")
 		access_token_timer.start()
 		authorized = true
-		prints("POST", res[1], "auth/login", body_json)
 	else:
-		sign_result.emit(false, res[3].get_string_from_utf8())
-		printerr("request error: ", res[3].get_string_from_utf8())
+		var body_json = JSON.parse_string(res[3].get_string_from_utf8())
+		if body_json == null:
+			sign_result.emit(false, body_json)
+		else:
+			sign_result.emit(false, body_json.detail)
+		printerr("request error: ", body_json)
 
 # register
 func sign_up(username: String, email: String, password: String) -> void:
@@ -59,27 +63,29 @@ func sign_up(username: String, email: String, password: String) -> void:
 		HTTPClient.METHOD_POST,
 		data,
 	)
-	
+
 	var res = await request_completed
 	if res[0] == HTTPRequest.RESULT_SUCCESS and res[1] == 200:
 		sign_result.emit(true, "Вы успешно зарегистрированы!")
 		prints("POST", res[1], "auth/register", res[3])
 	else:
-		sign_result.emit(false, res[3].get_string_from_utf8())
-		printerr("request error: ", res, res[3].get_string_from_utf8())
+		var body_json = JSON.parse_string(res[3].get_string_from_utf8())
+		sign_result.emit(false, body_json.detail)
+		printerr("request error: ", res, body_json)
 
 func join() -> void:
 	if !authorized:
 		await get_tree().process_frame
 		join_result.emit(false, "Вы не авторизованы!")
 		return
-	
+
+	var access_token = Global.get_password("access")
 	request(
 		API_BASE_URL + "queue/join",
-		[headers.json, headers.jwt_token + UserInfo.get_user_info().access],
+		[headers.json, headers.jwt_token + access_token],
 		HTTPClient.METHOD_POST,
 	)
-	
+
 	var res = await request_completed
 	if res[0] == HTTPRequest.RESULT_SUCCESS and res[1] == 200:
 		var body_json = JSON.parse_string(res[3].get_string_from_utf8())
@@ -93,34 +99,35 @@ func join() -> void:
 			)
 		else:
 			Global.game_state = Global.GameState.PlayingGame
-			UserInfo.set_room_id(body_json.room_id)
+			Cache.set_room_id(body_json.room_id)
 			await WS.connect_to_url(
 				WS.construct_url(WS.PLAY_ROOM_URL, body_json.room_id)
 			)
 			join_result.emit(true, "")
-		
+
 	else:
-		var error = res[3].get_string_from_utf8()
-		printerr("Request Error: ", error)
-		join_result.emit(false, error)
+		var body_json = JSON.parse_string(res[3].get_string_from_utf8())
+		printerr("Request Error: ", body_json)
+		join_result.emit(false, body_json.detail)
 
 func get_user_info() -> Dictionary:
+	var access_token = Global.get_password("access")
 	request(
 		API_BASE_URL + "users/me",
-		[headers.json, headers.jwt_token + UserInfo.get_user_info().access],
+		[headers.json, headers.jwt_token + access_token],
 		HTTPClient.METHOD_GET,
 	)
 	var res = await request_completed
 	var body_json = JSON.parse_string(res[3].get_string_from_utf8())
 	if res[0] == HTTPRequest.RESULT_SUCCESS and res[1] == 200:
 		body_json.id = int(body_json.id)
-		UserInfo.append_user_info(body_json)
+		Cache.append_user_info(body_json)
 	else:
 		printerr("Request Error: ", body_json.detail)
 	return body_json
 
 func update_access_token() -> bool:
-	var refresh_token = UserInfo.get_user_info().refresh
+	var refresh_token = Global.get_password("refresh")
 	request(
 		API_BASE_URL + "auth/refresh",
 		[headers.json],
@@ -130,31 +137,14 @@ func update_access_token() -> bool:
 	var res = await request_completed
 	var body_json = JSON.parse_string(res[3].get_string_from_utf8())
 	if res[0] == HTTPRequest.RESULT_SUCCESS and res[1] == 200:
-		UserInfo.append_user_info(body_json)
+		Global.set_password("access", body_json.access)
+		Global.set_password("refresh", body_json.refresh)
 		access_token_timer.start()
 		authorized = true
 		return true
 	else:
 		printerr("Request Error: ", res[1], ", ", body_json)
 		return false
-
-func check_room_exists() -> bool:
-	request(
-		API_BASE_URL + "game/check_room_exists",
-		[headers.json, headers.jwt_token + UserInfo.get_user_info().access],
-		HTTPClient.METHOD_POST,
-	)
-	
-	var res = await request_completed
-	if res[0] == HTTPRequest.RESULT_SUCCESS and res[1] == 200:
-		var body_json = JSON.parse_string(res[3].get_string_from_utf8())
-		prints("POST", res[1], "game/check_room_exists", body_json)
-		if body_json.has('success'):
-			return body_json.success
-	else:
-		var error = res[3].get_string_from_utf8()
-		printerr("Request Error: ", error)
-	return false
 
 
 func _add_field(body: PackedByteArray, key: String, value: String) -> void:
@@ -173,6 +163,6 @@ func _create_access_token_timer() -> void:
 	add_child(access_token_timer)
 
 func _on_access_token_timeout() -> void:
-	var user_info = UserInfo.get_user_info()
-	if !user_info.is_empty():
+	var refresh_token = Global.get_password("refresh")
+	if !refresh_token.is_empty():
 		update_access_token()

@@ -1,10 +1,11 @@
-[gd_scene load_steps=34 format=3 uid="uid://bps3g2ej7nq58"]
+[gd_scene load_steps=40 format=3 uid="uid://bps3g2ej7nq58"]
 
 [ext_resource type="Script" uid="uid://ckv4gl2fhnk67" path="res://src/miner.gd" id="1_v7bnt"]
 [ext_resource type="Texture2D" uid="uid://krfo6p6h6uo1" path="res://file/character/miner/SteamMan_attack.png" id="2_pnxvj"]
 [ext_resource type="Texture2D" uid="uid://og5vwkacpdv8" path="res://file/character/miner/SteamMan_idle.png" id="3_8cjr3"]
 [ext_resource type="Texture2D" uid="uid://dh21y6q7ri37r" path="res://file/character/miner/SteamMan_run.png" id="4_xajb2"]
 [ext_resource type="Texture2D" uid="uid://dj5hqb604ukgc" path="res://file/character/miner/SteamMan_walk.png" id="5_2envy"]
+[ext_resource type="Texture2D" uid="uid://dhuswul048ii3" path="res://file/OreSelection.png" id="6_8cjr3"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6ensq"]
 size = Vector2(1.6764706, 3.4411755)
@@ -208,9 +209,44 @@ corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 anti_aliasing = false
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_xajb2"]
+atlas = ExtResource("6_8cjr3")
+region = Rect2(0, 0, 32, 38)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2envy"]
+atlas = ExtResource("6_8cjr3")
+region = Rect2(32, 0, 32, 38)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6ensq"]
+atlas = ExtResource("6_8cjr3")
+region = Rect2(64, 0, 32, 38)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_8l213"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xajb2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2envy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6ensq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2envy")
+}],
+"loop": true,
+"name": &"select",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8cjr3"]
+size = Vector2(69, 71)
+
 [node name="Miner" type="Node2D"]
 script = ExtResource("1_v7bnt")
-_animations_path = NodePath("UnitArea/Animations")
+_selection_anim_path = NodePath("SelectionArea/SelectionAnimation")
 damage = 1
 is_player = true
 _unit_area_path = NodePath("UnitArea")
@@ -220,6 +256,7 @@ _attack_collision_path = NodePath("AttackArea/CollisionShape2D")
 _agr_area_path = NodePath("AgrArea")
 _agr_collision_path = NodePath("AgrArea/CollisionShape2D")
 _health_bar_path = NodePath("ProgressBar")
+_animations_path = NodePath("UnitArea/Animations")
 
 [node name="UnitArea" type="Area2D" parent="."]
 scale = Vector2(1.7, 1.7)
@@ -269,5 +306,20 @@ value = 50.0
 show_percentage = false
 metadata/_edit_use_anchors_ = true
 
+[node name="SelectionArea" type="Area2D" parent="."]
+collision_mask = 0
+
+[node name="SelectionAnimation" type="AnimatedSprite2D" parent="SelectionArea"]
+position = Vector2(0, -32)
+scale = Vector2(3, 3)
+sprite_frames = SubResource("SpriteFrames_8l213")
+animation = &"select"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SelectionArea"]
+position = Vector2(0, -36)
+shape = SubResource("RectangleShape2D_8cjr3")
+
 [connection signal="animation_changed" from="UnitArea/Animations" to="UnitArea" method="_on_animations_animation_changed"]
 [connection signal="animation_finished" from="UnitArea/Animations" to="UnitArea" method="_on_animations_animation_finished"]
+[connection signal="input_event" from="SelectionArea" to="." method="_on_selection_area_input_event"]
+[connection signal="mouse_exited" from="SelectionArea" to="." method="_on_selection_area_mouse_exited"]

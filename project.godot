@@ -20,6 +20,7 @@ config/icon="uid://c0n3uopwhyuc5"
 Global="*res://src/global.gd"
 Api="*res://src/api.gd"
 WS="*res://src/web_socket.gd"
+AudioPlayer="*res://src/audio_player.gd"
 
 [display]
 

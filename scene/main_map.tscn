@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=4 uid="uid://d1vrkfxgttq3c"]
+[gd_scene load_steps=49 format=4 uid="uid://d1vrkfxgttq3c"]
 
 [ext_resource type="Script" uid="uid://cfltnwoeynwn2" path="res://src/main_map.gd" id="1_xf4q7"]
 [ext_resource type="Texture2D" uid="uid://d3a0835k1w76s" path="res://file/background/background_layer_1.png" id="2_13gc7"]
@@ -16,14 +16,26 @@
 [ext_resource type="Texture2D" uid="uid://cbwi4vl02s7kq" path="res://file/mine/background 1/Plan 2.png" id="15_vrvtq"]
 [ext_resource type="Texture2D" uid="uid://dmoo2bpw1prh1" path="res://file/mine/background 1/Plan 1.png" id="16_utjqm"]
 [ext_resource type="PackedScene" uid="uid://cxyryuu4mixwb" path="res://scene/teleport.tscn" id="17_pig8g"]
+[ext_resource type="Texture2D" uid="uid://b8haoouoa0tq2" path="res://file/icon/icons8--32.png" id="19_tfxsk"]
 [ext_resource type="Texture2D" uid="uid://kgodj2irm8ts" path="res://file/icon/money_bg.png" id="20_byx81"]
 [ext_resource type="Texture2D" uid="uid://crhe2nx8l374s" path="res://file/icon/UI_Flat_Banner02a.png" id="20_oafc4"]
 [ext_resource type="Texture2D" uid="uid://cgr62eyayb85a" path="res://file/icon/SoldierPreview.png" id="20_vrvtq"]
 [ext_resource type="Texture2D" uid="uid://43h3swf8yjog" path="res://file/icon/SamuraiPreview.png" id="21_esod0"]
 [ext_resource type="Texture2D" uid="uid://cashwb0j287jg" path="res://file/icon/money.png" id="21_oafc4"]
+[ext_resource type="PackedScene" uid="uid://bfgnyo2ieqstc" path="res://scene/circular_progress_bar.tscn" id="21_utjqm"]
 [ext_resource type="Texture2D" uid="uid://bu87dp4eekawj" path="res://file/icon/MinotaurPreview.png" id="22_utjqm"]
 [ext_resource type="Texture2D" uid="uid://b14vjvk7aec8y" path="res://file/icon/MinerPreview.png" id="23_byx81"]
+[ext_resource type="Texture2D" uid="uid://ncalodr3i4kr" path="res://file/icon/attack_icon.png" id="26_byx81"]
+[ext_resource type="Texture2D" uid="uid://de2yrbhey0f3d" path="res://file/icon/defence_icon.png" id="27_oafc4"]
+[ext_resource type="Texture2D" uid="uid://d4l7pg8rtcfi5" path="res://file/icon/UI_Flat_Select01a_1.png" id="27_t3s1h"]
 [ext_resource type="Texture2D" uid="uid://clgt2ok7ey150" path="res://file/icon/WitchPreview.png" id="28_t3s1h"]
+[ext_resource type="Texture2D" uid="uid://c8hew7gsu7p7d" path="res://file/icon/UI_Flat_Button01a_1.png" id="29_t2adl"]
+[ext_resource type="Texture2D" uid="uid://5sqqcja6ej0g" path="res://file/icon/units_count_icon.png" id="30_ecsw8"]
+[ext_resource type="Shader" uid="uid://digctqwu0sib2" path="res://scene/glass.gdshader" id="32_w3ryn"]
+[ext_resource type="Texture2D" uid="uid://7pgq4bgqka0i" path="res://file/icon/icons8--100.png" id="33_agp45"]
+[ext_resource type="Texture2D" uid="uid://bcphp1anvu5gw" path="res://file/OneMint.png" id="34_4cyt7"]
+[ext_resource type="Texture2D" uid="uid://bwr4ca43vfjvg" path="res://file/Tick2.png" id="35_co0ym"]
+[ext_resource type="Texture2D" uid="uid://b8sk5nfxhs1tf" path="res://file/icon/icons8--28.png" id="36_agp45"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vrvtq"]
 texture = ExtResource("9_vvnmp")
@@ -140,26 +152,112 @@ sources/0 = SubResource("TileSetAtlasSource_utjqm")
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vrvtq"]
 size = Vector2(900, 40)
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fdj6w"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_e75qt"]
+shader = ExtResource("32_w3ryn")
+shader_parameter/shape_type = 1
+shader_parameter/rect_size = Vector2(396, 196)
+shader_parameter/corner_radius_top_left = 20.0
+shader_parameter/corner_radius_top_right = 20.0
+shader_parameter/corner_radius_bottom_left = 20.0
+shader_parameter/corner_radius_bottom_right = 20.0
+shader_parameter/circle_radius = 100.0
+shader_parameter/outline_enabled = true
+shader_parameter/outline_width = 2.0
+shader_parameter/outline_color = Color(1, 1, 1, 0.8)
+shader_parameter/shadow_enabled = true
+shader_parameter/shadow_color = Color(0, 0, 0, 0.5)
+shader_parameter/shadow_offset = Vector2(10, 10)
+shader_parameter/shadow_blur = 15.0
+shader_parameter/edge_softness = 1.0
+shader_parameter/shape_color = Color(0.82959175, 0.8851425, 0.9882358, 1)
+shader_parameter/color_gradient_y = 1.5
+shader_parameter/color_gradient_x = -0.8
+shader_parameter/color_multiplier = 0.9
+shader_parameter/enable_screen_blur = true
+shader_parameter/blur_amount = 3.0
+shader_parameter/blur_samples = 4
+shader_parameter/glass_opacity = 0.2
+shader_parameter/node_size = Vector2(400, 200)
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_q0pbl"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_agp45"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0, 0.89411765, 0.8039216, 0.68235296)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vnlmr"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4cyt7"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0, 0.89411765, 0.8039216, 0.68235296)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vvnmp"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_co0ym"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mn0co"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0, 1, 0, 0.4)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+corner_detail = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ppud3"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0, 1, 0, 0.7490196)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+corner_detail = 6
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4cyt7"]
 
 [node name="MainMap" type="Node2D"]
 script = ExtResource("1_xf4q7")
-_end_game_label_path = NodePath("UI Layer/UI/EndGame/ColorRect/VerticalBox/Label")
-_money_value_path = NodePath("UI Layer/UI/Battle/MoneyBackground/VBoxContainer/MoneyValue")
+_end_game_label_path = NodePath("UI Layer/UI/EndGame/EndMenu/VBoxContainer/Label")
+_units_capacity_label_path = NodePath("UI Layer/UI/Battle/UnitsCapacity/UnitsCapacityLabel")
+_select_texture_path = NodePath("UI Layer/UI/Battle/VBoxContainer/DefenceButton/SelectTexture")
 _camera_path = NodePath("Camera2D")
 _price_nodes = Dictionary[String, NodePath]({
 "miner": NodePath("UI Layer/UI/Battle/HBoxContainer/Miner/MinerPrice"),
 "minotaur": NodePath("UI Layer/UI/Battle/HBoxContainer/Minotaur/MinotaurPrice"),
 "samurai": NodePath("UI Layer/UI/Battle/HBoxContainer/Samurai/SamuraiPrice"),
 "soldier": NodePath("UI Layer/UI/Battle/HBoxContainer/Soldier/SoldierPrice"),
-"witch": NodePath("UI Layer/UI/Battle/HBoxContainer/Witch/MinotaurPrice")
+"witch": NodePath("UI Layer/UI/Battle/HBoxContainer/Witch/WitchPrice")
 })
+_circular_progress_bar_nodes = Dictionary[String, NodePath]({
+"miner": NodePath("UI Layer/UI/Battle/HBoxContainer/Miner/Control/CircularProgressBar"),
+"minotaur": NodePath("UI Layer/UI/Battle/HBoxContainer/Minotaur/Control/CircularProgressBar"),
+"samurai": NodePath("UI Layer/UI/Battle/HBoxContainer/Samurai/Control/CircularProgressBar"),
+"soldier": NodePath("UI Layer/UI/Battle/HBoxContainer/Soldier/Control/CircularProgressBar"),
+"witch": NodePath("UI Layer/UI/Battle/HBoxContainer/Witch/Control/CircularProgressBar")
+})
+_money_nodes = Array[NodePath]([NodePath("UI Layer/UI/Town/MoneyBackground/VBoxContainer/MoneyValue"), NodePath("UI Layer/UI/Battle/MoneyBackground/VBoxContainer/MoneyValue"), NodePath("UI Layer/UI/Mine/MoneyBackground/VBoxContainer/MoneyValue")])
 
 [node name="Camera2D" type="Camera2D" parent="."]
 anchor_mode = 0
@@ -175,7 +273,7 @@ position = Vector2(850, 128.15)
 scale = Vector2(2, 2)
 
 [node name="Parallax2D" type="Parallax2D" parent="Background"]
-scroll_scale = Vector2(0.5, 0.5)
+scroll_scale = Vector2(0.6, 0.6)
 repeat_size = Vector2(960, 0)
 repeat_times = 4
 
@@ -208,9 +306,11 @@ tile_set = SubResource("TileSet_utjqm")
 [node name="EnemyTower" parent="." instance=ExtResource("2_hquly")]
 position = Vector2(1950, 614)
 is_player = false
+defence_position = Vector2(-485, -17)
 
 [node name="PlayerTower" parent="." instance=ExtResource("2_hquly")]
 position = Vector2(150, 614)
+defence_position = Vector2(485, -17)
 
 [node name="Torch" parent="." instance=ExtResource("11_ruj8r")]
 position = Vector2(-203, 561)
@@ -303,6 +403,34 @@ offset_right = -1152.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="MoneyBackground" type="TextureRect" parent="UI Layer/UI/Town"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 0
+offset_left = 110.0
+offset_top = 9.0
+offset_right = 190.0
+offset_bottom = 89.0
+texture = ExtResource("20_byx81")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI Layer/UI/Town/MoneyBackground"]
+layout_mode = 0
+offset_right = 72.0
+offset_bottom = 77.0
+
+[node name="MoneyIcon" type="TextureRect" parent="UI Layer/UI/Town/MoneyBackground/VBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+texture = ExtResource("21_oafc4")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="MoneyValue" type="Label" parent="UI Layer/UI/Town/MoneyBackground/VBoxContainer"]
+layout_mode = 2
+text = "500"
+horizontal_alignment = 2
+
 [node name="GoBattleButton" type="TextureButton" parent="UI Layer/UI/Town"]
 layout_mode = 1
 anchors_preset = 6
@@ -342,6 +470,26 @@ offset_left = 923.0
 offset_top = 539.0
 offset_right = 1039.0
 offset_bottom = 650.0
+
+[node name="Settings" type="TextureRect" parent="UI Layer/UI/Town"]
+self_modulate = Color(0.60784316, 0.5058824, 0.45882353, 1)
+custom_minimum_size = Vector2(70, 70)
+layout_mode = 0
+offset_left = 1057.0
+offset_top = 16.0
+offset_right = 1127.0
+offset_bottom = 86.0
+texture = ExtResource("29_t2adl")
+
+[node name="SettingsButton" type="TextureButton" parent="UI Layer/UI/Town/Settings"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 0
+offset_left = 9.0
+offset_top = 12.0
+offset_right = 59.0
+offset_bottom = 62.0
+texture_normal = ExtResource("19_tfxsk")
+stretch_mode = 4
 
 [node name="Battle" type="Control" parent="UI Layer/UI"]
 layout_mode = 1
@@ -384,7 +532,7 @@ stretch_mode = 4
 
 [node name="MoneyValue" type="Label" parent="UI Layer/UI/Battle/MoneyBackground/VBoxContainer"]
 layout_mode = 2
-text = "200"
+text = "500"
 horizontal_alignment = 2
 
 [node name="GoTownButton" type="TextureButton" parent="UI Layer/UI/Battle"]
@@ -407,79 +555,238 @@ offset_bottom = 96.0
 theme_override_constants/separation = 20
 
 [node name="Miner" type="VBoxContainer" parent="UI Layer/UI/Battle/HBoxContainer"]
+custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 
-[node name="MinerButton" type="TextureButton" parent="UI Layer/UI/Battle/HBoxContainer/Miner"]
-custom_minimum_size = Vector2(60, 60)
+[node name="Control" type="Control" parent="UI Layer/UI/Battle/HBoxContainer/Miner"]
 layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MinerButton" type="TextureButton" parent="UI Layer/UI/Battle/HBoxContainer/Miner/Control"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 0
+offset_right = 60.0
+offset_bottom = 60.0
 texture_normal = ExtResource("23_byx81")
 ignore_texture_size = true
 stretch_mode = 4
 
+[node name="CircularProgressBar" parent="UI Layer/UI/Battle/HBoxContainer/Miner/Control" instance=ExtResource("21_utjqm")]
+layout_mode = 0
+offset_left = -4.0
+offset_top = -4.0
+offset_right = 64.0
+offset_bottom = 64.0
+
 [node name="MinerPrice" type="Label" parent="UI Layer/UI/Battle/HBoxContainer/Miner"]
 layout_mode = 2
-text = "999999"
+text = "750"
 horizontal_alignment = 1
 
 [node name="Soldier" type="VBoxContainer" parent="UI Layer/UI/Battle/HBoxContainer"]
+custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 
-[node name="SoldierButton" type="TextureButton" parent="UI Layer/UI/Battle/HBoxContainer/Soldier"]
-custom_minimum_size = Vector2(60, 60)
+[node name="Control" type="Control" parent="UI Layer/UI/Battle/HBoxContainer/Soldier"]
 layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SoldierButton" type="TextureButton" parent="UI Layer/UI/Battle/HBoxContainer/Soldier/Control"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 0
+offset_right = 60.0
+offset_bottom = 60.0
 texture_normal = ExtResource("20_vrvtq")
 ignore_texture_size = true
 stretch_mode = 4
 
+[node name="CircularProgressBar" parent="UI Layer/UI/Battle/HBoxContainer/Soldier/Control" instance=ExtResource("21_utjqm")]
+layout_mode = 1
+offset_left = -4.0
+offset_top = -4.0
+offset_right = 64.0
+offset_bottom = 64.0
+
 [node name="SoldierPrice" type="Label" parent="UI Layer/UI/Battle/HBoxContainer/Soldier"]
 layout_mode = 2
-text = "999999"
+text = "100"
 horizontal_alignment = 1
 
 [node name="Samurai" type="VBoxContainer" parent="UI Layer/UI/Battle/HBoxContainer"]
+custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 
-[node name="SamuraiButton" type="TextureButton" parent="UI Layer/UI/Battle/HBoxContainer/Samurai"]
-custom_minimum_size = Vector2(60, 60)
+[node name="Control" type="Control" parent="UI Layer/UI/Battle/HBoxContainer/Samurai"]
 layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SamuraiButton" type="TextureButton" parent="UI Layer/UI/Battle/HBoxContainer/Samurai/Control"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 0
+offset_right = 60.0
+offset_bottom = 60.0
 texture_normal = ExtResource("21_esod0")
 ignore_texture_size = true
 stretch_mode = 4
 
+[node name="CircularProgressBar" parent="UI Layer/UI/Battle/HBoxContainer/Samurai/Control" instance=ExtResource("21_utjqm")]
+layout_mode = 0
+offset_left = -4.0
+offset_top = -4.0
+offset_right = 64.0
+offset_bottom = 64.0
+
 [node name="SamuraiPrice" type="Label" parent="UI Layer/UI/Battle/HBoxContainer/Samurai"]
 layout_mode = 2
-text = "999999"
-horizontal_alignment = 1
-
-[node name="Minotaur" type="VBoxContainer" parent="UI Layer/UI/Battle/HBoxContainer"]
-layout_mode = 2
-
-[node name="MinotaurButton" type="TextureButton" parent="UI Layer/UI/Battle/HBoxContainer/Minotaur"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture_normal = ExtResource("22_utjqm")
-ignore_texture_size = true
-stretch_mode = 4
-
-[node name="MinotaurPrice" type="Label" parent="UI Layer/UI/Battle/HBoxContainer/Minotaur"]
-layout_mode = 2
-text = "999999"
+text = "175"
 horizontal_alignment = 1
 
 [node name="Witch" type="VBoxContainer" parent="UI Layer/UI/Battle/HBoxContainer"]
+custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 
-[node name="WitchButton" type="TextureButton" parent="UI Layer/UI/Battle/HBoxContainer/Witch"]
-custom_minimum_size = Vector2(60, 60)
+[node name="Control" type="Control" parent="UI Layer/UI/Battle/HBoxContainer/Witch"]
 layout_mode = 2
+size_flags_vertical = 3
+
+[node name="WitchButton" type="TextureButton" parent="UI Layer/UI/Battle/HBoxContainer/Witch/Control"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 0
+offset_right = 60.0
+offset_bottom = 60.0
 texture_normal = ExtResource("28_t3s1h")
 ignore_texture_size = true
 stretch_mode = 4
 
-[node name="MinotaurPrice" type="Label" parent="UI Layer/UI/Battle/HBoxContainer/Witch"]
+[node name="CircularProgressBar" parent="UI Layer/UI/Battle/HBoxContainer/Witch/Control" instance=ExtResource("21_utjqm")]
+layout_mode = 0
+offset_left = -4.0
+offset_top = -4.0
+offset_right = 64.0
+offset_bottom = 64.0
+
+[node name="WitchPrice" type="Label" parent="UI Layer/UI/Battle/HBoxContainer/Witch"]
 layout_mode = 2
-text = "999999"
+text = "450"
 horizontal_alignment = 1
+
+[node name="Minotaur" type="VBoxContainer" parent="UI Layer/UI/Battle/HBoxContainer"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+
+[node name="Control" type="Control" parent="UI Layer/UI/Battle/HBoxContainer/Minotaur"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MinotaurButton" type="TextureButton" parent="UI Layer/UI/Battle/HBoxContainer/Minotaur/Control"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 0
+offset_right = 60.0
+offset_bottom = 60.0
+texture_normal = ExtResource("22_utjqm")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="CircularProgressBar" parent="UI Layer/UI/Battle/HBoxContainer/Minotaur/Control" instance=ExtResource("21_utjqm")]
+layout_mode = 0
+offset_left = -4.0
+offset_top = -4.0
+offset_right = 64.0
+offset_bottom = 64.0
+
+[node name="MinotaurPrice" type="Label" parent="UI Layer/UI/Battle/HBoxContainer/Minotaur"]
+layout_mode = 2
+text = "1250"
+horizontal_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI Layer/UI/Battle"]
+custom_minimum_size = Vector2(40, 80)
+layout_mode = 0
+offset_left = 657.0
+offset_top = 37.0
+offset_right = 697.0
+offset_bottom = 117.0
+theme_override_constants/separation = 0
+
+[node name="AttackButton" type="TextureButton" parent="UI Layer/UI/Battle/VBoxContainer"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+texture_normal = ExtResource("26_byx81")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="DefenceButton" type="TextureButton" parent="UI Layer/UI/Battle/VBoxContainer"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+texture_normal = ExtResource("27_oafc4")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="SelectTexture" type="TextureRect" parent="UI Layer/UI/Battle/VBoxContainer/DefenceButton"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("27_t3s1h")
+stretch_mode = 4
+
+[node name="UnitsCapacity" type="TextureRect" parent="UI Layer/UI/Battle"]
+self_modulate = Color(0.60784316, 0.5058824, 0.45882353, 1)
+custom_minimum_size = Vector2(118, 118)
+layout_mode = 0
+offset_left = 737.0
+offset_top = 16.0
+offset_right = 817.0
+offset_bottom = 96.0
+texture = ExtResource("29_t2adl")
+
+[node name="TextureRect" type="TextureRect" parent="UI Layer/UI/Battle/UnitsCapacity"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("30_ecsw8")
+stretch_mode = 4
+
+[node name="UnitsCapacityLabel" type="Label" parent="UI Layer/UI/Battle/UnitsCapacity"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 40
+text = "0/15"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Settings" type="TextureRect" parent="UI Layer/UI/Battle"]
+self_modulate = Color(0.60784316, 0.5058824, 0.45882353, 1)
+custom_minimum_size = Vector2(70, 70)
+layout_mode = 0
+offset_left = 1057.0
+offset_top = 16.0
+offset_right = 1127.0
+offset_bottom = 86.0
+texture = ExtResource("29_t2adl")
+
+[node name="SettingsButton" type="TextureButton" parent="UI Layer/UI/Battle/Settings"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 0
+offset_left = 9.0
+offset_top = 12.0
+offset_right = 59.0
+offset_bottom = 62.0
+texture_normal = ExtResource("19_tfxsk")
+stretch_mode = 4
 
 [node name="EndGame" type="Control" parent="UI Layer/UI"]
 process_mode = 2
@@ -500,7 +807,9 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.5019608)
 
-[node name="ColorRect" type="ColorRect" parent="UI Layer/UI/EndGame"]
+[node name="EndMenu" type="Panel" parent="UI Layer/UI/EndGame"]
+material = SubResource("ShaderMaterial_e75qt")
+custom_minimum_size = Vector2(400, 200)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -508,69 +817,224 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -200.0
-offset_top = -200.0
+offset_top = -100.0
 offset_right = 200.0
-offset_bottom = 200.0
+offset_bottom = 100.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.34781694, 0.34781697, 0.3478169, 1)
+focus_mode = 1
 
-[node name="VerticalBox" type="VBoxContainer" parent="UI Layer/UI/EndGame/ColorRect"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="VBoxContainer" type="VBoxContainer" parent="UI Layer/UI/EndGame/EndMenu"]
+layout_mode = 0
+offset_left = 5.0
+offset_right = 395.0
+offset_bottom = 200.0
+theme_override_constants/separation = 30
 alignment = 1
 
-[node name="Label" type="Label" parent="UI Layer/UI/EndGame/ColorRect/VerticalBox"]
+[node name="Label" type="Label" parent="UI Layer/UI/EndGame/EndMenu/VBoxContainer"]
+custom_minimum_size = Vector2(0.435, 0)
 layout_mode = 2
-text = "Ты выиграл / Ты проиграл"
+theme_override_font_sizes/font_size = 20
+text = "Победитель adam"
 horizontal_alignment = 1
+autowrap_mode = 3
 
-[node name="exit_btn" type="Button" parent="UI Layer/UI/EndGame/ColorRect/VerticalBox"]
-custom_minimum_size = Vector2(0, 50)
+[node name="ExitButton" type="Button" parent="UI Layer/UI/EndGame/EndMenu/VBoxContainer"]
+custom_minimum_size = Vector2(260, 0)
 layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxEmpty_fdj6w")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_q0pbl")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_vnlmr")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_vvnmp")
-text = "Выход"
+size_flags_horizontal = 4
+theme_override_styles/normal = SubResource("StyleBoxFlat_agp45")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_4cyt7")
+theme_override_styles/hover = SubResource("StyleBoxFlat_4cyt7")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_co0ym")
+text = "Главное меню"
 
 [node name="Mine" type="Control" parent="UI Layer/UI"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 0
 offset_left = 151.0
 offset_top = 1096.0
-offset_right = 151.0
-offset_bottom = 1096.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_right = 1303.0
+offset_bottom = 1592.0
 
 [node name="GoTownButton" type="TextureButton" parent="UI Layer/UI/Mine"]
-layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -48.0
-offset_top = -24.0
-offset_bottom = 24.0
-grow_horizontal = 0
-grow_vertical = 2
+layout_mode = 0
+offset_left = 1104.0
+offset_top = 300.0
+offset_right = 1152.0
+offset_bottom = 348.0
 texture_normal = ExtResource("12_vvnmp")
+
+[node name="MoneyBackground" type="TextureRect" parent="UI Layer/UI/Mine"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 0
+offset_left = 110.0
+offset_top = 9.0
+offset_right = 190.0
+offset_bottom = 89.0
+texture = ExtResource("20_byx81")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI Layer/UI/Mine/MoneyBackground"]
+layout_mode = 0
+offset_right = 72.0
+offset_bottom = 77.0
+
+[node name="MoneyIcon" type="TextureRect" parent="UI Layer/UI/Mine/MoneyBackground/VBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+texture = ExtResource("21_oafc4")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="MoneyValue" type="Label" parent="UI Layer/UI/Mine/MoneyBackground/VBoxContainer"]
+layout_mode = 2
+text = "500"
+horizontal_alignment = 2
+
+[node name="Settings" type="TextureRect" parent="UI Layer/UI/Mine"]
+self_modulate = Color(0.60784316, 0.5058824, 0.45882353, 1)
+custom_minimum_size = Vector2(70, 70)
+layout_mode = 0
+offset_left = 1057.0
+offset_top = 16.0
+offset_right = 1127.0
+offset_bottom = 86.0
+texture = ExtResource("29_t2adl")
+
+[node name="SettingsButton" type="TextureButton" parent="UI Layer/UI/Mine/Settings"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 0
+offset_left = 9.0
+offset_top = 12.0
+offset_right = 59.0
+offset_bottom = 62.0
+texture_normal = ExtResource("19_tfxsk")
+stretch_mode = 4
+
+[node name="SettingsMenu" type="Panel" parent="UI Layer/UI"]
+visible = false
+material = SubResource("ShaderMaterial_e75qt")
+custom_minimum_size = Vector2(400, 200)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -100.0
+offset_right = 200.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI Layer/UI/SettingsMenu"]
+layout_mode = 0
+offset_left = 5.0
+offset_right = 395.0
+offset_bottom = 200.0
+
+[node name="Control" type="Control" parent="UI Layer/UI/SettingsMenu/VBoxContainer"]
+custom_minimum_size = Vector2(0, 45.26)
+layout_mode = 2
+
+[node name="Title" type="Label" parent="UI Layer/UI/SettingsMenu/VBoxContainer/Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -195.0
+offset_top = -15.499999
+offset_right = 195.0
+offset_bottom = 15.499999
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 20
+text = "Настройки"
+horizontal_alignment = 1
+
+[node name="CloseButton" type="TextureButton" parent="UI Layer/UI/SettingsMenu/VBoxContainer/Control"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.97
+anchor_top = 0.082
+anchor_right = 0.97
+anchor_bottom = 0.082
+offset_left = -40.0
+offset_top = 3.0
+offset_bottom = 43.0
+grow_horizontal = 0
+texture_normal = ExtResource("33_agp45")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="Music" type="HBoxContainer" parent="UI Layer/UI/SettingsMenu/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="UI Layer/UI/SettingsMenu/VBoxContainer/Music"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Громкость музыки"
+vertical_alignment = 1
+
+[node name="MusicSlider" type="HSlider" parent="UI Layer/UI/SettingsMenu/VBoxContainer/Music"]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_icons/grabber = ExtResource("34_4cyt7")
+theme_override_icons/grabber_highlight = ExtResource("34_4cyt7")
+theme_override_icons/tick = ExtResource("35_co0ym")
+theme_override_styles/grabber_area = SubResource("StyleBoxFlat_mn0co")
+theme_override_styles/grabber_area_highlight = SubResource("StyleBoxFlat_ppud3")
+step = 10.0
+value = 50.0
+tick_count = 11
+ticks_on_borders = true
+ticks_position = 3
+
+[node name="ValueLabel" type="Label" parent="UI Layer/UI/SettingsMenu/VBoxContainer/Music"]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+text = "50%"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="ExitButton" type="Button" parent="UI Layer/UI/SettingsMenu/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 10
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/icon_normal_color = Color(0.7193707, 0.5535781, 0.15469337, 1)
+theme_override_icons/icon = ExtResource("36_agp45")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_4cyt7")
+text = "Покинуть матч"
+flat = true
 
 [connection signal="pressed" from="UI Layer/UI/Town/GoBattleButton" to="." method="_on_go_battle_button_pressed"]
 [connection signal="pressed" from="UI Layer/UI/Town/GoMineButton" to="." method="_on_go_mine_button_pressed"]
+[connection signal="pressed" from="UI Layer/UI/Town/Settings/SettingsButton" to="." method="_on_settings_button_pressed"]
 [connection signal="pressed" from="UI Layer/UI/Battle/GoTownButton" to="." method="_on_go_town_button_pressed"]
-[connection signal="pressed" from="UI Layer/UI/Battle/HBoxContainer/Miner/MinerButton" to="." method="_on_miner_button_pressed"]
-[connection signal="pressed" from="UI Layer/UI/Battle/HBoxContainer/Soldier/SoldierButton" to="." method="_on_soldier_button_pressed"]
-[connection signal="pressed" from="UI Layer/UI/Battle/HBoxContainer/Samurai/SamuraiButton" to="." method="_on_archer_button_pressed"]
-[connection signal="pressed" from="UI Layer/UI/Battle/HBoxContainer/Minotaur/MinotaurButton" to="." method="_on_minotaur_button_pressed"]
-[connection signal="pressed" from="UI Layer/UI/Battle/HBoxContainer/Witch/WitchButton" to="." method="_on_witch_button_pressed"]
-[connection signal="pressed" from="UI Layer/UI/EndGame/ColorRect/VerticalBox/exit_btn" to="." method="_on_exit_btn_pressed"]
+[connection signal="pressed" from="UI Layer/UI/Battle/HBoxContainer/Miner/Control/MinerButton" to="." method="_on_miner_button_pressed"]
+[connection signal="pressed" from="UI Layer/UI/Battle/HBoxContainer/Soldier/Control/SoldierButton" to="." method="_on_soldier_button_pressed"]
+[connection signal="pressed" from="UI Layer/UI/Battle/HBoxContainer/Samurai/Control/SamuraiButton" to="." method="_on_archer_button_pressed"]
+[connection signal="pressed" from="UI Layer/UI/Battle/HBoxContainer/Witch/Control/WitchButton" to="." method="_on_witch_button_pressed"]
+[connection signal="pressed" from="UI Layer/UI/Battle/HBoxContainer/Minotaur/Control/MinotaurButton" to="." method="_on_minotaur_button_pressed"]
+[connection signal="pressed" from="UI Layer/UI/Battle/VBoxContainer/AttackButton" to="." method="_on_attack_button_pressed"]
+[connection signal="pressed" from="UI Layer/UI/Battle/VBoxContainer/DefenceButton" to="." method="_on_defence_button_pressed"]
+[connection signal="pressed" from="UI Layer/UI/Battle/Settings/SettingsButton" to="." method="_on_settings_button_pressed"]
+[connection signal="pressed" from="UI Layer/UI/EndGame/EndMenu/VBoxContainer/ExitButton" to="." method="_on_exit_button_pressed"]
 [connection signal="pressed" from="UI Layer/UI/Mine/GoTownButton" to="." method="_on_go_town_button_pressed"]
+[connection signal="pressed" from="UI Layer/UI/Mine/Settings/SettingsButton" to="." method="_on_settings_button_pressed"]
+[connection signal="pressed" from="UI Layer/UI/SettingsMenu/VBoxContainer/Control/CloseButton" to="." method="_on_settings_close_button_pressed"]
+[connection signal="value_changed" from="UI Layer/UI/SettingsMenu/VBoxContainer/Music/MusicSlider" to="." method="_on_music_slider_value_changed"]
+[connection signal="pressed" from="UI Layer/UI/SettingsMenu/VBoxContainer/ExitButton" to="." method="_on_exit_button_pressed"]

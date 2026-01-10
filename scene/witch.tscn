@@ -296,7 +296,7 @@ animations = [{
 size = Vector2(70, 37)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6f1nt"]
-size = Vector2(300, 150)
+size = Vector2(222, 200)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ijlss"]
 bg_color = Color(0, 0, 0, 1)
@@ -324,7 +324,6 @@ AnimationPos = Dictionary[String, Vector2]({
 "Idle": Vector2(-16, -42),
 "Run": Vector2(-16, -42)
 })
-_animations_path = NodePath("UnitArea/Animations")
 _wait_attack_timer_path = NodePath("WaitAttackTimer")
 _unit_area_path = NodePath("UnitArea")
 _unit_collision_path = NodePath("UnitArea/CollisionShape2D")
@@ -333,6 +332,7 @@ _attack_collision_path = NodePath("AttackArea/CollisionShape2D")
 _agr_area_path = NodePath("AgrArea")
 _agr_collision_path = NodePath("AgrArea/CollisionShape2D")
 _health_bar_path = NodePath("ProgressBar")
+_animations_path = NodePath("UnitArea/Animations")
 metadata/_custom_type_script = "uid://b1aemje2io0qa"
 
 [node name="UnitArea" type="Area2D" parent="."]
@@ -363,7 +363,7 @@ collision_layer = 0
 collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AgrArea"]
-position = Vector2(160, -20)
+position = Vector2(121.333336, -20)
 shape = SubResource("RectangleShape2D_6f1nt")
 debug_color = Color(1, 0.39215687, 0, 0.41960785)
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://c8srs8kms2owv"]
+[gd_scene load_steps=9 format=3 uid="uid://c8srs8kms2owv"]
 
 [ext_resource type="Script" uid="uid://b1aemje2io0qa" path="res://src/unit.gd" id="1_f4vs5"]
 
@@ -7,6 +7,8 @@ size = Vector3(50, 50, 1)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_w23df"]
 size = Vector2(50, 50)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jb630"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jb630"]
 size = Vector2(70, 60)
@@ -38,6 +40,8 @@ _attack_area_path = NodePath("AttackArea")
 _attack_collision_path = NodePath("AttackArea/CollisionShape2D")
 _agr_area_path = NodePath("AgrArea")
 _agr_collision_path = NodePath("AgrArea/CollisionShape2D")
+_health_bar_path = NodePath("ProgressBar")
+_animations_path = NodePath("UnitArea/Animations")
 
 [node name="UnitArea" type="Area2D" parent="."]
 collision_layer = 0
@@ -55,6 +59,9 @@ offset_top = -12.0
 offset_right = 20.0
 offset_bottom = 11.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
+
+[node name="Animations" type="AnimatedSprite2D" parent="UnitArea"]
+sprite_frames = SubResource("SpriteFrames_jb630")
 
 [node name="AttackArea" type="Area2D" parent="."]
 

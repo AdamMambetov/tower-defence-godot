@@ -20,8 +20,3 @@ shape = SubResource("RectangleShape2D_yspra")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_rufgg")
-
-[node name="LifeTimeTimer" type="Timer" parent="."]
-one_shot = true
-
-[connection signal="timeout" from="LifeTimeTimer" to="." method="_on_life_time_timer_timeout"]
