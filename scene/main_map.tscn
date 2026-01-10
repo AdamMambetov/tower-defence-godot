@@ -833,10 +833,12 @@ theme_override_constants/separation = 30
 alignment = 1
 
 [node name="Label" type="Label" parent="UI Layer/UI/EndGame/EndMenu/VBoxContainer"]
+custom_minimum_size = Vector2(0.435, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Победитель adam"
 horizontal_alignment = 1
+autowrap_mode = 3
 
 [node name="ExitButton" type="Button" parent="UI Layer/UI/EndGame/EndMenu/VBoxContainer"]
 custom_minimum_size = Vector2(260, 0)
@@ -849,29 +851,18 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_co0ym")
 text = "Главное меню"
 
 [node name="Mine" type="Control" parent="UI Layer/UI"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 0
 offset_left = 151.0
 offset_top = 1096.0
-offset_right = 151.0
-offset_bottom = 1096.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_right = 1303.0
+offset_bottom = 1592.0
 
 [node name="GoTownButton" type="TextureButton" parent="UI Layer/UI/Mine"]
-layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -48.0
-offset_top = -24.0
-offset_bottom = 24.0
-grow_horizontal = 0
-grow_vertical = 2
+layout_mode = 0
+offset_left = 1104.0
+offset_top = 300.0
+offset_right = 1152.0
+offset_bottom = 348.0
 texture_normal = ExtResource("12_vvnmp")
 
 [node name="MoneyBackground" type="TextureRect" parent="UI Layer/UI/Mine"]

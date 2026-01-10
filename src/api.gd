@@ -44,7 +44,10 @@ func sign_in(username: String, password: String) -> void:
 		authorized = true
 	else:
 		var body_json = JSON.parse_string(res[3].get_string_from_utf8())
-		sign_result.emit(false, body_json.detail)
+		if body_json == null:
+			sign_result.emit(false, body_json)
+		else:
+			sign_result.emit(false, body_json.detail)
 		printerr("request error: ", body_json)
 
 # register

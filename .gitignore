@@ -2,3 +2,5 @@
 .godot/
 /android/
 build/
+
+addons/keyring/bin/~libkeyring.windows.template_debug.x86_64.dll

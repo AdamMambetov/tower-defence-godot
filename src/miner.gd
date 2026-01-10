@@ -11,7 +11,12 @@ class UnitState:
 const ANIMATIONS_POS_RIGHT = Vector2(-17, -48)
 const ANIMATIONS_POS_LEFT = Vector2(-34, -48)
 
-var current_ore: Node = null
+var current_ore: Ore = null
+var selected_ore: Ore = null:
+	set(value):
+		if is_instance_valid(selected_ore):
+			selected_ore.stop_select_anim()
+		selected_ore = value
 var route: Global.Route = Global.Route.Mine:
 	set(value):
 		route = value
@@ -25,12 +30,17 @@ var bag_capacity: float = 0:
 			route = Global.Route.Tower
 			unit_state = UnitState.Walk
 var in_mine: bool = false
+var is_pressed: bool = false
+
+@export var _selection_anim_path: NodePath
+@onready var selection_anim: AnimatedSprite2D = get_node(_selection_anim_path)
 
 
 func _ready() -> void:
 	unit_state = UnitState.Idle
 	WS.new_data_received.connect(_on_WS_new_data_recieved)
 	update_direction()
+	stop_select_anim()
 
 func _physics_process(delta: float) -> void:
 	match unit_state:
@@ -62,9 +72,13 @@ func _physics_process(delta: float) -> void:
 							continue
 						if ore.health <= 0:
 							continue
-						current_ore = ore
-						unit_state = UnitState.Attack
-						break
+						if !is_instance_valid(selected_ore) \
+								or selected_ore == ore:
+							current_ore = ore
+							unit_state = UnitState.Attack
+							break
+				if unit_state != UnitState.Attack:
+					unit_state = UnitState.Walk
 			elif route == Global.Route.Mine:
 				if !in_mine:
 					unit_state = UnitState.Walk
@@ -76,11 +90,14 @@ func _physics_process(delta: float) -> void:
 					return
 				
 				var nearest_ore: Node2D = ores.front()
-				for ore in ores:
-					var ore_distance = global_position.distance_to(ore.global_position)
-					var nearest_distance = global_position.distance_to(nearest_ore.global_position)
-					if ore_distance < nearest_distance:
-						nearest_ore = ore
+				if is_instance_valid(selected_ore):
+					nearest_enemy = selected_ore
+				else:
+					for ore in ores:
+						var ore_distance = global_position.distance_to(ore.global_position)
+						var nearest_distance = global_position.distance_to(nearest_ore.global_position)
+						if ore_distance < nearest_distance:
+							nearest_ore = ore
 				var to_direction = global_position.direction_to(nearest_ore.global_position)
 				if to_direction.x < 0:
 					direction = Vector2.LEFT
@@ -116,6 +133,21 @@ func get_default_direction() -> Vector2:
 func action_none() -> void:
 	unit_state = UnitState.None
 
+func find_nearest_enemy() -> void:
+	if !agr_area.has_overlapping_areas():
+		nearest_enemy = null
+		return
+	var enemies = agr_area.get_overlapping_areas()
+	nearest_enemy = enemies[0].get_parent()
+	if is_instance_valid(selected_ore):
+		nearest_enemy = selected_ore
+	else:
+		for el in enemies:
+			var enemy = el.get_parent()
+			var distance = global_position.distance_to(enemy.global_position)
+			if distance < global_position.distance_to(nearest_enemy.global_position):
+				nearest_enemy = enemy
+
 func update_direction() -> void:
 	match route:
 		Global.Route.Tower:
@@ -124,6 +156,18 @@ func update_direction() -> void:
 		Global.Route.Mine:
 			direction = Vector2.LEFT
 			agr_collision.disabled = false
+
+func play_select_anim() -> void:
+	selection_anim.visible = true
+	selection_anim.play(&"select")
+	if is_instance_valid(selected_ore):
+		selected_ore.play_select_anim()
+
+func stop_select_anim() -> void:
+	selection_anim.visible = false
+	selection_anim.stop()
+	if is_instance_valid(selected_ore):
+		selected_ore.stop_select_anim()
 
 
 func _on_set_unit_state(_old: String, new: String) -> void:
@@ -149,13 +193,12 @@ func _on_set_unit_state(_old: String, new: String) -> void:
 func _on_set_direction(old: Vector2, new: Vector2) -> void:
 	super._on_set_direction(old, new)
 	agr_collision.position = Vector2.ZERO
-	match new:
-		Vector2.RIGHT:
-			animations.flip_h = false
-			animations.position = ANIMATIONS_POS_RIGHT
-		Vector2.LEFT:
-			animations.flip_h = true
-			animations.position = ANIMATIONS_POS_LEFT
+	if direction.x > 0:
+		animations.flip_h = false
+		animations.position = ANIMATIONS_POS_RIGHT
+	else:
+		animations.flip_h = true
+		animations.position = ANIMATIONS_POS_LEFT
 
 func _on_set_health(_old: float, _new: float) -> void:
 	return
@@ -166,3 +209,23 @@ func _on_WS_new_data_recieved(result: Dictionary) -> void:
 	if !result.has(id):
 		return
 	bag_capacity = result[id]
+
+func _on_selection_area_input_event(
+		_viewport: Node,
+		event: InputEvent,
+		_shape_idx: int,
+) -> void:
+	if !in_mine:
+		return
+	
+	if event is InputEventMouseButton:
+		if event.button_index != MOUSE_BUTTON_LEFT:
+			return
+		if event.pressed:
+			is_pressed = true
+		elif !event.pressed and is_pressed:
+			is_pressed = false
+			tower_node.selected_miner = self
+
+func _on_selection_area_mouse_exited() -> void:
+	is_pressed = false

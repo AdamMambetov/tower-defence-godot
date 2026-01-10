@@ -11,7 +11,7 @@ enum MapState {
 }
 
 const UNIT_SCENE = preload("res://scene/soldier.tscn")
-const CONNECTION_CLOSED_TEXT = "Соединение с сервером разорвано. %s, Ты проиграл!"
+const CONNECTION_CLOSED_TEXT = "Соединение с сервером разорвано!"
 
 var camera_speed: float = 50.0
 var move_by_mouse: bool = true
@@ -153,6 +153,7 @@ func spawn_ore(data: Dictionary) -> void:
 	ore.update_info(data)
 	ore.position.x = data.x
 	ore.position.y = data.y
+	ore.ore_clicked.connect($PlayerTower._on_ore_clicked)
 	$MineLocation/Ores.add_child(ore)
 
 func update_money_text(new_money: int) -> void:
@@ -169,9 +170,7 @@ func _on_WS_new_data_recieved(result: Dictionary) -> void:
 func _on_WS_socket_closed() -> void:
 	if get_tree() != null:
 		get_tree().paused = true
-	end_game_label.text = CONNECTION_CLOSED_TEXT % [
-		Cache.get_user_info().username,
-	]
+	end_game_label.text = CONNECTION_CLOSED_TEXT
 	map_state = MapState.EndGame
 
 func _on_soldier_button_pressed() -> void:
@@ -202,6 +201,7 @@ func _on_go_town_button_pressed() -> void:
 	map_state = MapState.Town
 	camera.limit_left = -1152
 	camera.position.x = -1152
+	$PlayerTower.selected_miner = null
 
 func _on_go_mine_button_pressed() -> void:
 	move_by_mouse = false
@@ -228,6 +228,7 @@ func _on_defence_button_pressed() -> void:
 func _on_settings_button_pressed() -> void:
 	var current_visibility = $"UI Layer/UI/SettingsMenu".visible
 	$"UI Layer/UI/SettingsMenu".visible = !current_visibility
+	$PlayerTower.selected_miner = null
 
 func _on_settings_close_button_pressed() -> void:
 	$"UI Layer/UI/SettingsMenu".visible = false

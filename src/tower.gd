@@ -53,6 +53,16 @@ var tower_state: String = TowerState.Defence:
 		tower_state_changed.emit(old, tower_state)
 		_send_tower_state()
 
+var selected_miner: Miner:
+	set(value):
+		if selected_miner == value:
+			return
+		if is_instance_valid(selected_miner):
+			selected_miner.stop_select_anim()
+		selected_miner = value
+		if is_instance_valid(selected_miner):
+			selected_miner.play_select_anim()
+
 @export var _tower_area_path: NodePath
 @onready var tower_area: Area2D = get_node(_tower_area_path)
 
@@ -157,3 +167,9 @@ func _on_unit_removed(unit_is_player: bool, unit_id: String) -> void:
 	defence_matrix[idx].id = ""
 	defence_matrix[idx].priority = int(-INF)
 	defence_matrix.sort_custom(func(a, b): return a.priority > b.priority)
+
+func _on_ore_clicked(ore: Ore) -> void:
+	if !is_instance_valid(selected_miner):
+		return
+	selected_miner.selected_ore = ore
+	ore.play_select_anim()
