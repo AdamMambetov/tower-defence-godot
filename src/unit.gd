@@ -131,7 +131,7 @@ func move_defence(delta: float) -> void:
 	direction = global_position.direction_to(to_position)
 	if (direction.x > 0 and is_player) \
 			or (direction.x < 0 and !is_player):
-		if has_enemy_on_attack_distance():
+		if has_enemy_on_attack_distance(tower_node.get_defence_position(id)) and has_enemy_on_attack_distance(global_position):
 			action_attack()
 			return
 	position += speed * delta * direction
@@ -145,7 +145,8 @@ func action_none() -> void:
 			else:
 				action_move()
 		Tower.TowerState.Defence:
-			if has_enemy_on_attack_distance():
+			if (tower_node.has_enemies() and attack_area.has_overlapping_areas()) \
+					or (has_enemy_on_attack_distance(tower_node.get_defence_position(id)) and has_enemy_on_attack_distance(global_position)):
 				action_attack()
 			elif !is_on_defence_position():
 				action_move()
@@ -189,12 +190,11 @@ func is_on_defence_position() -> bool:
 func horizontal_distance(pos1: Vector2, pos2: Vector2) -> float:
 	return abs(pos1.x - pos2.x)
 
-func has_enemy_on_attack_distance() -> bool:
+func has_enemy_on_attack_distance(my_pos: Vector2) -> bool:
 	find_nearest_enemy()
 	if !is_instance_valid(nearest_enemy):
 		return false
 	
-	var my_pos = global_position
 	var x_sign = 1 if is_player else -1
 	my_pos.x += unit_collision.shape.size.x / 2 * x_sign
 	
