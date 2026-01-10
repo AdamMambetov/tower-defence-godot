@@ -146,6 +146,9 @@ func _on_play_random_btn_pressed() -> void:
 	#if (await Api.check_room_exists()):
 		#await WS.reconnect()
 		#return
+	if $LoadingScreen.visible:
+		return
+	
 	Api.join()
 	$LoadingScreen.visible = true
 	var res = await Api.join_result
