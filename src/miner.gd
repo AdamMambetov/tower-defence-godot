@@ -52,12 +52,14 @@ func _physics_process(delta: float) -> void:
 func move_attack(delta: float) -> void:
 	direction = get_default_direction()
 	if route == Global.Route.Mine and in_mine:
-		find_nearest_enemy()
-		if is_instance_valid(nearest_enemy):
+		if find_nearest_enemy():
 			direction = global_position.direction_to(nearest_enemy.global_position)
 			direction.x /= 2
 			direction.y *= 2
 			direction = direction.normalized()
+		else:
+			route = Global.Route.Tower
+			direction = get_default_direction()
 	position += speed * delta * direction
 
 func update_info(info: Dictionary) -> void:
@@ -88,20 +90,30 @@ func action_none() -> void:
 func action_move() -> void:
 	unit_state = UnitState.Walk
 
-func find_nearest_enemy() -> void:
-	if !agr_area.has_overlapping_areas():
-		nearest_enemy = null
-		return
-	var enemies = agr_area.get_overlapping_areas()
-	nearest_enemy = enemies[0].get_parent()
+func find_nearest_enemy() -> bool:
 	if is_instance_valid(selected_ore):
 		nearest_enemy = selected_ore
-	else:
+		return false
+	if agr_area.has_overlapping_areas():
+		var enemies = agr_area.get_overlapping_areas()
+		nearest_enemy = enemies[0].get_parent()
 		for el in enemies:
 			var enemy = el.get_parent()
 			var distance = global_position.distance_to(enemy.global_position)
 			if distance < global_position.distance_to(nearest_enemy.global_position):
 				nearest_enemy = enemy
+	else:
+		var ores = get_tree().get_nodes_in_group(&"ore")
+		if ores.is_empty():
+			nearest_enemy = null
+			return false
+		nearest_enemy = ores[0]
+		for ore in ores:
+			var ore_distance = global_position.distance_to(ore.global_position)
+			var nearest_distance = global_position.distance_to(nearest_enemy.global_position)
+			if ore_distance < nearest_distance:
+				nearest_enemy = ore
+	return true
 
 func play_select_anim() -> void:
 	selection_anim.visible = true
