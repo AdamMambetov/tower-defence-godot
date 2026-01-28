@@ -93,7 +93,7 @@ func action_move() -> void:
 func find_nearest_enemy() -> bool:
 	if is_instance_valid(selected_ore):
 		nearest_enemy = selected_ore
-		return false
+		return true
 	if agr_area.has_overlapping_areas():
 		var enemies = agr_area.get_overlapping_areas()
 		nearest_enemy = enemies[0].get_parent()

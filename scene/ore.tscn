@@ -228,6 +228,7 @@ animations = [{
 size = Vector2(50, 50)
 
 [node name="Ore" type="Node2D" groups=["ore"]]
+scale = Vector2(2, 2)
 script = ExtResource("1_m0j7s")
 _animations_path = NodePath("AnimatedSprite2D")
 _selection_anim_path = NodePath("SelectionAnimation")

@@ -258,6 +258,7 @@ _circular_progress_bar_nodes = Dictionary[String, NodePath]({
 "witch": NodePath("UI Layer/UI/Battle/HBoxContainer/Witch/Control/CircularProgressBar")
 })
 _money_nodes = Array[NodePath]([NodePath("UI Layer/UI/Town/MoneyBackground/VBoxContainer/MoneyValue"), NodePath("UI Layer/UI/Battle/MoneyBackground/VBoxContainer/MoneyValue"), NodePath("UI Layer/UI/Mine/MoneyBackground/VBoxContainer/MoneyValue")])
+_spawn_ore_nodes = Array[NodePath]([NodePath("UI Layer/UI/Town/SpawnOreLabel"), NodePath("UI Layer/UI/Mine/SpawnOreLabel")])
 
 [node name="Camera2D" type="Camera2D" parent="."]
 anchor_mode = 0
@@ -324,7 +325,8 @@ scale = Vector2(1.5, 1.5)
 position = Vector2(0, 1000)
 
 [node name="Background" type="Node2D" parent="MineLocation"]
-scale = Vector2(2.5, 2.5)
+position = Vector2(151, 96)
+scale = Vector2(2, 2)
 
 [node name="Sprite2D" type="Sprite2D" parent="MineLocation/Background"]
 texture = ExtResource("12_pig8g")
@@ -347,7 +349,8 @@ texture = ExtResource("16_utjqm")
 centered = false
 
 [node name="Mine" type="TileMapLayer" parent="MineLocation"]
-scale = Vector2(0.4, 0.4)
+position = Vector2(-90, -597.36)
+scale = Vector2(0.7, 0.7)
 tile_map_data = PackedByteArray("AAADABEAAAAAAAMAAAADABIAAAAAAAMAAAADABMAAAAAAAMAAAAEABEAAAAAAAMAAAAEABIAAAAAAAMAAAAEABMAAAAAAAMAAAAFABEAAAAAAAMAAAAFABIAAAAAAAMAAAAFABMAAAAAAAMAAAAGABEAAAAAAAMAAAAGABIAAAAAAAMAAAAGABMAAAAAAAMAAAAHABEAAAAAAAMAAAAHABIAAAAAAAMAAAAHABMAAAAAAAMAAAAIABEAAAAAAAMAAAAIABIAAAAAAAMAAAAIABMAAAAAAAMAAAAJABEAAAAAAAMAAAAJABIAAAAAAAMAAAAJABMAAAAAAAMAAAAKABEAAAAAAAMAAAAKABIAAAAAAAMAAAAKABMAAAAAAAMAAAALABEAAAAAAAMAAAALABIAAAAAAAMAAAALABMAAAAAAAMAAAAMABEAAAAAAAMAAAAMABIAAAAAAAMAAAAMABMAAAAAAAMAAAANABEAAAAAAAMAAAANABIAAAAAAAMAAAANABMAAAAAAAMAAAAOABEAAAAAAAMAAAAOABIAAAAAAAMAAAAOABMAAAAAAAMAAAAPABEAAAAAAAMAAAAPABIAAAAAAAMAAAAPABMAAAAAAAMAAAAQABEAAAAAAAMAAAAQABIAAAAAAAMAAAAQABMAAAAAAAMAAAARABEAAAAAAAMAAAARABIAAAAAAAMAAAARABMAAAAAAAMAAAASABEAAAAAAAMAAAASABIAAAAAAAMAAAASABMAAAAAAAMAAAATABEAAAAAAAMAAAATABIAAAAAAAMAAAATABMAAAAAAAMAAAAUABEAAAAAAAMAAAAUABIAAAAAAAMAAAAUABMAAAAAAAMAAAAVABEAAAAAAAMAAAAVABIAAAAAAAMAAAAVABMAAAAAAAMAAAAWABEAAAAAAAMAAAAWABIAAAAAAAMAAAAWABMAAAAAAAMAAAAXABEAAAAAAAMAAAAXABIAAAAAAAMAAAAXABMAAAAAAAMAAAAYABEAAAAAAAMAAAAYABIAAAAAAAMAAAAYABMAAAAAAAMAAAAZABEAAAAAAAMAAAAZABIAAAAAAAMAAAAZABMAAAAAAAMAAAAaABEAAAAAAAMAAAAaABIAAAAAAAMAAAAaABMAAAAAAAMAAAAbABEAAAAAAAMAAAAbABIAAAAAAAMAAAAbABMAAAAAAAMAAAAcABEAAAAAAAMAAAAcABIAAAAAAAMAAAAcABMAAAAAAAMAAAAdABEAAAAAAAMAAAAdABIAAAAAAAMAAAAdABMAAAAAAAMAAAAeABEAAAAAAAMAAAAeABIAAAAAAAMAAAAeABMAAAAAAAMAAAAfABEAAAAAAAMAAAAfABIAAAAAAAMAAAAfABMAAAAAAAMAAAAgABEAAAAAAAMAAAAgABIAAAAAAAMAAAAgABMAAAAAAAMAAAAhABEAAAAAAAMAAAAhABIAAAAAAAMAAAAhABMAAAAAAAMAAAAiABEAAAAAAAMAAAAiABIAAAAAAAMAAAAiABMAAAAAAAMAAAAjABEAAAAAAAMAAAAjABIAAAAAAAMAAAAjABMAAAAAAAMAAAA=")
 tile_set = SubResource("TileSet_byx81")
 
@@ -357,6 +360,7 @@ offset = Vector2(150, 95)
 anchor_mode = 0
 
 [node name="Ores" type="Node2D" parent="MineLocation"]
+y_sort_enabled = true
 
 [node name="OreSpawn" type="Area2D" parent="MineLocation"]
 position = Vector2(334, 737)
@@ -364,7 +368,7 @@ collision_layer = 0
 collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="MineLocation/OreSpawn"]
-position = Vector2(450, -20)
+position = Vector2(398, -105)
 shape = SubResource("RectangleShape2D_vrvtq")
 
 [node name="Teleports" type="Node2D" parent="."]
@@ -375,14 +379,16 @@ scale = Vector2(1, 5.51)
 out_direction = 1
 
 [node name="TeleportMine" parent="Teleports" instance=ExtResource("17_pig8g")]
-position = Vector2(1336, 1718)
-scale = Vector2(1, 4.955)
+position = Vector2(1490, 1631)
+scale = Vector2(1.879, 9.31)
 route = 1
+out_scale = Vector2(2, 2)
 
 [node name="Units" type="Node2D" parent="."]
 y_sort_enabled = true
 
 [node name="UI Layer" type="CanvasLayer" parent="."]
+visible = false
 
 [node name="UI" type="Control" parent="UI Layer"]
 layout_mode = 3
@@ -402,6 +408,23 @@ offset_left = -1152.0
 offset_right = -1152.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="TextureRect2" type="TextureRect" parent="UI Layer/UI/Town"]
+self_modulate = Color(0.60784316, 0.5058824, 0.45882353, 1)
+layout_mode = 0
+offset_left = 9.0
+offset_right = 722.0
+offset_bottom = 135.0
+texture = ExtResource("20_oafc4")
+
+[node name="SpawnOreLabel" type="Label" parent="UI Layer/UI/Town"]
+layout_mode = 0
+offset_left = 210.0
+offset_top = 36.0
+offset_right = 623.0
+offset_bottom = 64.0
+theme_override_font_sizes/font_size = 20
+text = "Новая руда появится через: 4 сек"
 
 [node name="MoneyBackground" type="TextureRect" parent="UI Layer/UI/Town"]
 custom_minimum_size = Vector2(80, 80)
@@ -857,6 +880,23 @@ offset_top = 1096.0
 offset_right = 1303.0
 offset_bottom = 1592.0
 
+[node name="TextureRect" type="TextureRect" parent="UI Layer/UI/Mine"]
+self_modulate = Color(0.60784316, 0.5058824, 0.45882353, 1)
+layout_mode = 0
+offset_left = 9.0
+offset_right = 722.0
+offset_bottom = 135.0
+texture = ExtResource("20_oafc4")
+
+[node name="SpawnOreLabel" type="Label" parent="UI Layer/UI/Mine"]
+layout_mode = 0
+offset_left = 210.0
+offset_top = 36.0
+offset_right = 623.0
+offset_bottom = 64.0
+theme_override_font_sizes/font_size = 20
+text = "Новая руда появится через: 4 сек"
+
 [node name="GoTownButton" type="TextureButton" parent="UI Layer/UI/Mine"]
 layout_mode = 0
 offset_left = 1104.0
@@ -1020,6 +1060,9 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_4cyt7")
 text = "Покинуть матч"
 flat = true
 
+[node name="SpawnOreTimer" type="Timer" parent="."]
+
+[connection signal="ore_added" from="." to="." method="_on_ore_added"]
 [connection signal="pressed" from="UI Layer/UI/Town/GoBattleButton" to="." method="_on_go_battle_button_pressed"]
 [connection signal="pressed" from="UI Layer/UI/Town/GoMineButton" to="." method="_on_go_mine_button_pressed"]
 [connection signal="pressed" from="UI Layer/UI/Town/Settings/SettingsButton" to="." method="_on_settings_button_pressed"]
@@ -1038,3 +1081,4 @@ flat = true
 [connection signal="pressed" from="UI Layer/UI/SettingsMenu/VBoxContainer/Control/CloseButton" to="." method="_on_settings_close_button_pressed"]
 [connection signal="value_changed" from="UI Layer/UI/SettingsMenu/VBoxContainer/Music/MusicSlider" to="." method="_on_music_slider_value_changed"]
 [connection signal="pressed" from="UI Layer/UI/SettingsMenu/VBoxContainer/ExitButton" to="." method="_on_exit_button_pressed"]
+[connection signal="timeout" from="SpawnOreTimer" to="." method="_on_spawn_ore_timer_timeout"]

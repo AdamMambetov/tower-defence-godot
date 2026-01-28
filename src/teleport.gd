@@ -8,11 +8,13 @@ enum Direction {
 
 @export var route: Global.Route
 @export var out_direction: Direction
+@export var out_scale: Vector2 = Vector2.ONE
 
 
 func teleport(unit: Node) -> void:
 	unit.direction = _get_out_direction()
 	unit.global_position = global_position
+	unit.scale = out_scale
 	unit.in_mine = route == Global.Route.Mine
 
 func _get_out_direction() -> Vector2:

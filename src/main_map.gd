@@ -2,6 +2,7 @@ extends Node2D
 
 signal unit_added(is_player: bool, unit_id: String, unit_priority: int)
 signal unit_removed(is_player: bool, unit_id: String)
+signal ore_added
 
 enum MapState {
 	Battle,
@@ -12,6 +13,8 @@ enum MapState {
 
 const UNIT_SCENE = preload("res://scene/soldier.tscn")
 const CONNECTION_CLOSED_TEXT = "Соединение с сервером разорвано!"
+const SPAWN_ORE_TEXT = "Новая руда появится через: {0} сек"
+const SPAWN_ORE_TIME = 240
 
 var camera_speed: float = 50.0
 var move_by_mouse: bool = true
@@ -26,6 +29,8 @@ var map_state: MapState = MapState.Battle:
 		if map_state == MapState.EndGame:
 			$"UI Layer/UI/SettingsMenu".visible = false
 
+var current_spawn_ore_time: int = SPAWN_ORE_TIME
+
 @export var _end_game_label_path: NodePath
 @onready var end_game_label: Label = get_node(_end_game_label_path)
 @export var _units_capacity_label_path: NodePath
@@ -37,6 +42,7 @@ var map_state: MapState = MapState.Battle:
 @export var _price_nodes: Dictionary[String, NodePath]
 @export var _circular_progress_bar_nodes: Dictionary[String, NodePath]
 @export var _money_nodes: Array[NodePath]
+@export var _spawn_ore_nodes: Array[NodePath]
 
 
 func _ready() -> void:
@@ -57,6 +63,7 @@ func _ready() -> void:
 		circular_progress_bar.visible = false
 	$"UI Layer/UI/SettingsMenu/VBoxContainer/Music/MusicSlider".value = AudioPlayer.get_music_volume()
 	$"UI Layer/UI/SettingsMenu".visible = false
+	update_spawn_ore_text()
 	AudioPlayer.play_battle()
 
 func _process(_delta: float) -> void:
@@ -155,10 +162,17 @@ func spawn_ore(data: Dictionary) -> void:
 	ore.position.y = data.y
 	ore.ore_clicked.connect($PlayerTower._on_ore_clicked)
 	$MineLocation/Ores.add_child(ore)
+	ore_added.emit()
 
 func update_money_text(new_money: int) -> void:
 	for path in _money_nodes:
 		get_node(path).text = str(new_money)
+
+func update_spawn_ore_text() -> void:
+	for el in _spawn_ore_nodes:
+		get_node(el).text = SPAWN_ORE_TEXT.format([
+			str(current_spawn_ore_time),
+		])
 
 
 func _on_WS_new_data_recieved(result: Dictionary) -> void:
@@ -243,3 +257,16 @@ func _on_exit_button_pressed() -> void:
 		WS.socket.close()
 	get_tree().paused = false
 	get_tree().change_scene_to_file("res://scene/main_menu.tscn")
+
+func _on_ore_added() -> void:
+	current_spawn_ore_time = SPAWN_ORE_TIME
+	update_spawn_ore_text()
+	$SpawnOreTimer.start()
+
+func _on_spawn_ore_timer_timeout() -> void:
+	current_spawn_ore_time = clampi(
+		current_spawn_ore_time - 1,
+		0,
+		SPAWN_ORE_TIME,
+	)
+	update_spawn_ore_text()
