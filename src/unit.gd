@@ -114,8 +114,7 @@ func update_info(info: Dictionary) -> void:
 
 func move_attack(delta: float) -> void:
 	direction = get_default_direction()
-	find_nearest_enemy()
-	if is_instance_valid(nearest_enemy):
+	if find_nearest_enemy():
 		direction = global_position.direction_to(nearest_enemy.global_position)
 		direction.x /= 2
 		direction.y *= 2
@@ -171,10 +170,10 @@ func get_default_direction() -> Vector2:
 	else:
 		return Vector2.LEFT
 
-func find_nearest_enemy() -> void:
+func find_nearest_enemy() -> bool:
 	if !agr_area.has_overlapping_areas():
 		nearest_enemy = null
-		return
+		return false
 	var enemies = agr_area.get_overlapping_areas()
 	nearest_enemy = enemies[0].get_parent()
 	for el in enemies:
@@ -182,6 +181,7 @@ func find_nearest_enemy() -> void:
 		var distance = global_position.distance_to(enemy.global_position)
 		if distance < global_position.distance_to(nearest_enemy.global_position):
 			nearest_enemy = enemy
+	return true
 
 func is_on_defence_position() -> bool:
 	var to_position = tower_node.get_defence_position(id)
@@ -191,8 +191,7 @@ func horizontal_distance(pos1: Vector2, pos2: Vector2) -> float:
 	return abs(pos1.x - pos2.x)
 
 func has_enemy_on_attack_distance(my_pos: Vector2) -> bool:
-	find_nearest_enemy()
-	if !is_instance_valid(nearest_enemy):
+	if !find_nearest_enemy():
 		return false
 	
 	var x_sign = 1 if is_player else -1
