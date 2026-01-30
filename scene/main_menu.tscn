@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://clbg1eyvs7ak8"]
+[gd_scene load_steps=32 format=3 uid="uid://clbg1eyvs7ak8"]
 
 [ext_resource type="Script" uid="uid://c155d6c6f3lr3" path="res://src/main_menu.gd" id="1_3er1b"]
 [ext_resource type="PackedScene" uid="uid://dxfvbrgnu75ji" path="res://scene/background.tscn" id="2_0iwki"]
@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://bwr4ca43vfjvg" path="res://file/Tick2.png" id="7_2atga"]
 [ext_resource type="Texture2D" uid="uid://7pgq4bgqka0i" path="res://file/icon/icons8--100.png" id="8_by01r"]
 [ext_resource type="Texture2D" uid="uid://b8sk5nfxhs1tf" path="res://file/icon/icons8--28.png" id="9_dclss"]
-[ext_resource type="Texture2D" uid="uid://c1uvd5in4pi34" path="res://file/20250420manaSoul9SlicesA-Sheet.png" id="9_hmxu4"]
+[ext_resource type="PackedScene" uid="uid://cfjtk0ckcp7p2" path="res://scene/warning_menu.tscn" id="9_hmxu4"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dclss"]
 
@@ -221,9 +221,6 @@ corner_radius_bottom_left = 15
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_by01r"]
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ceq6q"]
-texture = ExtResource("9_hmxu4")
-
 [node name="MainMenu" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -233,6 +230,7 @@ grow_horizontal = 2
 grow_vertical = 2
 focus_mode = 1
 script = ExtResource("1_3er1b")
+_warning_menu_path = NodePath("WarningMenu")
 
 [node name="Background" parent="." instance=ExtResource("2_0iwki")]
 
@@ -796,45 +794,13 @@ flat = true
 visible = false
 layout_mode = 1
 
-[node name="WarningMenu" type="Panel" parent="."]
+[node name="WarningMenu" parent="." instance=ExtResource("9_hmxu4")]
 visible = false
-custom_minimum_size = Vector2(192, 192)
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
-grow_horizontal = 2
-grow_vertical = 2
-focus_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_ceq6q")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="WarningMenu"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.065
-anchor_top = 0.123
-anchor_right = 0.941
-anchor_bottom = 0.895
-
-[node name="Title" type="Label" parent="WarningMenu/VBoxContainer"]
-layout_mode = 2
-text = "Внимание"
-horizontal_alignment = 1
-uppercase = true
-
-[node name="Text" type="Label" parent="WarningMenu/VBoxContainer"]
-custom_minimum_size = Vector2(8.375, 0)
-layout_mode = 2
-size_flags_vertical = 3
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 3
+offset_left = -96.0
+offset_top = -96.0
+offset_right = 96.0
+offset_bottom = 96.0
 
 [connection signal="pressed" from="MarginContainer/start_btn" to="." method="_on_start_btn_pressed"]
 [connection signal="pressed" from="MarginContainer/settings_btn" to="." method="_on_settings_btn_pressed"]
@@ -858,4 +824,3 @@ autowrap_mode = 3
 [connection signal="pressed" from="AccountsMenu/SignIn/go_sign_up_btn" to="." method="_on_go_sign_up_btn_pressed"]
 [connection signal="pressed" from="AccountsMenu/Profile/Control/ExitButton" to="." method="_on_exit_button_pressed"]
 [connection signal="pressed" from="AccountsMenu/Profile/logout_btn" to="." method="_on_logout_btn_pressed"]
-[connection signal="focus_exited" from="WarningMenu" to="." method="_on_warning_menu_focus_exited"]

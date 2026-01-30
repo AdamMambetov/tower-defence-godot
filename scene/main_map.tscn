@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=4 uid="uid://d1vrkfxgttq3c"]
+[gd_scene load_steps=50 format=4 uid="uid://d1vrkfxgttq3c"]
 
 [ext_resource type="Script" uid="uid://cfltnwoeynwn2" path="res://src/main_map.gd" id="1_xf4q7"]
 [ext_resource type="Texture2D" uid="uid://d3a0835k1w76s" path="res://file/background/background_layer_1.png" id="2_13gc7"]
@@ -36,6 +36,7 @@
 [ext_resource type="Texture2D" uid="uid://bcphp1anvu5gw" path="res://file/OneMint.png" id="34_4cyt7"]
 [ext_resource type="Texture2D" uid="uid://bwr4ca43vfjvg" path="res://file/Tick2.png" id="35_co0ym"]
 [ext_resource type="Texture2D" uid="uid://b8sk5nfxhs1tf" path="res://file/icon/icons8--28.png" id="36_agp45"]
+[ext_resource type="PackedScene" uid="uid://cfjtk0ckcp7p2" path="res://scene/warning_menu.tscn" id="37_4cyt7"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vrvtq"]
 texture = ExtResource("9_vvnmp")
@@ -243,6 +244,7 @@ _end_game_label_path = NodePath("UI Layer/UI/EndGame/EndMenu/VBoxContainer/Label
 _units_capacity_label_path = NodePath("UI Layer/UI/Battle/UnitsCapacity/UnitsCapacityLabel")
 _select_texture_path = NodePath("UI Layer/UI/Battle/VBoxContainer/DefenceButton/SelectTexture")
 _camera_path = NodePath("Camera2D")
+_warning_menu_path = NodePath("UI Layer/UI/WarningMenu")
 _price_nodes = Dictionary[String, NodePath]({
 "miner": NodePath("UI Layer/UI/Battle/HBoxContainer/Miner/MinerPrice"),
 "minotaur": NodePath("UI Layer/UI/Battle/HBoxContainer/Minotaur/MinotaurPrice"),
@@ -388,7 +390,6 @@ out_scale = Vector2(2, 2)
 y_sort_enabled = true
 
 [node name="UI Layer" type="CanvasLayer" parent="."]
-visible = false
 
 [node name="UI" type="Control" parent="UI Layer"]
 layout_mode = 3
@@ -600,6 +601,7 @@ offset_left = -4.0
 offset_top = -4.0
 offset_right = 64.0
 offset_bottom = 64.0
+test_start_anim = true
 
 [node name="MinerPrice" type="Label" parent="UI Layer/UI/Battle/HBoxContainer/Miner"]
 layout_mode = 2
@@ -1059,6 +1061,23 @@ theme_override_icons/icon = ExtResource("36_agp45")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_4cyt7")
 text = "Покинуть матч"
 flat = true
+
+[node name="WarningMenu" parent="UI Layer/UI" instance=ExtResource("37_4cyt7")]
+visible = false
+layout_mode = 1
+offset_left = -96.0
+offset_top = -96.0
+offset_right = 96.0
+offset_bottom = 96.0
+
+[node name="CircularProgressBar" parent="UI Layer/UI/WarningMenu" instance=ExtResource("21_utjqm")]
+show_behind_parent = true
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 0
+offset_left = 46.0
+offset_top = 46.0
+offset_right = 146.0
+offset_bottom = 146.0
 
 [node name="SpawnOreTimer" type="Timer" parent="."]
 

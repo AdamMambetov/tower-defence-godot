@@ -17,6 +17,8 @@ var id: String
 
 var unit_state: String:
 	set(value):
+		if unit_state == value:
+			return
 		var old = unit_state
 		unit_state = value
 		_on_set_unit_state(old, value)

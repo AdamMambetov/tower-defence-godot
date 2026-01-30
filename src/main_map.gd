@@ -39,6 +39,8 @@ var current_spawn_ore_time: int = SPAWN_ORE_TIME
 @onready var select_texture: TextureRect = get_node(_select_texture_path)
 @export var _camera_path: NodePath
 @onready var camera: Camera2D = get_node(_camera_path)
+@export var _warning_menu_path: NodePath
+@onready var warning_menu: WarningMenu = get_node(_warning_menu_path)
 @export var _price_nodes: Dictionary[String, NodePath]
 @export var _circular_progress_bar_nodes: Dictionary[String, NodePath]
 @export var _money_nodes: Array[NodePath]
@@ -111,6 +113,12 @@ func _new_data_handler(data: Dictionary) -> void:
 			spawn_ore(data.ore)
 		"sell_ore":
 			update_money_text(data.money)
+		"opponent_left":
+			warning_menu.detail = "Противник вышел из игры"
+			$"UI Layer/UI/WarningMenu/CircularProgressBar".start(4, true)
+			warning_menu.show_menu()
+			await $"UI Layer/UI/WarningMenu/CircularProgressBar".animation_finished
+			warning_menu.visible = false
 
 
 func spawn_request(unit_name: String) -> void:

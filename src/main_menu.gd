@@ -31,6 +31,9 @@ var accounts_state: AccountsState:
 		$AccountsMenu/SignIn.visible = accounts_state == AccountsState.SignIn
 		$AccountsMenu/Profile.visible = accounts_state == AccountsState.Profile
 
+@export var _warning_menu_path: NodePath
+@onready var warning_menu: WarningMenu = get_node(_warning_menu_path)
+
 
 func _ready() -> void:
 	init_audio_player()
@@ -52,9 +55,8 @@ func _ready() -> void:
 
 
 func _show_warning_menu(text: String) -> void:
-	$WarningMenu/VBoxContainer/Text.text = text
-	$WarningMenu.visible = true
-	$WarningMenu.grab_focus()
+	warning_menu.detail = text
+	warning_menu.show_menu()
 
 func update_profile(user_info: Dictionary) -> void:
 	$AccountsMenu/Profile/id_label.text = "ID: %s" % str(user_info.id)
@@ -174,6 +176,3 @@ func _on_music_slider_value_changed(value: float) -> void:
 
 func _on_exit_button_pressed() -> void:
 	menu_state = MenuState.None
-
-func _on_warning_menu_focus_exited() -> void:
-	$WarningMenu.visible = false

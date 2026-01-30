@@ -60,7 +60,7 @@ func move_attack(delta: float) -> void:
 		else:
 			route = Global.Route.Tower
 			direction = get_default_direction()
-	position += speed * delta * direction
+	position += speed * delta * direction * scale.x
 
 func update_info(info: Dictionary) -> void:
 	super.update_info(info)
@@ -83,7 +83,8 @@ func action_none() -> void:
 	find_nearest_enemy()
 	var areas = attack_area.get_overlapping_areas()
 	for area in areas:
-		_on_attack_area_area_entered(area)
+		if unit_state != UnitState.Attack:
+			_on_attack_area_area_entered(area)
 	if unit_state == UnitState.None:
 		action_move()
 
@@ -127,7 +128,7 @@ func stop_select_anim() -> void:
 	if is_instance_valid(selected_ore):
 		selected_ore.stop_select_anim()
 
-
+var attack_count = 0
 func _on_set_unit_state(_old: String, new: String) -> void:
 	match new:
 		UnitState.Idle:
@@ -135,6 +136,9 @@ func _on_set_unit_state(_old: String, new: String) -> void:
 		UnitState.Walk:
 			animations.play(&"walk")
 		UnitState.Attack:
+			if animations.animation == &"attack" and animations.is_playing():
+				return
+			attack_count += 1
 			animations.play(&"attack")
 			await animations.animation_finished
 			if unit_state != UnitState.Attack:
@@ -146,7 +150,9 @@ func _on_set_unit_state(_old: String, new: String) -> void:
 					to = current_ore.id,
 				}))
 			current_ore = null
+			await get_tree().physics_frame
 			action_none()
+			print(attack_count)
 
 func _on_set_direction(old: Vector2, new: Vector2) -> void:
 	super._on_set_direction(old, new)
