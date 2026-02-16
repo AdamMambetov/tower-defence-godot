@@ -8272,6 +8272,7 @@ defence_position = Vector2(200, 0)
 _tower_area_path = NodePath("TowerArea")
 _tower_collition_path = NodePath("TowerArea/CollisionShape2D")
 _defence_shape_cast_path = NodePath("DefenceShapeCast")
+_name_label_path = NodePath("VBox/NameLabel")
 
 [node name="TowerArea" type="Area2D" parent="."]
 collision_layer = 8
@@ -8353,6 +8354,19 @@ grow_vertical = 2
 text = "1000"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="VBox" type="VBoxContainer" parent="."]
+offset_left = -112.0
+offset_top = -385.0
+offset_right = 88.0
+offset_bottom = -343.0
+
+[node name="NameLabel" type="Label" parent="VBox"]
+custom_minimum_size = Vector2(200, 42)
+layout_mode = 2
+text = "Nickname"
+horizontal_alignment = 1
+autowrap_mode = 3
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
 position = Vector2(0, -169)

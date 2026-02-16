@@ -72,6 +72,9 @@ var selected_miner: Miner:
 @export var _defence_shape_cast_path: NodePath
 @onready var defence_shape_cast: ShapeCast2D = get_node(_defence_shape_cast_path)
 
+@export var _name_label_path: NodePath
+@onready var name_label: Label = get_node(_name_label_path)
+
 
 func _ready() -> void:
 	if is_instance_valid(WS):

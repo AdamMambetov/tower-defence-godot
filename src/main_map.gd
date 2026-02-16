@@ -96,6 +96,8 @@ func _new_data_handler(data: Dictionary) -> void:
 				get_node(_price_nodes.get(el[0])).text = str(int(el[1]))
 			$PlayerTower.init_matrix(data.units_capacity)
 			$EnemyTower.init_matrix(data.units_capacity)
+			$PlayerTower.name_label.text = data.name
+			$EnemyTower.name_label.text = data.enemy_name
 			units_capacity_label.text = "0/{0}".format([int(data.units_capacity)])
 		"end_game":
 			Cache.set_room_id("")
