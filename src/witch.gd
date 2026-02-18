@@ -67,7 +67,8 @@ func _on_set_unit_state(_old: String, new: String) -> void:
 					if enemy.health <= 0:
 						continue
 					enemy_ids.push_back(enemy.id)
-				WS.attack(self.id, enemy_ids)
+				var from_id = self.id + " " if tower_node.player_left else self.id
+				WS.attack(from_id, enemy_ids)
 			unit_state = UnitState.WaitAttack
 		UnitState.WaitAttack:
 			animations.position = AnimationPos.Idle

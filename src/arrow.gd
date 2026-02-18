@@ -32,7 +32,8 @@ func _physics_process(delta: float) -> void:
 	if area_node.has_overlapping_areas():
 		var unit = area_node.get_overlapping_areas()[0].get_parent()
 		if is_player or player_left:
-			WS.attack(id, unit.id)
+			var from_id = id + " " if player_left else id
+			WS.attack(from_id, unit.id)
 		is_launched = false
 		queue_free()
 
