@@ -50,7 +50,7 @@ func _on_set_unit_state(_old: String, new: String) -> void:
 				find_nearest_enemy()
 			else:
 				nearest_enemy = null
-			if is_instance_valid(nearest_enemy) and is_player:
+			if is_instance_valid(nearest_enemy) and (is_player or tower_node.player_left):
 				WS.attack(self.id, nearest_enemy.id)
 			unit_state = UnitState.WaitAttack
 		UnitState.WaitAttack:

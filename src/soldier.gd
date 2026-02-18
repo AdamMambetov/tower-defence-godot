@@ -52,11 +52,13 @@ func _on_set_unit_state(old: String, new: String) -> void:
 				find_nearest_enemy()
 			else:
 				nearest_enemy = null
-			if is_instance_valid(nearest_enemy) and is_player:
+			if is_instance_valid(nearest_enemy) and (is_player or tower_node.player_left):
+				print("attack!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 				WS.attack(self.id, nearest_enemy.id)
 			if animations.animation == ATTACKS.back():
 				unit_state = UnitState.WaitAttack
 			else:
+				unit_state = UnitState.None
 				action_none()
 		UnitState.WaitAttack:
 			animations.play(&"idle")

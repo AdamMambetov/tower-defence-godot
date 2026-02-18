@@ -18,6 +18,7 @@ const headers = {
 
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	_create_access_token_timer()
 
 
@@ -145,6 +146,31 @@ func update_access_token() -> bool:
 	else:
 		printerr("Request Error: ", res[1], ", ", body_json)
 		return false
+
+func send_friend_request(id: int) -> String:
+	var access_token = Global.get_password("access")
+	var error = request(
+		API_BASE_URL + "users/friends/{0}".format([str(id)]),
+		[headers.json, headers.jwt_token + access_token],
+		HTTPClient.METHOD_POST,
+	 )
+	if error:
+		printerr(error)
+		return str(error)
+	
+	var res = await request_completed
+	var body_json = JSON.parse_string(res[3].get_string_from_utf8())
+	if res[0] == HTTPRequest.RESULT_SUCCESS and res[1] == 200:
+		prints(
+			"POST",
+			res[1],
+			"users/friends/{0}".format([str(id)]),
+			body_json,
+		)
+	else:
+		printerr("request error: ", res, body_json)
+		return body_json.detail
+	return ""
 
 
 func _add_field(body: PackedByteArray, key: String, value: String) -> void:

@@ -68,6 +68,7 @@ func _on_set_unit_state(_old: String, new: String) -> void:
 				to_point = to_point,
 			})
 			arrow.is_player = is_player
+			arrow.player_left = tower_node.player_left
 			get_parent().add_child(arrow)
 			unit_state = UnitState.WaitAttack
 		UnitState.WaitAttack:

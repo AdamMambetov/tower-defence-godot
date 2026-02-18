@@ -708,7 +708,6 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_ictww")
 text = "У вас нет аккаунта? Зарегистрироваться"
 
 [node name="Profile" type="VBoxContainer" parent="AccountsMenu"]
-visible = false
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -789,6 +788,15 @@ theme_override_icons/icon = ExtResource("9_dclss")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_by01r")
 text = "Выйти из аккаунта"
 flat = true
+
+[node name="FriendList" type="Panel" parent="AccountsMenu"]
+material = SubResource("ShaderMaterial_sepwh")
+custom_minimum_size = Vector2(400, 275)
+layout_mode = 0
+offset_left = 372.155
+offset_right = 772.15515
+offset_bottom = 275.0
+focus_mode = 1
 
 [node name="LoadingScreen" parent="." instance=ExtResource("2_hxu56")]
 visible = false

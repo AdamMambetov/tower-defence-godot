@@ -57,7 +57,7 @@ func _on_set_unit_state(_old: String, new: String) -> void:
 			await animations.animation_finished
 			if unit_state != UnitState.Attack:
 				return
-			if is_player:
+			if is_player or tower_node.player_left:
 				var areas = attack_area.get_overlapping_areas()
 				var enemy_ids = []
 				for area in areas:

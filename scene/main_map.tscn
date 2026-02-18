@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=4 uid="uid://d1vrkfxgttq3c"]
+[gd_scene load_steps=81 format=4 uid="uid://d1vrkfxgttq3c"]
 
 [ext_resource type="Script" uid="uid://cfltnwoeynwn2" path="res://src/main_map.gd" id="1_xf4q7"]
 [ext_resource type="Texture2D" uid="uid://d3a0835k1w76s" path="res://file/background/background_layer_1.png" id="2_13gc7"]
@@ -33,7 +33,9 @@
 [ext_resource type="Texture2D" uid="uid://5sqqcja6ej0g" path="res://file/icon/units_count_icon.png" id="30_ecsw8"]
 [ext_resource type="Shader" uid="uid://digctqwu0sib2" path="res://scene/glass.gdshader" id="32_w3ryn"]
 [ext_resource type="Texture2D" uid="uid://7pgq4bgqka0i" path="res://file/icon/icons8--100.png" id="33_agp45"]
+[ext_resource type="Texture2D" uid="uid://bhb8ouxybqqdr" path="res://file/icon/icons8---48_1.png" id="33_co0ym"]
 [ext_resource type="Texture2D" uid="uid://bcphp1anvu5gw" path="res://file/OneMint.png" id="34_4cyt7"]
+[ext_resource type="Texture2D" uid="uid://d4m8dy3ssrpv4" path="res://file/icon/ffe07840e1d82fad.png" id="34_e75qt"]
 [ext_resource type="Texture2D" uid="uid://bwr4ca43vfjvg" path="res://file/Tick2.png" id="35_co0ym"]
 [ext_resource type="Texture2D" uid="uid://b8sk5nfxhs1tf" path="res://file/icon/icons8--28.png" id="36_agp45"]
 [ext_resource type="PackedScene" uid="uid://cfjtk0ckcp7p2" path="res://scene/warning_menu.tscn" id="37_4cyt7"]
@@ -180,6 +182,210 @@ shader_parameter/blur_samples = 4
 shader_parameter/glass_opacity = 0.2
 shader_parameter/node_size = Vector2(400, 200)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_mn0co"]
+atlas = ExtResource("34_e75qt")
+region = Rect2(0, 0, 49, 49)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ppud3"]
+atlas = ExtResource("34_e75qt")
+region = Rect2(49, 0, 49, 49)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f1jaf"]
+atlas = ExtResource("34_e75qt")
+region = Rect2(98, 0, 49, 49)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qjvm5"]
+atlas = ExtResource("34_e75qt")
+region = Rect2(147, 0, 49, 49)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2nidw"]
+atlas = ExtResource("34_e75qt")
+region = Rect2(196, 0, 49, 49)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ig6k7"]
+atlas = ExtResource("34_e75qt")
+region = Rect2(245, 0, 49, 49)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yi2fj"]
+atlas = ExtResource("34_e75qt")
+region = Rect2(0, 49, 49, 49)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_57hc3"]
+atlas = ExtResource("34_e75qt")
+region = Rect2(49, 49, 49, 49)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2sdbp"]
+atlas = ExtResource("34_e75qt")
+region = Rect2(98, 49, 49, 49)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c4cq0"]
+atlas = ExtResource("34_e75qt")
+region = Rect2(147, 49, 49, 49)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pw7wy"]
+atlas = ExtResource("34_e75qt")
+region = Rect2(196, 49, 49, 49)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nluqf"]
+atlas = ExtResource("34_e75qt")
+region = Rect2(245, 49, 49, 49)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7562s"]
+atlas = ExtResource("34_e75qt")
+region = Rect2(0, 98, 49, 49)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_npq1d"]
+atlas = ExtResource("34_e75qt")
+region = Rect2(49, 98, 49, 49)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3eb0m"]
+atlas = ExtResource("34_e75qt")
+region = Rect2(98, 98, 49, 49)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4kpk5"]
+atlas = ExtResource("34_e75qt")
+region = Rect2(147, 98, 49, 49)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3tonr"]
+atlas = ExtResource("34_e75qt")
+region = Rect2(196, 98, 49, 49)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1aydu"]
+atlas = ExtResource("34_e75qt")
+region = Rect2(245, 98, 49, 49)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ufwm6"]
+atlas = ExtResource("34_e75qt")
+region = Rect2(0, 147, 49, 49)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bwyex"]
+atlas = ExtResource("34_e75qt")
+region = Rect2(49, 147, 49, 49)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vtiua"]
+atlas = ExtResource("34_e75qt")
+region = Rect2(98, 147, 49, 49)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mgkkh"]
+atlas = ExtResource("34_e75qt")
+region = Rect2(147, 147, 49, 49)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kbnm4"]
+atlas = ExtResource("34_e75qt")
+region = Rect2(196, 147, 49, 49)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_48er6"]
+atlas = ExtResource("34_e75qt")
+region = Rect2(245, 147, 49, 49)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jb5t5"]
+atlas = ExtResource("34_e75qt")
+region = Rect2(0, 196, 49, 49)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6l6j0"]
+atlas = ExtResource("34_e75qt")
+region = Rect2(49, 196, 49, 49)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_emt1e"]
+atlas = ExtResource("34_e75qt")
+region = Rect2(98, 196, 49, 49)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uy2w2"]
+atlas = ExtResource("34_e75qt")
+region = Rect2(147, 196, 49, 49)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ixgmx"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mn0co")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ppud3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f1jaf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qjvm5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2nidw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ig6k7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yi2fj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_57hc3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2sdbp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c4cq0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pw7wy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nluqf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7562s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_npq1d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3eb0m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4kpk5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3tonr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1aydu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ufwm6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bwyex")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vtiua")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mgkkh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kbnm4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_48er6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jb5t5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6l6j0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_emt1e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uy2w2")
+}],
+"loop": false,
+"name": &"default",
+"speed": 28.0
+}]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_agp45"]
 content_margin_left = 4.0
 content_margin_top = 4.0
@@ -240,11 +446,15 @@ corner_detail = 6
 
 [node name="MainMap" type="Node2D"]
 script = ExtResource("1_xf4q7")
-_end_game_label_path = NodePath("UI Layer/UI/EndGame/EndMenu/VBoxContainer/Label")
+_end_game_label_path = NodePath("UI Layer/UI/EndGame/EndMenu/VBoxContainer/EndGameLabel")
 _units_capacity_label_path = NodePath("UI Layer/UI/Battle/UnitsCapacity/UnitsCapacityLabel")
 _select_texture_path = NodePath("UI Layer/UI/Battle/VBoxContainer/DefenceButton/SelectTexture")
 _camera_path = NodePath("Camera2D")
 _warning_menu_path = NodePath("UI Layer/UI/WarningMenu")
+_friend_button_path = NodePath("UI Layer/UI/EndGame/EndMenu/VBoxContainer/HBoxContainer/FriendButton")
+_friend_animation_path = NodePath("UI Layer/UI/EndGame/EndMenu/VBoxContainer/HBoxContainer/FriendAnimation")
+_enemy_label_path = NodePath("UI Layer/UI/EndGame/EndMenu/VBoxContainer/HBoxContainer/EnemyLabel")
+_warning_progress_bar_path = NodePath("UI Layer/UI/WarningMenu/CircularProgressBar")
 _price_nodes = Dictionary[String, NodePath]({
 "miner": NodePath("UI Layer/UI/Battle/HBoxContainer/Miner/MinerPrice"),
 "minotaur": NodePath("UI Layer/UI/Battle/HBoxContainer/Minotaur/MinotaurPrice"),
@@ -814,7 +1024,6 @@ stretch_mode = 4
 
 [node name="EndGame" type="Control" parent="UI Layer/UI"]
 process_mode = 2
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -853,16 +1062,42 @@ layout_mode = 0
 offset_left = 5.0
 offset_right = 395.0
 offset_bottom = 200.0
-theme_override_constants/separation = 30
+theme_override_constants/separation = 15
 alignment = 1
 
-[node name="Label" type="Label" parent="UI Layer/UI/EndGame/EndMenu/VBoxContainer"]
+[node name="EndGameLabel" type="Label" parent="UI Layer/UI/EndGame/EndMenu/VBoxContainer"]
 custom_minimum_size = Vector2(0.435, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
-text = "Победитель adam"
+text = "Ты проиграл!"
 horizontal_alignment = 1
 autowrap_mode = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI Layer/UI/EndGame/EndMenu/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 14
+alignment = 1
+
+[node name="EnemyLabel" type="Label" parent="UI Layer/UI/EndGame/EndMenu/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(0.435, 0)
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 20
+text = "Соперник adam"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="FriendButton" type="TextureButton" parent="UI Layer/UI/EndGame/EndMenu/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(38, 38)
+layout_mode = 2
+texture_normal = ExtResource("33_co0ym")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="FriendAnimation" type="AnimatedSprite2D" parent="UI Layer/UI/EndGame/EndMenu/VBoxContainer/HBoxContainer"]
+visible = false
+position = Vector2(279, 19)
+sprite_frames = SubResource("SpriteFrames_ixgmx")
 
 [node name="ExitButton" type="Button" parent="UI Layer/UI/EndGame/EndMenu/VBoxContainer"]
 custom_minimum_size = Vector2(260, 0)
@@ -1070,6 +1305,7 @@ offset_right = 96.0
 offset_bottom = 96.0
 
 [node name="CircularProgressBar" parent="UI Layer/UI/WarningMenu" instance=ExtResource("21_utjqm")]
+process_mode = 3
 show_behind_parent = true
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 0
@@ -1093,6 +1329,7 @@ offset_bottom = 146.0
 [connection signal="pressed" from="UI Layer/UI/Battle/VBoxContainer/AttackButton" to="." method="_on_attack_button_pressed"]
 [connection signal="pressed" from="UI Layer/UI/Battle/VBoxContainer/DefenceButton" to="." method="_on_defence_button_pressed"]
 [connection signal="pressed" from="UI Layer/UI/Battle/Settings/SettingsButton" to="." method="_on_settings_button_pressed"]
+[connection signal="pressed" from="UI Layer/UI/EndGame/EndMenu/VBoxContainer/HBoxContainer/FriendButton" to="." method="_on_friend_button_pressed"]
 [connection signal="pressed" from="UI Layer/UI/EndGame/EndMenu/VBoxContainer/ExitButton" to="." method="_on_exit_button_pressed"]
 [connection signal="pressed" from="UI Layer/UI/Mine/GoTownButton" to="." method="_on_go_town_button_pressed"]
 [connection signal="pressed" from="UI Layer/UI/Mine/Settings/SettingsButton" to="." method="_on_settings_button_pressed"]

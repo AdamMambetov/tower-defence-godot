@@ -5,6 +5,7 @@ var id: String
 @export var speed = 1000
 @export var damage = 5
 @export var is_player: bool = true
+var player_left: bool = false
 
 var direction: Vector2 = Vector2.RIGHT:
 	set(value):
@@ -30,7 +31,8 @@ func _physics_process(delta: float) -> void:
 	
 	if area_node.has_overlapping_areas():
 		var unit = area_node.get_overlapping_areas()[0].get_parent()
-		WS.attack(id, unit.id)
+		if is_player or player_left:
+			WS.attack(id, unit.id)
 		is_launched = false
 		queue_free()
 

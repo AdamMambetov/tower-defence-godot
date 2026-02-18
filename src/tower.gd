@@ -35,6 +35,7 @@ var defence_range_y: Array = [-38.4, 0.0, 38.4]
 var defence_matrix: Array[DefenceItem] = []
 
 var id: String = "tower"
+var player_left: bool = false
 
 var health: float = 1000:
 	set(value):

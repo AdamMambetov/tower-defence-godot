@@ -128,7 +128,6 @@ func stop_select_anim() -> void:
 	if is_instance_valid(selected_ore):
 		selected_ore.stop_select_anim()
 
-var attack_count = 0
 func _on_set_unit_state(_old: String, new: String) -> void:
 	match new:
 		UnitState.Idle:
@@ -138,7 +137,6 @@ func _on_set_unit_state(_old: String, new: String) -> void:
 		UnitState.Attack:
 			if animations.animation == &"attack" and animations.is_playing():
 				return
-			attack_count += 1
 			animations.play(&"attack")
 			await animations.animation_finished
 			if unit_state != UnitState.Attack:
@@ -152,7 +150,6 @@ func _on_set_unit_state(_old: String, new: String) -> void:
 			current_ore = null
 			await get_tree().physics_frame
 			action_none()
-			print(attack_count)
 
 func _on_set_direction(old: Vector2, new: Vector2) -> void:
 	super._on_set_direction(old, new)

@@ -30,19 +30,39 @@ var map_state: MapState = MapState.Battle:
 			$"UI Layer/UI/SettingsMenu".visible = false
 
 var current_spawn_ore_time: int = SPAWN_ORE_TIME
+var enemy_id: int
+
 
 @export var _end_game_label_path: NodePath
 @onready var end_game_label: Label = get_node(_end_game_label_path)
+
 @export var _units_capacity_label_path: NodePath
 @onready var units_capacity_label: Label = get_node(_units_capacity_label_path)
+
 @export var _select_texture_path: NodePath
 @onready var select_texture: TextureRect = get_node(_select_texture_path)
+
 @export var _camera_path: NodePath
 @onready var camera: Camera2D = get_node(_camera_path)
+
 @export var _warning_menu_path: NodePath
 @onready var warning_menu: WarningMenu = get_node(_warning_menu_path)
+
+@export var _friend_button_path: NodePath
+@onready var friend_button: TextureButton = get_node(_friend_button_path)
+
+@export var _friend_animation_path: NodePath
+@onready var friend_animation: AnimatedSprite2D = get_node(_friend_animation_path)
+
+@export var _enemy_label_path: NodePath
+@onready var enemy_label: Label = get_node(_enemy_label_path)
+
+@export var _warning_progress_bar_path: NodePath
+@onready var warning_progress_bar: CircularProgressBar = get_node(_warning_progress_bar_path)
+
 @export var _price_nodes: Dictionary[String, NodePath]
 @export var _circular_progress_bar_nodes: Dictionary[String, NodePath]
+
 @export var _money_nodes: Array[NodePath]
 @export var _spawn_ore_nodes: Array[NodePath]
 
@@ -98,11 +118,16 @@ func _new_data_handler(data: Dictionary) -> void:
 			$EnemyTower.init_matrix(data.units_capacity)
 			$PlayerTower.name_label.text = data.name
 			$EnemyTower.name_label.text = data.enemy_name
+			enemy_label.text = "Соперник " + data.enemy_name
+			enemy_id = data.enemy_id
 			units_capacity_label.text = "0/{0}".format([int(data.units_capacity)])
 		"end_game":
 			Cache.set_room_id("")
 			get_tree().paused = true
-			end_game_label.text = "Победитель " + data.winner
+			if data.winner == $PlayerTower.name_label.text:
+				end_game_label.text = "Ты победил!"
+			else:
+				end_game_label.text = "Ты проиграл!"
 			map_state = MapState.EndGame
 		"spawn":
 			spawn_unit(true, JSON.parse_string(data.unit_info))
@@ -116,12 +141,16 @@ func _new_data_handler(data: Dictionary) -> void:
 		"sell_ore":
 			update_money_text(data.money)
 		"opponent_left":
-			warning_menu.detail = "Противник вышел из игры"
-			$"UI Layer/UI/WarningMenu/CircularProgressBar".start(4, true)
-			warning_menu.show_menu()
-			await $"UI Layer/UI/WarningMenu/CircularProgressBar".animation_finished
-			warning_menu.visible = false
+			$EnemyTower.player_left = true
+			show_warning_menu("Противник вышел из игры", 4)
 
+
+func show_warning_menu(message: String, delay: int = 3) -> void:
+	warning_menu.detail = message
+	warning_progress_bar.start(delay, true)
+	warning_menu.show_menu()
+	await warning_progress_bar.animation_finished
+	warning_menu.visible = false
 
 func spawn_request(unit_name: String) -> void:
 	if !is_instance_valid(WS.socket):
@@ -280,3 +309,13 @@ func _on_spawn_ore_timer_timeout() -> void:
 		SPAWN_ORE_TIME,
 	)
 	update_spawn_ore_text()
+
+func _on_friend_button_pressed() -> void:
+	friend_button.disabled = true
+	friend_button.self_modulate = Color.TRANSPARENT
+	friend_animation.visible = true
+	friend_animation.play(&"default")
+	
+	var error = await Api.send_friend_request(enemy_id)
+	if !error.is_empty():
+		show_warning_menu(error)
