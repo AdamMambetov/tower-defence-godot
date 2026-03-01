@@ -54,7 +54,7 @@ var is_pressed: bool = false
 
 
 func _ready() -> void:
-	WS.new_data_received.connect(_on_WS_new_data_recieved)
+	GameWS.new_data_received.connect(_on_GameWS_new_data_recieved)
 	stop_select_anim()
 
 
@@ -80,7 +80,7 @@ func stop_select_anim() -> void:
 	selection_anim.visible = false
 	selection_anim.stop()
 
-func _on_WS_new_data_recieved(result: Dictionary) -> void:
+func _on_GameWS_new_data_recieved(result: Dictionary) -> void:
 	if result.type != "attack_ore":
 		return
 	if !result.has(id):

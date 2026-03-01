@@ -12,7 +12,11 @@ enum AccountsState {
 	SignUp,
 	SignIn,
 	Profile,
+	Friends,
+	FriendRequests,
 }
+
+const FRIEND_REQUEST = preload("res://scene/friend_request_item.tscn")
 
 var username: String
 var email: String
@@ -29,14 +33,28 @@ var accounts_state: AccountsState:
 		accounts_state = value
 		$AccountsMenu/SignUp.visible = accounts_state == AccountsState.SignUp
 		$AccountsMenu/SignIn.visible = accounts_state == AccountsState.SignIn
+		$AccountsMenu/ProfileTabs.visible = accounts_state != AccountsState.SignIn \
+				and accounts_state != AccountsState.SignUp
 		$AccountsMenu/Profile.visible = accounts_state == AccountsState.Profile
+		$AccountsMenu/Friends.visible = accounts_state == AccountsState.Friends
+		$AccountsMenu/FriendRequests.visible = accounts_state == AccountsState.FriendRequests
 
 @export var _warning_menu_path: NodePath
 @onready var warning_menu: WarningMenu = get_node(_warning_menu_path)
 
+@export var _friend_container_path: NodePath
+@onready var friend_container: Node = get_node(_friend_container_path)
+
+@export var _friend_request_container_path: NodePath
+@onready var friend_request_container: Node = get_node(_friend_request_container_path)
+
 
 func _ready() -> void:
+	OnlineWS.new_data_received.connect(_on_OnlineWS_new_data_received)
 	init_audio_player()
+	clear_friends()
+	clear_friend_requests()
+	
 	accounts_state = AccountsState.SignIn
 	if !Cache.get_user_info().is_empty():
 		$LoadingScreen.visible = true
@@ -51,6 +69,12 @@ func _ready() -> void:
 			return
 		update_profile(user_info)
 		accounts_state = AccountsState.Profile
+		for i in 3:
+			success = await OnlineWS.connect_to_url()
+			if success: break
+			OnlineWS.socket = null
+		if !success:
+			_show_warning_menu("У вас плохой интернет!")
 		$LoadingScreen.visible = false
 
 
@@ -72,6 +96,16 @@ func init_audio_player() -> void:
 		Cache.append_settings(settings)
 	AudioPlayer.play_main_menu()
 	$SettingsMenu/VBoxContainer/Music/MusicSlider.value = settings.music_volume
+
+func clear_friends() -> void:
+	var friends = friend_container.get_children()
+	for el in friends:
+		friend_container.remove_child(el)
+	
+func clear_friend_requests() -> void:
+	var requests = friend_request_container.get_children()
+	for el in requests:
+		friend_request_container.remove_child(el)
 
 
 func _on_start_btn_pressed() -> void:
@@ -146,7 +180,7 @@ func _on_username_le_text_changed(new_text: String) -> void:
 
 func _on_play_random_btn_pressed() -> void:
 	#if (await Api.check_room_exists()):
-		#await WS.reconnect()
+		#await GameWS.reconnect()
 		#return
 	if $LoadingScreen.visible:
 		return
@@ -176,3 +210,57 @@ func _on_music_slider_value_changed(value: float) -> void:
 
 func _on_exit_button_pressed() -> void:
 	menu_state = MenuState.None
+
+func _on_profile_button_pressed() -> void:
+	accounts_state = AccountsState.Profile
+
+func _on_friends_button_pressed() -> void:
+	accounts_state = AccountsState.Friends
+
+func _on_friend_request_button_pressed() -> void:
+	accounts_state = AccountsState.FriendRequests
+
+func _on_OnlineWS_new_data_received(result: Dictionary) -> void:
+	print(result)
+	if result.has("accepted_friends"):
+		Global.friends = Global.map(
+			result.accepted_friends,
+			func(k,v): return {int(k): v},
+		)
+		clear_friends()
+		for user_name in Global.friends.values():
+			var friend = Label.new()
+			friend.text = user_name
+			friend_container.add_child(friend)
+	if result.has("pending_friends"):
+		Global.friend_requests = Global.map(
+			result.pending_friends,
+			func(k,v): return {int(k): v},
+		)
+		clear_friend_requests()
+		for user_name in Global.friend_requests.values():
+			var friend_request = FRIEND_REQUEST.instantiate()
+			friend_request.username = user_name
+			friend_request.on_accept.connect(_on_friend_request_accept)
+			friend_request.on_reject.connect(_on_friend_request_reject)
+			friend_request_container.add_child(friend_request)
+
+func _on_friend_request_accept(request_node: Node, user_name: String) -> void:
+	request_node.disable_buttons()
+	var msg = await Api.accept_friend(Global.friend_requests.find_key(user_name))
+	if !msg.is_empty():
+		request_node.enable_buttons()
+		_show_warning_menu(msg)
+		return
+	friend_request_container.remove_child(request_node)
+	request_node = null
+
+func _on_friend_request_reject(request_node: Node, user_name: String) -> void:
+	request_node.disable_buttons()
+	var msg = await Api.reject_friend(Global.friend_requests.find_key(user_name))
+	if !msg.is_empty():
+		request_node.enable_buttons()
+		_show_warning_menu(msg)
+		return
+	friend_request_container.remove_child(request_node)
+	request_node = null

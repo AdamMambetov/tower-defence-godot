@@ -55,7 +55,7 @@ func _on_set_unit_state(old: String, new: String) -> void:
 			if is_instance_valid(nearest_enemy) and (is_player or tower_node.player_left):
 				print("attack!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 				var from_id = self.id + " " if tower_node.player_left else self.id
-				WS.attack(from_id, nearest_enemy.id)
+				GameWS.attack(from_id, nearest_enemy.id)
 			if animations.animation == ATTACKS.back():
 				unit_state = UnitState.WaitAttack
 			else:

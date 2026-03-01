@@ -22,7 +22,8 @@ const units = {
 }
 
 var game_state: GameState
-
+var friends: Dictionary
+var friend_requests: Dictionary
 
 func get_password(key: String) -> String:
 	return Keyring.get_password(
@@ -44,3 +45,10 @@ func set_password(key: String, value: String) -> void:
 			key = key,
 			value = value,
 		}))
+
+# method: func(key, value) -> {"key": any, "value": any}
+func map(target: Dictionary, method: Callable) -> Dictionary:
+	var result := {}
+	for k in target:
+		result.merge(method.call(k, target[k]))
+	return result

@@ -1,0 +1,57 @@
+[gd_scene load_steps=5 format=3 uid="uid://d11jucaa4qlko"]
+
+[ext_resource type="Script" uid="uid://b8sr3nadjwrev" path="res://src/friend_request_item.gd" id="1_48u4q"]
+[ext_resource type="Texture2D" uid="uid://begu4xppfqsvv" path="res://file/icon/icons8-галочка.svg" id="1_ti7p0"]
+[ext_resource type="Texture2D" uid="uid://2itbx54ev28i" path="res://file/icon/icons8-удалить.svg" id="2_48u4q"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2nbnt"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+bg_color = Color(0.5529412, 0.5176471, 0.9490196, 0.57254905)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="PanelContainer" type="PanelContainer"]
+theme_override_styles/panel = SubResource("StyleBoxFlat_2nbnt")
+script = ExtResource("1_48u4q")
+_username_label_path = NodePath("HBoxContainer/UsernameLabel")
+username = "Друг"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="UsernameLabel" type="Label" parent="HBoxContainer"]
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "Друг"
+autowrap_mode = 3
+
+[node name="AcceptButton" type="TextureButton" parent="HBoxContainer"]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture_normal = ExtResource("1_ti7p0")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="RejectButton" type="TextureButton" parent="HBoxContainer"]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture_normal = ExtResource("2_48u4q")
+ignore_texture_size = true
+stretch_mode = 4
+
+[connection signal="pressed" from="HBoxContainer/AcceptButton" to="." method="_on_accept_button_pressed"]
+[connection signal="pressed" from="HBoxContainer/RejectButton" to="." method="_on_reject_button_pressed"]

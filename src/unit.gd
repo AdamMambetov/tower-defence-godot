@@ -63,7 +63,7 @@ func _ready() -> void:
 	attack_area.area_exited.connect(_on_attack_area_area_exited)
 	agr_area.area_entered.connect(_on_agr_area_area_entered)
 	agr_area.area_exited.connect(_on_agr_area_area_exited)
-	WS.new_data_received.connect(_on_WS_new_data_recieved)
+	GameWS.new_data_received.connect(_on_GameWS_new_data_recieved)
 	tower_node.tower_state_changed.connect(_on_tower_state_changed)
 	unit_area.set_collision_layer_value(2, is_player)
 	unit_area.set_collision_layer_value(3, !is_player)
@@ -246,7 +246,7 @@ func _on_set_direction(old: Vector2, new: Vector2) -> void:
 	agr_collision.position.x = agr_collision.shape.size.x / 2 * direction.x \
 			+ unit_collision.shape.size.x / 2 * direction.x
 
-func _on_WS_new_data_recieved(result: Dictionary) -> void:
+func _on_GameWS_new_data_recieved(result: Dictionary) -> void:
 	if !result.has("attacked_units"):
 		return
 	if !result.attacked_units.has(id):

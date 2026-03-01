@@ -68,8 +68,8 @@ var enemy_id: int
 
 
 func _ready() -> void:
-	WS.new_data_received.connect(_on_WS_new_data_recieved)
-	WS.socket_closed.connect(_on_WS_socket_closed)
+	GameWS.new_data_received.connect(_on_GameWS_new_data_recieved)
+	GameWS.socket_closed.connect(_on_GameWS_socket_closed)
 	
 	unit_added.connect($PlayerTower._on_unit_added)
 	unit_removed.connect($PlayerTower._on_unit_removed)
@@ -153,13 +153,13 @@ func show_warning_menu(message: String, delay: int = 3) -> void:
 	warning_menu.visible = false
 
 func spawn_request(unit_name: String) -> void:
-	if !is_instance_valid(WS.socket):
+	if !is_instance_valid(GameWS.socket):
 		return
 	var info = {
 		type = "spawn",
 		unit_name = unit_name,
 	}
-	var error = WS.socket.send_text(JSON.stringify(info))
+	var error = GameWS.socket.send_text(JSON.stringify(info))
 	if error:
 		printerr(error)
 
@@ -180,7 +180,8 @@ func spawn_unit(is_player: bool, data: Dictionary) -> void:
 	unit.global_position = pos
 	unit.destroyed.connect(_on_unit_destroyed)
 	$"Units".add_child(unit)
-	if data.priority != null:
+	print(data.priority)
+	if data.priority > 0:
 		unit_added.emit(is_player, data.id, data.priority)
 		units_capacity_label.text = "{0}/{1}".format([
 			$PlayerTower.get_unit_count(),
@@ -214,13 +215,13 @@ func update_spawn_ore_text() -> void:
 		])
 
 
-func _on_WS_new_data_recieved(result: Dictionary) -> void:
+func _on_GameWS_new_data_recieved(result: Dictionary) -> void:
 	if result.has("success"):
 		if !result.success:
 			return
 	_new_data_handler(result)
 
-func _on_WS_socket_closed() -> void:
+func _on_GameWS_socket_closed() -> void:
 	if get_tree() != null:
 		get_tree().paused = true
 	end_game_label.text = CONNECTION_CLOSED_TEXT
@@ -292,8 +293,8 @@ func _on_music_slider_value_changed(value: float) -> void:
 	Cache.append_settings({ music_volume = value })
 
 func _on_exit_button_pressed() -> void:
-	if WS.socket != null:
-		WS.socket.close()
+	if GameWS.socket != null:
+		GameWS.socket.close()
 	get_tree().paused = false
 	get_tree().change_scene_to_file("res://scene/main_menu.tscn")
 

@@ -18,6 +18,8 @@ const headers = {
 
 
 func _ready() -> void:
+	use_threads = true
+	
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_create_access_token_timer()
 
@@ -93,16 +95,16 @@ func join() -> void:
 		prints("POST", res[1], "queue/join", body_json)
 		if body_json.has('waiting_room_id'):
 			Global.game_state = Global.GameState.WaitingGame
-			WS.waiting_opponent = true
+			GameWS.waiting_opponent = true
 			var room_id = body_json.waiting_room_id
-			await WS.connect_to_url(
-				WS.construct_url(WS.WAITING_ROOM_URL, room_id)
+			await GameWS.connect_to_url(
+				GameWS.construct_url(GameWS.WAITING_ROOM_URL, room_id),
 			)
 		else:
 			Global.game_state = Global.GameState.PlayingGame
 			Cache.set_room_id(body_json.room_id)
-			await WS.connect_to_url(
-				WS.construct_url(WS.PLAY_ROOM_URL, body_json.room_id)
+			await GameWS.connect_to_url(
+				GameWS.construct_url(GameWS.PLAY_ROOM_URL, body_json.room_id),
 			)
 			join_result.emit(true, "")
 
@@ -172,6 +174,12 @@ func send_friend_request(id: int) -> String:
 		return body_json.detail
 	return ""
 
+func accept_friend(id: int) -> String:
+	return await _manage_friend_request(id, "accepted")
+
+func reject_friend(id: int) -> String:
+	return await _manage_friend_request(id, "blocked")
+
 
 func _add_field(body: PackedByteArray, key: String, value: String) -> void:
 	var content = "\r\n--boundary\r\n" + "Content-Disposition: form-data; name=\"%s\"\r\n" % key + "Content-Type: text/plain; charset=UTF-8\r\n\r\n" + value
@@ -187,6 +195,34 @@ func _create_access_token_timer() -> void:
 	access_token_timer.wait_time = ACCESS_TOKEN_LIFE_TIME
 	access_token_timer.timeout.connect(_on_access_token_timeout)
 	add_child(access_token_timer)
+
+func _manage_friend_request(id: int, status: String) -> String:
+	var access_token = Global.get_password("access")
+	var url = API_BASE_URL + "users/friend_requests?friend_id={0}&set_status={1}".format(
+		[id, status],
+	)
+	var error = request(
+		url,
+		[headers.json, headers.jwt_token + access_token],
+		HTTPClient.METHOD_POST,
+	 )
+	if error:
+		printerr(error)
+		return str(error)
+	
+	var res = await request_completed
+	var body_json = JSON.parse_string(res[3].get_string_from_utf8())
+	if res[0] == HTTPRequest.RESULT_SUCCESS:
+		prints(
+			"POST",
+			res[1],
+			url,
+			body_json,
+		)
+	else:
+		printerr("request error: ", res, body_json)
+		return body_json.detail
+	return ""
 
 func _on_access_token_timeout() -> void:
 	var refresh_token = Global.get_password("refresh")

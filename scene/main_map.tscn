@@ -31,7 +31,7 @@
 [ext_resource type="Texture2D" uid="uid://clgt2ok7ey150" path="res://file/icon/WitchPreview.png" id="28_t3s1h"]
 [ext_resource type="Texture2D" uid="uid://c8hew7gsu7p7d" path="res://file/icon/UI_Flat_Button01a_1.png" id="29_t2adl"]
 [ext_resource type="Texture2D" uid="uid://5sqqcja6ej0g" path="res://file/icon/units_count_icon.png" id="30_ecsw8"]
-[ext_resource type="Shader" uid="uid://digctqwu0sib2" path="res://scene/glass.gdshader" id="32_w3ryn"]
+[ext_resource type="Shader" uid="uid://digctqwu0sib2" path="res://src/glass.gdshader" id="32_w3ryn"]
 [ext_resource type="Texture2D" uid="uid://7pgq4bgqka0i" path="res://file/icon/icons8--100.png" id="33_agp45"]
 [ext_resource type="Texture2D" uid="uid://bhb8ouxybqqdr" path="res://file/icon/icons8---48_1.png" id="33_co0ym"]
 [ext_resource type="Texture2D" uid="uid://bcphp1anvu5gw" path="res://file/OneMint.png" id="34_4cyt7"]
@@ -1024,6 +1024,7 @@ stretch_mode = 4
 
 [node name="EndGame" type="Control" parent="UI Layer/UI"]
 process_mode = 2
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

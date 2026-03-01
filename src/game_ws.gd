@@ -45,7 +45,7 @@ func _process(_delta: float) -> void:
 			var code = socket.get_close_code()
 			var reason = socket.get_close_reason()
 			socket = null
-			prints("Connection closed","CODE:",code,"Reason:",reason)
+			prints("Connection closed", "CODE:", code, "Reason:", reason)
 			socket_closed.emit()
 
 func _notification(what: int) -> void:
@@ -116,7 +116,7 @@ func _waiting_game_process(json: Dictionary) -> void:
 		waiting_opponent = false
 		Cache.set_room_id(json.room_id)
 		for i in 3:
-			if await connect_to_url(construct_url(WS.PLAY_ROOM_URL, json.room_id)):
+			if await connect_to_url(construct_url(GameWS.PLAY_ROOM_URL, json.room_id)):
 				Global.game_state = Global.GameState.PlayingGame
 				Api.join_result.emit(true, "")
 				await get_tree().create_timer(1.0).timeout

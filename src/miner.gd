@@ -34,7 +34,7 @@ var is_pressed: bool = false
 
 
 func _ready() -> void:
-	WS.new_data_received.connect(_on_WS_new_data_recieved)
+	GameWS.new_data_received.connect(_on_GameWS_new_data_recieved)
 	attack_area.area_entered.connect(_on_attack_area_area_entered)
 	unit_state = UnitState.Idle
 	direction = get_default_direction()
@@ -142,7 +142,7 @@ func _on_set_unit_state(_old: String, new: String) -> void:
 			if unit_state != UnitState.Attack:
 				return
 			if is_instance_valid(current_ore):
-				WS.socket.send_text(JSON.stringify({
+				GameWS.socket.send_text(JSON.stringify({
 					type = "attack_ore",
 					from = self.id,
 					to = current_ore.id,
@@ -164,7 +164,7 @@ func _on_set_direction(old: Vector2, new: Vector2) -> void:
 func _on_set_health(_old: float, _new: float) -> void:
 	return
 
-func _on_WS_new_data_recieved(result: Dictionary) -> void:
+func _on_GameWS_new_data_recieved(result: Dictionary) -> void:
 	if result.type != "attack_ore":
 		return
 	if !result.has(id):
@@ -181,7 +181,7 @@ func _on_attack_area_area_entered(area: Area2D) -> void:
 	if other is Tower and route == Global.Route.Tower:
 		if !other.is_player:
 			return
-		WS.socket.send_text(JSON.stringify({
+		GameWS.socket.send_text(JSON.stringify({
 			type = "sell_ore",
 			miner = id,
 		}))

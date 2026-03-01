@@ -78,8 +78,8 @@ var selected_miner: Miner:
 
 
 func _ready() -> void:
-	if is_instance_valid(WS):
-		WS.new_data_received.connect(_on_WS_new_data_received)
+	if is_instance_valid(GameWS):
+		GameWS.new_data_received.connect(_on_GameWS_new_data_received)
 	tower_area.set_collision_layer_value(2, is_player)
 	tower_area.set_collision_layer_value(3, !is_player)
 	tower_area.set_collision_mask_value(2, !is_player)
@@ -132,10 +132,10 @@ func _send_tower_state() -> void:
 	match tower_state:
 		TowerState.Defence:
 			type = "go_defence"
-	WS.socket.send_text(JSON.stringify({ type = type }))
+	GameWS.socket.send_text(JSON.stringify({ type = type }))
 
 
-func _on_WS_new_data_received(result: Dictionary) -> void:
+func _on_GameWS_new_data_received(result: Dictionary) -> void:
 	match result.type:
 		"attack":
 			if result.has("me_tower") and is_player:

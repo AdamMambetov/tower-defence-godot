@@ -1,14 +1,18 @@
-[gd_scene load_steps=32 format=3 uid="uid://clbg1eyvs7ak8"]
+[gd_scene load_steps=40 format=3 uid="uid://clbg1eyvs7ak8"]
 
 [ext_resource type="Script" uid="uid://c155d6c6f3lr3" path="res://src/main_menu.gd" id="1_3er1b"]
 [ext_resource type="PackedScene" uid="uid://dxfvbrgnu75ji" path="res://scene/background.tscn" id="2_0iwki"]
 [ext_resource type="PackedScene" uid="uid://binsf0lskx6jt" path="res://scene/LoadingScreen.tscn" id="2_hxu56"]
-[ext_resource type="Shader" uid="uid://digctqwu0sib2" path="res://scene/glass.gdshader" id="5_sepwh"]
+[ext_resource type="Shader" uid="uid://digctqwu0sib2" path="res://src/glass.gdshader" id="5_sepwh"]
 [ext_resource type="Texture2D" uid="uid://bcphp1anvu5gw" path="res://file/OneMint.png" id="6_2atga"]
 [ext_resource type="Texture2D" uid="uid://bwr4ca43vfjvg" path="res://file/Tick2.png" id="7_2atga"]
+[ext_resource type="Texture2D" uid="uid://c0joijnw7dldb" path="res://file/icon/profile_icon.png" id="8_1o50l"]
 [ext_resource type="Texture2D" uid="uid://7pgq4bgqka0i" path="res://file/icon/icons8--100.png" id="8_by01r"]
+[ext_resource type="PackedScene" uid="uid://d11jucaa4qlko" path="res://scene/friend_request_item.tscn" id="8_cht4j"]
+[ext_resource type="Texture2D" uid="uid://bpeex33504yy" path="res://file/icon/friends_icon.png" id="9_cht4j"]
 [ext_resource type="Texture2D" uid="uid://b8sk5nfxhs1tf" path="res://file/icon/icons8--28.png" id="9_dclss"]
 [ext_resource type="PackedScene" uid="uid://cfjtk0ckcp7p2" path="res://scene/warning_menu.tscn" id="9_hmxu4"]
+[ext_resource type="Texture2D" uid="uid://bkyxefwmjw3nt" path="res://file/icon/friend_request_icon.png" id="10_os2d6"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dclss"]
 
@@ -221,6 +225,50 @@ corner_radius_bottom_left = 15
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_by01r"]
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_os2d6"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2nbnt"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+bg_color = Color(0.5529412, 0.5176471, 0.9490196, 0.57254905)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_t6h5b"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v0h3m"]
+shader = ExtResource("5_sepwh")
+shader_parameter/shape_type = 1
+shader_parameter/rect_size = Vector2(41.675, 196)
+shader_parameter/corner_radius_top_left = 20.0
+shader_parameter/corner_radius_top_right = 20.0
+shader_parameter/corner_radius_bottom_left = 20.0
+shader_parameter/corner_radius_bottom_right = 20.0
+shader_parameter/circle_radius = 100.0
+shader_parameter/outline_enabled = true
+shader_parameter/outline_width = 2.0
+shader_parameter/outline_color = Color(1, 1, 1, 0.8)
+shader_parameter/shadow_enabled = true
+shader_parameter/shadow_color = Color(0, 0, 0, 0.5)
+shader_parameter/shadow_offset = Vector2(10, 10)
+shader_parameter/shadow_blur = 15.0
+shader_parameter/edge_softness = 1.0
+shader_parameter/shape_color = Color(0.82959175, 0.8851425, 0.9882358, 1)
+shader_parameter/color_gradient_y = 1.5
+shader_parameter/color_gradient_x = -0.8
+shader_parameter/color_multiplier = 0.9
+shader_parameter/enable_screen_blur = true
+shader_parameter/blur_amount = 3.0
+shader_parameter/blur_samples = 4
+shader_parameter/glass_opacity = 0.2
+shader_parameter/node_size = Vector2(45.68, 199.435)
+
 [node name="MainMenu" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -231,6 +279,8 @@ grow_vertical = 2
 focus_mode = 1
 script = ExtResource("1_3er1b")
 _warning_menu_path = NodePath("WarningMenu")
+_friend_container_path = NodePath("AccountsMenu/Friends/ScrollContainer/VBoxContainer")
+_friend_request_container_path = NodePath("AccountsMenu/FriendRequests/HBoxContainer2/ScrollContainer/HBoxContainer/VBoxContainer")
 
 [node name="Background" parent="." instance=ExtResource("2_0iwki")]
 
@@ -708,6 +758,7 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_ictww")
 text = "У вас нет аккаунта? Зарегистрироваться"
 
 [node name="Profile" type="VBoxContainer" parent="AccountsMenu"]
+visible = false
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -765,13 +816,13 @@ horizontal_alignment = 1
 [node name="username_label" type="Label" parent="AccountsMenu/Profile"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Имя пользователя: "
+text = "Name: "
 horizontal_alignment = 1
 
 [node name="email_label" type="Label" parent="AccountsMenu/Profile"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Почта: "
+text = "Email: "
 horizontal_alignment = 1
 
 [node name="logout_btn" type="Button" parent="AccountsMenu/Profile"]
@@ -789,14 +840,340 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_by01r")
 text = "Выйти из аккаунта"
 flat = true
 
-[node name="FriendList" type="Panel" parent="AccountsMenu"]
-material = SubResource("ShaderMaterial_sepwh")
-custom_minimum_size = Vector2(400, 275)
+[node name="Friends" type="VBoxContainer" parent="AccountsMenu"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 3.5
+offset_right = -2.0
+offset_bottom = -18.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="Control" type="Control" parent="AccountsMenu/Friends"]
+layout_mode = 2
+size_flags_vertical = 3
+focus_mode = 2
+
+[node name="Title" type="Label" parent="AccountsMenu/Friends/Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -7.88
+offset_right = 200.0
+offset_bottom = 20.120022
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 6
+theme_override_font_sizes/font_size = 20
+text = "Друзья"
+horizontal_alignment = 1
+
+[node name="ExitButton" type="TextureButton" parent="AccountsMenu/Friends/Control"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.97
+anchor_top = 0.082
+anchor_right = 0.97
+anchor_bottom = 0.082
+offset_left = -33.120026
+offset_top = -1.5240002
+offset_right = 6.8799744
+offset_bottom = 38.476
+grow_horizontal = 0
+texture_normal = ExtResource("8_by01r")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="ScrollContainer" type="ScrollContainer" parent="AccountsMenu/Friends"]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="AccountsMenu/Friends/ScrollContainer"]
+layout_mode = 2
+
+[node name="username_label" type="Label" parent="AccountsMenu/Friends/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Name: "
+horizontal_alignment = 1
+
+[node name="username_label2" type="Label" parent="AccountsMenu/Friends/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Name: "
+horizontal_alignment = 1
+
+[node name="username_label3" type="Label" parent="AccountsMenu/Friends/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Name: "
+horizontal_alignment = 1
+
+[node name="username_label4" type="Label" parent="AccountsMenu/Friends/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Name: "
+horizontal_alignment = 1
+
+[node name="username_label5" type="Label" parent="AccountsMenu/Friends/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Name: "
+horizontal_alignment = 1
+
+[node name="username_label6" type="Label" parent="AccountsMenu/Friends/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Name: "
+horizontal_alignment = 1
+
+[node name="username_label7" type="Label" parent="AccountsMenu/Friends/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Name: "
+horizontal_alignment = 1
+
+[node name="username_label8" type="Label" parent="AccountsMenu/Friends/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Name: "
+horizontal_alignment = 1
+
+[node name="username_label9" type="Label" parent="AccountsMenu/Friends/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Name: "
+horizontal_alignment = 1
+
+[node name="username_label10" type="Label" parent="AccountsMenu/Friends/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Name: "
+horizontal_alignment = 1
+
+[node name="username_label11" type="Label" parent="AccountsMenu/Friends/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Name: "
+horizontal_alignment = 1
+
+[node name="username_label12" type="Label" parent="AccountsMenu/Friends/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Name: "
+horizontal_alignment = 1
+
+[node name="username_label13" type="Label" parent="AccountsMenu/Friends/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Name: "
+horizontal_alignment = 1
+
+[node name="username_label14" type="Label" parent="AccountsMenu/Friends/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Name: "
+horizontal_alignment = 1
+
+[node name="username_label15" type="Label" parent="AccountsMenu/Friends/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Name: "
+horizontal_alignment = 1
+
+[node name="username_label16" type="Label" parent="AccountsMenu/Friends/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Name: "
+horizontal_alignment = 1
+
+[node name="username_label17" type="Label" parent="AccountsMenu/Friends/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Name: "
+horizontal_alignment = 1
+
+[node name="username_label18" type="Label" parent="AccountsMenu/Friends/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Name: "
+horizontal_alignment = 1
+
+[node name="FriendRequests" type="VBoxContainer" parent="AccountsMenu"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 3.5
+offset_right = -2.0
+offset_bottom = -18.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="Control" type="Control" parent="AccountsMenu/FriendRequests"]
+layout_mode = 2
+size_flags_vertical = 3
+focus_mode = 2
+
+[node name="Title" type="Label" parent="AccountsMenu/FriendRequests/Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -7.88
+offset_right = 200.0
+offset_bottom = 20.120022
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 6
+theme_override_font_sizes/font_size = 20
+text = "Запросы дружбы"
+horizontal_alignment = 1
+
+[node name="ExitButton" type="TextureButton" parent="AccountsMenu/FriendRequests/Control"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.97
+anchor_top = 0.082
+anchor_right = 0.97
+anchor_bottom = 0.082
+offset_left = -33.120026
+offset_top = -1.5240002
+offset_right = 6.8799744
+offset_bottom = 38.476
+grow_horizontal = 0
+texture_normal = ExtResource("8_by01r")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="AccountsMenu/FriendRequests"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="VSeparator" type="VSeparator" parent="AccountsMenu/FriendRequests/HBoxContainer2"]
+layout_mode = 2
+theme_override_constants/separation = 10
+theme_override_styles/separator = SubResource("StyleBoxEmpty_os2d6")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="AccountsMenu/FriendRequests/HBoxContainer2"]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="AccountsMenu/FriendRequests/HBoxContainer2/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="AccountsMenu/FriendRequests/HBoxContainer2/ScrollContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="FriendRequestItem" parent="AccountsMenu/FriendRequests/HBoxContainer2/ScrollContainer/HBoxContainer/VBoxContainer" instance=ExtResource("8_cht4j")]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_2nbnt")
+
+[node name="FriendRequestItem2" parent="AccountsMenu/FriendRequests/HBoxContainer2/ScrollContainer/HBoxContainer/VBoxContainer" instance=ExtResource("8_cht4j")]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_2nbnt")
+
+[node name="FriendRequestItem3" parent="AccountsMenu/FriendRequests/HBoxContainer2/ScrollContainer/HBoxContainer/VBoxContainer" instance=ExtResource("8_cht4j")]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_2nbnt")
+
+[node name="FriendRequestItem4" parent="AccountsMenu/FriendRequests/HBoxContainer2/ScrollContainer/HBoxContainer/VBoxContainer" instance=ExtResource("8_cht4j")]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_2nbnt")
+
+[node name="FriendRequestItem5" parent="AccountsMenu/FriendRequests/HBoxContainer2/ScrollContainer/HBoxContainer/VBoxContainer" instance=ExtResource("8_cht4j")]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_2nbnt")
+
+[node name="FriendRequestItem6" parent="AccountsMenu/FriendRequests/HBoxContainer2/ScrollContainer/HBoxContainer/VBoxContainer" instance=ExtResource("8_cht4j")]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_2nbnt")
+
+[node name="FriendRequestItem7" parent="AccountsMenu/FriendRequests/HBoxContainer2/ScrollContainer/HBoxContainer/VBoxContainer" instance=ExtResource("8_cht4j")]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_2nbnt")
+
+[node name="FriendRequestItem8" parent="AccountsMenu/FriendRequests/HBoxContainer2/ScrollContainer/HBoxContainer/VBoxContainer" instance=ExtResource("8_cht4j")]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_2nbnt")
+
+[node name="FriendRequestItem9" parent="AccountsMenu/FriendRequests/HBoxContainer2/ScrollContainer/HBoxContainer/VBoxContainer" instance=ExtResource("8_cht4j")]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_2nbnt")
+
+[node name="FriendRequestItem10" parent="AccountsMenu/FriendRequests/HBoxContainer2/ScrollContainer/HBoxContainer/VBoxContainer" instance=ExtResource("8_cht4j")]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_2nbnt")
+
+[node name="FriendRequestItem11" parent="AccountsMenu/FriendRequests/HBoxContainer2/ScrollContainer/HBoxContainer/VBoxContainer" instance=ExtResource("8_cht4j")]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_2nbnt")
+
+[node name="VSeparator" type="VSeparator" parent="AccountsMenu/FriendRequests/HBoxContainer2/ScrollContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+theme_override_styles/separator = SubResource("StyleBoxEmpty_t6h5b")
+
+[node name="VSeparator2" type="VSeparator" parent="AccountsMenu/FriendRequests/HBoxContainer2"]
+layout_mode = 2
+theme_override_constants/separation = 4
+theme_override_styles/separator = SubResource("StyleBoxEmpty_t6h5b")
+
+[node name="ProfileTabs" type="Panel" parent="AccountsMenu"]
+visible = false
+material = SubResource("ShaderMaterial_v0h3m")
+custom_minimum_size = Vector2(55, 275)
 layout_mode = 0
-offset_left = 372.155
-offset_right = 772.15515
+offset_left = -65.0
+offset_right = -15.0
 offset_bottom = 275.0
 focus_mode = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="AccountsMenu/ProfileTabs"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="ProfileButton" type="TextureButton" parent="AccountsMenu/ProfileTabs/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+texture_normal = ExtResource("8_1o50l")
+
+[node name="FriendsButton" type="TextureButton" parent="AccountsMenu/ProfileTabs/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+texture_normal = ExtResource("9_cht4j")
+
+[node name="FriendRequestButton" type="TextureButton" parent="AccountsMenu/ProfileTabs/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+texture_normal = ExtResource("10_os2d6")
 
 [node name="LoadingScreen" parent="." instance=ExtResource("2_hxu56")]
 visible = false
@@ -832,3 +1209,8 @@ offset_bottom = 96.0
 [connection signal="pressed" from="AccountsMenu/SignIn/go_sign_up_btn" to="." method="_on_go_sign_up_btn_pressed"]
 [connection signal="pressed" from="AccountsMenu/Profile/Control/ExitButton" to="." method="_on_exit_button_pressed"]
 [connection signal="pressed" from="AccountsMenu/Profile/logout_btn" to="." method="_on_logout_btn_pressed"]
+[connection signal="pressed" from="AccountsMenu/Friends/Control/ExitButton" to="." method="_on_exit_button_pressed"]
+[connection signal="pressed" from="AccountsMenu/FriendRequests/Control/ExitButton" to="." method="_on_exit_button_pressed"]
+[connection signal="pressed" from="AccountsMenu/ProfileTabs/VBoxContainer/ProfileButton" to="." method="_on_profile_button_pressed"]
+[connection signal="pressed" from="AccountsMenu/ProfileTabs/VBoxContainer/FriendsButton" to="." method="_on_friends_button_pressed"]
+[connection signal="pressed" from="AccountsMenu/ProfileTabs/VBoxContainer/FriendRequestButton" to="." method="_on_friend_request_button_pressed"]
