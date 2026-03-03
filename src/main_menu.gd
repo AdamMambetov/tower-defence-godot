@@ -16,6 +16,7 @@ enum AccountsState {
 	FriendRequests,
 }
 
+const FRIEND = preload("res://scene/friend_item.tscn")
 const FRIEND_REQUEST = preload("res://scene/friend_request_item.tscn")
 
 var username: String
@@ -115,8 +116,8 @@ func add_friend_request_item(user_name: String) -> void:
 	friend_request_container.add_child(friend_request)
 
 func add_friend_item(user_name: String) -> void:
-	var friend = Label.new()
-	friend.text = user_name
+	var friend = FRIEND.instantiate()
+	friend.username = user_name
 	friend_container.add_child(friend)
 
 
