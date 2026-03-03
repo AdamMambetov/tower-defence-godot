@@ -107,6 +107,18 @@ func clear_friend_requests() -> void:
 	for el in requests:
 		friend_request_container.remove_child(el)
 
+func add_friend_request_item(user_name: String) -> void:
+	var friend_request = FRIEND_REQUEST.instantiate()
+	friend_request.username = user_name
+	friend_request.on_accept.connect(_on_friend_request_accept)
+	friend_request.on_reject.connect(_on_friend_request_reject)
+	friend_request_container.add_child(friend_request)
+
+func add_friend_item(user_name: String) -> void:
+	var friend = Label.new()
+	friend.text = user_name
+	friend_container.add_child(friend)
+
 
 func _on_start_btn_pressed() -> void:
 	menu_state = MenuState.Game
@@ -221,29 +233,26 @@ func _on_friend_request_button_pressed() -> void:
 	accounts_state = AccountsState.FriendRequests
 
 func _on_OnlineWS_new_data_received(result: Dictionary) -> void:
-	print(result)
-	if result.has("accepted_friends"):
-		Global.friends = Global.map(
-			result.accepted_friends,
-			func(k,v): return {int(k): v},
-		)
-		clear_friends()
-		for user_name in Global.friends.values():
-			var friend = Label.new()
-			friend.text = user_name
-			friend_container.add_child(friend)
-	if result.has("pending_friends"):
-		Global.friend_requests = Global.map(
-			result.pending_friends,
-			func(k,v): return {int(k): v},
-		)
-		clear_friend_requests()
-		for user_name in Global.friend_requests.values():
-			var friend_request = FRIEND_REQUEST.instantiate()
-			friend_request.username = user_name
-			friend_request.on_accept.connect(_on_friend_request_accept)
-			friend_request.on_reject.connect(_on_friend_request_reject)
-			friend_request_container.add_child(friend_request)
+	match result.type:
+		"new_friend":
+			Global.friends[result.friend_id] = result.friend_name
+			add_friend_item(result.friend_name)
+		"friends":
+			Global.friends = Global.map(
+				result.accepted_friends,
+				func(k,v): return { int(k): v },
+			)
+			clear_friends()
+			for user_name in Global.friends.values():
+				add_friend_item(user_name)
+			
+			Global.friend_requests = Global.map(
+				result.pending_friends,
+				func(k,v): return { int(k): v },
+			)
+			clear_friend_requests()
+			for user_name in Global.friend_requests.values():
+				add_friend_request_item(user_name)
 
 func _on_friend_request_accept(request_node: Node, user_name: String) -> void:
 	request_node.disable_buttons()
@@ -252,6 +261,7 @@ func _on_friend_request_accept(request_node: Node, user_name: String) -> void:
 		request_node.enable_buttons()
 		_show_warning_menu(msg)
 		return
+	Global.friend_requests.erase(Global.friend_requests.find_key(user_name))
 	friend_request_container.remove_child(request_node)
 	request_node = null
 
@@ -262,5 +272,6 @@ func _on_friend_request_reject(request_node: Node, user_name: String) -> void:
 		request_node.enable_buttons()
 		_show_warning_menu(msg)
 		return
+	Global.friend_requests.erase(Global.friend_requests.find_key(user_name))
 	friend_request_container.remove_child(request_node)
 	request_node = null
