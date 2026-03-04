@@ -24,6 +24,7 @@ const units = {
 var game_state: GameState
 var friends: Dictionary
 var friend_requests: Dictionary
+var online_friends: Array
 
 func get_password(key: String) -> String:
 	return Keyring.get_password(

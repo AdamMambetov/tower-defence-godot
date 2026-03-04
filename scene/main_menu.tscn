@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://clbg1eyvs7ak8"]
+[gd_scene load_steps=48 format=3 uid="uid://clbg1eyvs7ak8"]
 
 [ext_resource type="Script" uid="uid://c155d6c6f3lr3" path="res://src/main_menu.gd" id="1_3er1b"]
 [ext_resource type="PackedScene" uid="uid://dxfvbrgnu75ji" path="res://scene/background.tscn" id="2_0iwki"]
@@ -14,6 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://b8sk5nfxhs1tf" path="res://file/icon/icons8--28.png" id="9_dclss"]
 [ext_resource type="PackedScene" uid="uid://cfjtk0ckcp7p2" path="res://scene/warning_menu.tscn" id="9_hmxu4"]
 [ext_resource type="Texture2D" uid="uid://bkyxefwmjw3nt" path="res://file/icon/friend_request_icon.png" id="10_os2d6"]
+[ext_resource type="Shader" uid="uid://c4vuy3araoeke" path="res://src/glow_shader.gdshader" id="10_v0h3m"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dclss"]
 
@@ -263,6 +264,35 @@ shader_parameter/blur_samples = 4
 shader_parameter/glass_opacity = 0.2
 shader_parameter/node_size = Vector2(45.68, 199.435)
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sra1m"]
+shader = ExtResource("10_v0h3m")
+shader_parameter/active = true
+shader_parameter/glow_color = Color(0, 0.17058241, 0.99993104, 1)
+shader_parameter/glow_intensity = 3.0
+shader_parameter/glow_radius = 0.6590000313025
+shader_parameter/pulse_speed = 1.10000005225
+shader_parameter/pulse_strength = 0.3
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_os2d6"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_unisd"]
+shader = ExtResource("10_v0h3m")
+shader_parameter/active = false
+shader_parameter/glow_color = Color(0, 0.14111099, 0.99992484, 1)
+shader_parameter/glow_intensity = 3.0
+shader_parameter/glow_radius = 0.6590000313025
+shader_parameter/pulse_speed = 1.10000005225
+shader_parameter/pulse_strength = 0.3
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2nbnt"]
+shader = ExtResource("10_v0h3m")
+shader_parameter/active = false
+shader_parameter/glow_color = Color(2.8878452e-07, 0.63477045, 0.5286736, 1)
+shader_parameter/glow_intensity = 3.0
+shader_parameter/glow_radius = 0.7590000360525
+shader_parameter/pulse_speed = 1.10000005225
+shader_parameter/pulse_strength = 0.3
+
 [node name="MainMenu" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -275,6 +305,9 @@ script = ExtResource("1_3er1b")
 _warning_menu_path = NodePath("WarningMenu")
 _friend_container_path = NodePath("AccountsMenu/Friends/HBoxContainer/ScrollContainer/HBoxContainer/VBoxContainer")
 _friend_request_container_path = NodePath("AccountsMenu/FriendRequests/HBoxContainer2/ScrollContainer/HBoxContainer/VBoxContainer")
+_profile_button_path = NodePath("AccountsMenu/ProfileTabs/VBoxContainer/ProfileButton")
+_friends_button_path = NodePath("AccountsMenu/ProfileTabs/VBoxContainer/FriendsButton")
+_friend_request_button_path = NodePath("AccountsMenu/ProfileTabs/VBoxContainer/FriendRequestButton")
 
 [node name="Background" parent="." instance=ExtResource("2_0iwki")]
 
@@ -1077,18 +1110,28 @@ grow_vertical = 2
 alignment = 1
 
 [node name="ProfileButton" type="TextureButton" parent="AccountsMenu/ProfileTabs/VBoxContainer"]
+material = SubResource("ShaderMaterial_sra1m")
 layout_mode = 2
 size_flags_horizontal = 4
+toggle_mode = true
+button_pressed = true
+button_group = SubResource("ButtonGroup_os2d6")
 texture_normal = ExtResource("8_1o50l")
 
 [node name="FriendsButton" type="TextureButton" parent="AccountsMenu/ProfileTabs/VBoxContainer"]
+material = SubResource("ShaderMaterial_unisd")
 layout_mode = 2
 size_flags_horizontal = 4
+toggle_mode = true
+button_group = SubResource("ButtonGroup_os2d6")
 texture_normal = ExtResource("9_cht4j")
 
 [node name="FriendRequestButton" type="TextureButton" parent="AccountsMenu/ProfileTabs/VBoxContainer"]
+material = SubResource("ShaderMaterial_2nbnt")
 layout_mode = 2
 size_flags_horizontal = 4
+toggle_mode = true
+button_group = SubResource("ButtonGroup_os2d6")
 texture_normal = ExtResource("10_os2d6")
 
 [node name="LoadingScreen" parent="." instance=ExtResource("2_hxu56")]

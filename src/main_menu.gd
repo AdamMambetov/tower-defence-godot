@@ -39,6 +39,20 @@ var accounts_state: AccountsState:
 		$AccountsMenu/Profile.visible = accounts_state == AccountsState.Profile
 		$AccountsMenu/Friends.visible = accounts_state == AccountsState.Friends
 		$AccountsMenu/FriendRequests.visible = accounts_state == AccountsState.FriendRequests
+		
+		get_button_shader(profile_button).set_shader_parameter(
+			"active",
+			accounts_state == AccountsState.Profile,
+		)
+		get_button_shader(friends_button).set_shader_parameter(
+			"active",
+			accounts_state == AccountsState.Friends,
+		)
+		get_button_shader(friend_request_button).set_shader_parameter(
+			"active",
+			accounts_state == AccountsState.FriendRequests,
+		)
+
 
 @export var _warning_menu_path: NodePath
 @onready var warning_menu: WarningMenu = get_node(_warning_menu_path)
@@ -48,6 +62,15 @@ var accounts_state: AccountsState:
 
 @export var _friend_request_container_path: NodePath
 @onready var friend_request_container: Node = get_node(_friend_request_container_path)
+
+@export var _profile_button_path: NodePath
+@onready var profile_button: TextureButton = get_node(_profile_button_path)
+
+@export var _friends_button_path: NodePath
+@onready var friends_button: TextureButton = get_node(_friends_button_path)
+
+@export var _friend_request_button_path: NodePath
+@onready var friend_request_button: TextureButton = get_node(_friend_request_button_path)
 
 
 func _ready() -> void:
@@ -115,10 +138,14 @@ func add_friend_request_item(user_name: String) -> void:
 	friend_request.on_reject.connect(_on_friend_request_reject)
 	friend_request_container.add_child(friend_request)
 
-func add_friend_item(user_name: String) -> void:
+func add_friend_item(user_name: String, is_online: bool) -> void:
 	var friend = FRIEND.instantiate()
 	friend.username = user_name
+	friend.is_online = is_online
 	friend_container.add_child(friend)
+
+func get_button_shader(button: TextureButton) -> ShaderMaterial:
+	return button.material
 
 
 func _on_start_btn_pressed() -> void:
@@ -234,18 +261,20 @@ func _on_friend_request_button_pressed() -> void:
 	accounts_state = AccountsState.FriendRequests
 
 func _on_OnlineWS_new_data_received(result: Dictionary) -> void:
+	print(result)
 	match result.type:
-		"new_friend":
-			Global.friends[result.friend_id] = result.friend_name
-			add_friend_item(result.friend_name)
 		"friends":
+			Global.online_friends = result.online_friends.map(func(id): return int(id))
 			Global.friends = Global.map(
 				result.accepted_friends,
 				func(k,v): return { int(k): v },
 			)
 			clear_friends()
-			for user_name in Global.friends.values():
-				add_friend_item(user_name)
+			for id in Global.friends:
+				add_friend_item(
+					Global.friends[id],
+					Global.online_friends.has(id),
+				)
 			
 			Global.friend_requests = Global.map(
 				result.pending_friends,
@@ -254,6 +283,20 @@ func _on_OnlineWS_new_data_received(result: Dictionary) -> void:
 			clear_friend_requests()
 			for user_name in Global.friend_requests.values():
 				add_friend_request_item(user_name)
+		"new_friend":
+			Global.friends[result.friend_id] = result.friend_name
+			if result.is_online:
+				Global.online_friends.push_back(result.friend_id)
+			add_friend_item(result.friend_name, result.is_online)
+		"friend_status":
+			if result.is_online:
+				Global.online_friends.push_back(result.user_id)
+			else:
+				Global.online_friends.erase(result.user_id)
+			var friend_item = friend_container.get_child(
+				Global.friends.keys().find(result.user_id),
+			)
+			friend_item.is_online = result.is_online
 
 func _on_friend_request_accept(request_node: Node, user_name: String) -> void:
 	request_node.disable_buttons()

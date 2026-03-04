@@ -12,9 +12,8 @@ const OFFLINE_COLOR = Color(0.5, 0.5, 0.5)
 		is_online = value
 		if !is_instance_valid(online_circle):
 			return
-		online_circle \
-			.get_theme_stylebox("panel") \
-			.bg_color = ONLINE_COLOR if is_online else OFFLINE_COLOR
+		var online_stylebox = get_online_stylebox()
+		online_stylebox.bg_color = ONLINE_COLOR if is_online else OFFLINE_COLOR
 
 @export var username: String = "Друг":
 	set(value):
@@ -31,7 +30,11 @@ const OFFLINE_COLOR = Color(0.5, 0.5, 0.5)
 
 
 func _ready() -> void:
+	var online_stylebox = get_online_stylebox().duplicate(true)
+	online_circle.add_theme_stylebox_override("panel", online_stylebox)
 	username_label.text = username
-	online_circle \
-		.get_theme_stylebox("panel") \
-		.bg_color = ONLINE_COLOR if is_online else OFFLINE_COLOR
+	online_stylebox.bg_color = ONLINE_COLOR if is_online else OFFLINE_COLOR
+
+
+func get_online_stylebox() -> StyleBoxFlat:
+	return online_circle.get_theme_stylebox("panel")
